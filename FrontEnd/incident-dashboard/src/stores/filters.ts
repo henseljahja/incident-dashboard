@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
+import { formatDate } from '@/utils/date'
+
 export const DEFAULT_PAGE_SIZE = 25
 
 /** `GET /api/incidents?status=` — mirrors the backend `StatusFacet` enum exactly. */
@@ -15,6 +17,10 @@ export type SlaFacet = (typeof SLA_FACETS)[number]
  * `GET /api/incidents?scope=` — the three ticket groups, mirroring the backend `SCOPE_GROUP`
  * values (`CFG_TRACKER_SCOPE`). Each group is its own menu and its own page.
  */
+/** Period presets from the RD home mock-up: 30/60/90 days, 6 months, all time. */
+export const PERIOD_PRESETS = ['30d', '60d', '90d', '6m', 'all'] as const
+export type PeriodPreset = (typeof PERIOD_PRESETS)[number]
+
 export const SCOPES = ['INCIDENT', 'PROBLEM', 'SERVICE_REQUEST'] as const
 export type Scope = (typeof SCOPES)[number]
 
@@ -70,6 +76,10 @@ export const useFiltersStore = defineStore('filters', () => {
    * (called from the route's meta) moves it.
    */
   const scope = ref<Scope | null>(null)
+  /** Free-text search over ticket number, subject, assignee and institusi. */
+  const search = ref('')
+  const source = ref<string[]>([])
+  const assignedTo = ref<string[]>([])
   const sort = ref<string | null>(null)
   const direction = ref<string | null>(null)
   const page = ref(0)
@@ -95,6 +105,9 @@ export const useFiltersStore = defineStore('filters', () => {
     if (status.value) params.set('status', status.value)
     if (sla.value) params.set('sla', sla.value)
     if (matrixMissing.value) params.set('matrixMissing', 'true')
+    if (search.value.trim()) params.set('search', search.value.trim())
+    for (const value of source.value) params.append('source', value)
+    for (const value of assignedTo.value) params.append('assignedTo', value)
     if (scope.value) params.set('scope', scope.value)
     if (sort.value) params.set('sort', sort.value)
     if (direction.value) params.set('direction', direction.value)
@@ -163,6 +176,9 @@ export const useFiltersStore = defineStore('filters', () => {
     priority.value = params.getAll('priority')
     institusi.value = params.getAll('institusi')
     category.value = params.getAll('category')
+    search.value = params.get('search') ?? ''
+    source.value = params.getAll('source')
+    assignedTo.value = params.getAll('assignedTo')
 
     const hasWorkaroundRaw = params.get('hasWorkaround')
     hasWorkaround.value = hasWorkaroundRaw === null ? null : hasWorkaroundRaw === 'true'
@@ -188,6 +204,9 @@ export const useFiltersStore = defineStore('filters', () => {
     priority.value = []
     institusi.value = []
     category.value = []
+    search.value = ''
+    source.value = []
+    assignedTo.value = []
     hasWorkaround.value = null
     status.value = null
     sla.value = null
@@ -225,7 +244,30 @@ export const useFiltersStore = defineStore('filters', () => {
     page.value = 0
   }
 
+  /**
+   * The home mock-up's period chips. A preset is just a `dateFrom`/`dateTo` pair, so every
+   * surface that already reads the date window follows it; `all` clears both bounds. `today`
+   * is injectable so the arithmetic is testable.
+   */
+  function setPeriod(preset: PeriodPreset, today: Date = new Date()) {
+    if (preset === 'all') {
+      dateFrom.value = null
+      dateTo.value = null
+    } else {
+      const from = new Date(today.getFullYear(), today.getMonth(), today.getDate())
+      if (preset === '6m') from.setMonth(from.getMonth() - 6)
+      else from.setDate(from.getDate() - (Number.parseInt(preset, 10) - 1))
+      dateFrom.value = formatDate(from)
+      dateTo.value = formatDate(today)
+    }
+    page.value = 0
+  }
+
   return {
+    search,
+    source,
+    assignedTo,
+    setPeriod,
     dateFrom,
     dateTo,
     tracker,

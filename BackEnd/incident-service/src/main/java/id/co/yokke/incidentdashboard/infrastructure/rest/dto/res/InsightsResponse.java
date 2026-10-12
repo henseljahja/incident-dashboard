@@ -20,8 +20,11 @@ public final class InsightsResponse {
             Double closureRatePct) {
     }
 
-    /** One month of the Summary &amp; Assignment comparison table. */
-    public record Month(String period, long created, long closed, long breached,
+    /**
+     * One month of the Summary &amp; Assignment comparison table. {@code met} is closed AND not
+     * breached, so SLA compliance over any span is {@code sum(met) / sum(closed)}.
+     */
+    public record Month(String period, long created, long closed, long breached, long met,
             Double mttrDays) {
     }
 

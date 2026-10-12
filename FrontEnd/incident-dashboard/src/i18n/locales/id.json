@@ -97,7 +97,13 @@
       "field": "{name}: {value}",
       "hasWorkaround": "Ada workaround: {value}",
       "matrixMissing": "Dampak atau urgensi kosong"
-    }
+    },
+    "search": "Cari",
+    "searchPlaceholder": "No. tiket, subjek, penanggung jawab…",
+    "source": "Sumber",
+    "anySource": "Semua sumber",
+    "assignedTo": "Ditugaskan ke",
+    "assignedToHint": "Tekan Enter untuk menambah tiap nama"
   },
   "table": {
     "heading": "Insiden",
@@ -485,5 +491,69 @@
     "tileLabel": "{name}: {open} terbuka, {breached} melewati SLA",
     "none": "Belum ada",
     "error": "Jumlah kelompok gagal dimuat"
+  },
+  "insights": {
+    "title": "Analitik",
+    "show": "Tampilkan analitik",
+    "hide": "Sembunyikan analitik",
+    "empty": "Tidak ada data untuk filter saat ini.",
+    "period": {
+      "label": "Periode",
+      "30d": "30 hari",
+      "60d": "60 hari",
+      "90d": "90 hari",
+      "6m": "6 bulan",
+      "all": "Semua"
+    },
+    "tile": {
+      "total": "Total tiket",
+      "mttr": "MTTR (hari)",
+      "compliance": "Kepatuhan SLA",
+      "breached": "Terlampaui",
+      "closure": "Rasio penutupan"
+    },
+    "donut": {
+      "priority": "Berdasarkan prioritas",
+      "source": "Eksternal vs Internal"
+    },
+    "institusi": {
+      "title": "Institusi teratas"
+    },
+    "assignees": {
+      "title": "10 penanggung jawab teratas",
+      "assignee": "Penanggung jawab",
+      "total": "Total",
+      "open": "Terbuka",
+      "closed": "Selesai",
+      "breached": "Terlampaui",
+      "closureRate": "Rasio penutupan"
+    },
+    "monthly": {
+      "title": "Perbandingan bulanan",
+      "month": "Bulan",
+      "created": "Dibuat",
+      "closed": "Selesai",
+      "breached": "Terlampaui",
+      "mttr": "MTTR (hari)",
+      "compliance": "Kepatuhan SLA"
+    },
+    "aging": {
+      "title": "10 tiket terbuka terlama",
+      "ticket": "Tiket",
+      "priority": "Prioritas",
+      "assignee": "Ditugaskan ke",
+      "days": "Usia (hari)",
+      "slaUsed": "SLA terpakai"
+    },
+    "forecast": {
+      "title": "Tiket dibuat: prakiraan",
+      "horizon": "Horizon prakiraan dalam hari",
+      "actual": "Aktual",
+      "forecast": "Prakiraan",
+      "upper": "Atas (95%)",
+      "lower": "Bawah (95%)",
+      "note": "Tren garis lurus selama 60 hari terakhir dengan pita 95%. Tidak memodelkan musiman atau perubahan terencana.",
+      "slope": "Tren: {value} tiket/hari per hari."
+    }
   }
 }

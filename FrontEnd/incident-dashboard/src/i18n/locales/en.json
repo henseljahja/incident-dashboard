@@ -97,7 +97,13 @@
       "field": "{name}: {value}",
       "hasWorkaround": "Has workaround: {value}",
       "matrixMissing": "Missing impact or urgency"
-    }
+    },
+    "search": "Search",
+    "searchPlaceholder": "Ticket no., subject, assignee…",
+    "source": "Source",
+    "anySource": "Any source",
+    "assignedTo": "Assigned to",
+    "assignedToHint": "Press Enter to add each name"
   },
   "table": {
     "heading": "Incidents",
@@ -485,5 +491,69 @@
     "tileLabel": "{name}: {open} open, {breached} breached",
     "none": "None yet",
     "error": "Couldn't load the group counts"
+  },
+  "insights": {
+    "title": "Analytics",
+    "show": "Show analytics",
+    "hide": "Hide analytics",
+    "empty": "No data for the current filters.",
+    "period": {
+      "label": "Period",
+      "30d": "30 days",
+      "60d": "60 days",
+      "90d": "90 days",
+      "6m": "6 months",
+      "all": "All"
+    },
+    "tile": {
+      "total": "Total tickets",
+      "mttr": "MTTR (days)",
+      "compliance": "SLA compliance",
+      "breached": "Breached",
+      "closure": "Closure rate"
+    },
+    "donut": {
+      "priority": "By priority",
+      "source": "External vs Internal"
+    },
+    "institusi": {
+      "title": "Top institusi"
+    },
+    "assignees": {
+      "title": "Top 10 assigned to",
+      "assignee": "Assignee",
+      "total": "Total",
+      "open": "Open",
+      "closed": "Closed",
+      "breached": "Breached",
+      "closureRate": "Closure rate"
+    },
+    "monthly": {
+      "title": "Monthly comparison",
+      "month": "Month",
+      "created": "Created",
+      "closed": "Closed",
+      "breached": "Breached",
+      "mttr": "MTTR (days)",
+      "compliance": "SLA compliance"
+    },
+    "aging": {
+      "title": "Top 10 aging open tickets",
+      "ticket": "Ticket",
+      "priority": "Priority",
+      "assignee": "Assigned to",
+      "days": "Age (days)",
+      "slaUsed": "SLA used"
+    },
+    "forecast": {
+      "title": "Created tickets: forecast",
+      "horizon": "Forecast horizon in days",
+      "actual": "Actual",
+      "forecast": "Forecast",
+      "upper": "Upper (95%)",
+      "lower": "Lower (95%)",
+      "note": "Straight-line trend over the last 60 days with a 95% band. It does not model seasonality or planned changes.",
+      "slope": "Trend: {value} tickets/day each day."
+    }
   }
 }

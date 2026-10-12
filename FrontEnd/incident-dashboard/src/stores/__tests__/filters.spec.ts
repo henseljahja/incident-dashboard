@@ -303,3 +303,55 @@ describe('matrixMissing', () => {
     expect(filters.matrixMissing).toBe(true)
   })
 })
+
+describe('search / source / assignedTo', () => {
+  it('serialises, restores and resets the three list filters', () => {
+    const filters = useFiltersStore()
+    filters.search = '  vpn  '
+    filters.source = ['External']
+    filters.assignedTo = ['Budi', 'Siti']
+
+    const params = filters.toFilterParams()
+    expect(params.get('search')).toBe('vpn')
+    expect(params.getAll('source')).toEqual(['External'])
+    expect(params.getAll('assignedTo')).toEqual(['Budi', 'Siti'])
+
+    const restored = useFiltersStore()
+    restored.applyFromQueryString(filters.serialize())
+    expect(restored.search).toBe('vpn')
+    expect(restored.assignedTo).toEqual(['Budi', 'Siti'])
+
+    restored.reset()
+    expect(restored.search).toBe('')
+    expect(restored.source).toEqual([])
+    expect(restored.assignedTo).toEqual([])
+  })
+
+  it('omits a blank search from the request', () => {
+    const filters = useFiltersStore()
+    filters.search = '   '
+    expect(filters.toFilterParams().has('search')).toBe(false)
+  })
+})
+
+describe('setPeriod', () => {
+  const today = new Date(2026, 9, 12) // 12 Oct 2026, local
+
+  it('30d is an inclusive 30-day window ending today', () => {
+    const filters = useFiltersStore()
+    filters.page = 3
+    filters.setPeriod('30d', today)
+    expect(filters.dateFrom).toBe('2026-09-13')
+    expect(filters.dateTo).toBe('2026-10-12')
+    expect(filters.page).toBe(0)
+  })
+
+  it('6m goes back six calendar months and all clears both bounds', () => {
+    const filters = useFiltersStore()
+    filters.setPeriod('6m', today)
+    expect(filters.dateFrom).toBe('2026-04-12')
+    filters.setPeriod('all', today)
+    expect(filters.dateFrom).toBeNull()
+    expect(filters.dateTo).toBeNull()
+  })
+})

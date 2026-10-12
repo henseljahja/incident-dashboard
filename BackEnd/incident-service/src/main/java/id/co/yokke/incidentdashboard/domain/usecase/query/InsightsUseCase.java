@@ -101,14 +101,18 @@ public class InsightsUseCase {
         return jdbc.query("SELECT TO_CHAR(DATE_CREATE, 'YYYY-MM') AS PERIOD, COUNT(*) AS CREATED, "
                         + "SUM(CASE WHEN IS_CLOSED = 1 THEN 1 ELSE 0 END) AS CLOSED_N, "
                         + "SUM(CASE WHEN SLA_BREACHED = 1 THEN 1 ELSE 0 END) AS BREACHED_N, "
+                        + "SUM(CASE WHEN IS_CLOSED = 1 AND SLA_BREACHED = 0 THEN 1 ELSE 0 END) "
+                        + "AS MET_N, "
                         + "AVG(CASE WHEN IS_CLOSED = 1 THEN AGING_NEW END) AS MTTR FROM " + VIEW
                         + predicate.sql() + " GROUP BY TO_CHAR(DATE_CREATE, 'YYYY-MM') "
                         + "ORDER BY 1",
                 (rs, i) -> {
                     double mttr = rs.getDouble("MTTR");
+                    boolean noMttr = rs.wasNull();
                     return new InsightsResponse.Month(rs.getString("PERIOD"),
                             rs.getLong("CREATED"), rs.getLong("CLOSED_N"),
-                            rs.getLong("BREACHED_N"), rs.wasNull() ? null : round2(mttr));
+                            rs.getLong("BREACHED_N"), rs.getLong("MET_N"),
+                            noMttr ? null : round2(mttr));
                 }, predicate.params().toArray());
     }
 
