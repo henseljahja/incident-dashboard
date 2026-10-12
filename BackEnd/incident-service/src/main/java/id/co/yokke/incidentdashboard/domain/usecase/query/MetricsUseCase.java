@@ -203,8 +203,8 @@ public class MetricsUseCase {
         return new IncidentFilter(previousFrom, previousTo, filter.trackers(), filter.stages(),
                 filter.priorities(), filter.institusi(), filter.categories(),
                 filter.hasWorkaround(), filter.status(), filter.sla(), filter.scope(),
-                filter.matrixMissing(), filter.page(),
-                filter.size(), filter.sortColumn(), filter.sortDirection());
+                filter.matrixMissing(), filter.search(), filter.sources(), filter.assignees(),
+                filter.page(), filter.size(), filter.sortColumn(), filter.sortDirection());
     }
 
     /** Inclusive of both bounds — a from == to request is one day, not zero. */
