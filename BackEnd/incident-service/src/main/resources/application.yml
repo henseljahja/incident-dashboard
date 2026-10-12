@@ -23,6 +23,22 @@ spring:
       mirror: ${incident.mirror.schema}
 
 incident:
+  ai:
+    # OPTIONAL prose layer for /api/insights/ai/summary and /patterns. Everything else on the AI
+    # page (figures, Q&A, search, patterns) is computed locally and never leaves the process.
+    #
+    # DEFAULT: none -> nothing is sent anywhere. To enable, set provider=openai AND supply
+    # INCIDENT_AI_API_KEY in the environment (never in this file). Any OpenAI-compatible
+    # chat-completions endpoint works via base-url.
+    #
+    # What is sent when enabled: aggregate counts, institusi/category names and ticket NUMBERS.
+    # Ticket SUBJECTS (customer and staff names) are sent only if send-subjects=true.
+    provider: ${INCIDENT_AI_PROVIDER:none}
+    base-url: ${INCIDENT_AI_BASE_URL:https://api.openai.com/v1}
+    api-key: ${INCIDENT_AI_API_KEY:}
+    model: ${INCIDENT_AI_MODEL:gpt-4o-mini}
+    send-subjects: ${INCIDENT_AI_SEND_SUBJECTS:false}
+    timeout-seconds: 20
   cors:
     # EXPLICIT ALLOWLIST, echoed by name. Never `*`: the refresh cookie requires
     # Access-Control-Allow-Credentials: true, and a wildcard origin is incompatible with
