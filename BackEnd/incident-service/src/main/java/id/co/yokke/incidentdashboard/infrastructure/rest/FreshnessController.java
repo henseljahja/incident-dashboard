@@ -38,7 +38,8 @@ public class FreshnessController {
     @GetMapping("/api/freshness")
     @RequirePrivilege(
             menu = {"incident.ops", "incident.problem", "incident.sr", "incident.exec",
-                    "incident.wallboard"},
+                    "incident.wallboard", "incident.dashboard", "incident.forecast", "incident.alerts",
+                    "incident.rca", "incident.ai", "incident.sla"},
             privilege = "view")
     public Freshness freshness() {
         return freshnessUseCase.freshness();

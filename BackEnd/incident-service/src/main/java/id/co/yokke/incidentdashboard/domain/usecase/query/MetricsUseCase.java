@@ -203,7 +203,7 @@ public class MetricsUseCase {
         return new IncidentFilter(previousFrom, previousTo, filter.trackers(), filter.stages(),
                 filter.priorities(), filter.institusi(), filter.categories(),
                 filter.hasWorkaround(), filter.status(), filter.sla(), filter.scope(),
-                filter.matrixMissing(), filter.search(), filter.sources(), filter.assignees(),
+                filter.matrixMissing(), filter.search(), filter.sources(), filter.assignees(), filter.statusNames(),
                 filter.page(), filter.size(), filter.sortColumn(), filter.sortDirection());
     }
 

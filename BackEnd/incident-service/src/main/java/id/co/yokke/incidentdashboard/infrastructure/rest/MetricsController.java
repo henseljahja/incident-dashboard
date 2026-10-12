@@ -69,7 +69,7 @@ public class MetricsController {
     @GetMapping("/api/metrics/definitions")
     @RequirePrivilege(
             menu = {"incident.ops", "incident.problem", "incident.sr", "incident.exec",
-                    "incident.wallboard"},
+                    "incident.wallboard", "incident.dashboard", "incident.sla"},
             privilege = "view")
     public DefinitionsResponse definitions() {
         return definitions.definitions();

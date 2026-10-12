@@ -77,11 +77,12 @@ public class IncidentController {
             @RequestParam(required = false) Boolean matrixMissing,
             @RequestParam(required = false) String search,
             @RequestParam(required = false) List<String> source,
-            @RequestParam(required = false) List<String> assignedTo) {
+            @RequestParam(required = false) List<String> assignedTo,
+            @RequestParam(required = false) List<String> statusName) {
 
         return queryUseCase.page(new IncidentFilterRequest(dateFrom, dateTo, tracker, stage,
                 priority, institusi, category, hasWorkaround, status, sla, page, size, sort,
-                direction, scope, matrixMissing, search, source, assignedTo)
+                direction, scope, matrixMissing, search, source, assignedTo, statusName)
                 .toFilter());
     }
 
@@ -112,13 +113,14 @@ public class IncidentController {
             @RequestParam(required = false) String search,
             @RequestParam(required = false) List<String> source,
             @RequestParam(required = false) List<String> assignedTo,
+            @RequestParam(required = false) List<String> statusName,
             HttpServletRequest request) {
 
         // page/size are deliberately not accepted here: the export is the whole filtered set
         // up to its own cap, and honouring a page bound would make `truncated` a lie.
         IncidentFilter filter = new IncidentFilterRequest(dateFrom, dateTo, tracker, stage,
                 priority, institusi, category, hasWorkaround, status, sla, 0,
-                IncidentFilter.MAX_PAGE_SIZE, sort, direction, scope, matrixMissing, search, source, assignedTo).toFilter();
+                IncidentFilter.MAX_PAGE_SIZE, sort, direction, scope, matrixMissing, search, source, assignedTo, statusName).toFilter();
         return exportUseCase.export(username(request), filter);
     }
 

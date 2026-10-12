@@ -47,6 +47,8 @@ public record IncidentFilter(
         String search,
         List<String> sources,
         List<String> assignees,
+        // Redmine status NAME (e.g. 'Closed Wkaround'), as typed in the list mock-up's Status box.
+        List<String> statusNames,
         int page,
         int size,
         String sortColumn,
@@ -110,7 +112,7 @@ public record IncidentFilter(
             ScopeGroup scope, Boolean matrixMissing, int page, int size, String sortColumn,
             String sortDirection) {
         this(dateFrom, dateTo, trackers, stages, priorities, institusi, categories,
-                hasWorkaround, status, sla, scope, matrixMissing, null, null, null, page, size,
+                hasWorkaround, status, sla, scope, matrixMissing, null, null, null, null, page, size,
                 sortColumn, sortDirection);
     }
 
@@ -120,7 +122,7 @@ public record IncidentFilter(
             List<String> categories, Boolean hasWorkaround, StatusFacet status, SlaFacet sla,
             int page, int size, String sortColumn, String sortDirection) {
         this(dateFrom, dateTo, trackers, stages, priorities, institusi, categories,
-                hasWorkaround, status, sla, null, null, null, null, null, page, size, sortColumn,
+                hasWorkaround, status, sla, null, null, null, null, null, null, page, size, sortColumn,
                 sortDirection);
     }
 
@@ -128,7 +130,7 @@ public record IncidentFilter(
     public IncidentFilter withScope(ScopeGroup newScope) {
         return new IncidentFilter(dateFrom, dateTo, trackers, stages, priorities, institusi,
                 categories, hasWorkaround, status, sla, newScope, matrixMissing, search, sources,
-                assignees, page, size, sortColumn, sortDirection);
+                assignees, statusNames, page, size, sortColumn, sortDirection);
     }
 
     public IncidentFilter {
@@ -141,6 +143,7 @@ public record IncidentFilter(
         categories = clean(categories);
         sources = clean(sources);
         assignees = clean(assignees);
+        statusNames = clean(statusNames);
         search = search == null || search.isBlank() ? null
                 : search.trim().substring(0, Math.min(search.trim().length(), MAX_SEARCH_LENGTH));
         page = Math.max(page, 0);

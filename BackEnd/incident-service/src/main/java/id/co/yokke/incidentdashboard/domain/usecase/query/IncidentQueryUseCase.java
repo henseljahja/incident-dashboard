@@ -222,6 +222,7 @@ public class IncidentQueryUseCase {
 
         inList(terms, params, "EXTERNAL_INTERNAL", filter.sources());
         inList(terms, params, "ASSIGNED_TO", filter.assignees());
+        inList(terms, params, "STATUS", filter.statusNames());
         if (filter.search() != null) {
             // Bound LIKE over the ticket number, subject, assignee and institusi. The term is
             // escaped so a client-supplied % or _ matches itself instead of widening the scan.

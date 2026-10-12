@@ -46,7 +46,8 @@ public record IncidentFilterRequest(
         Boolean matrixMissing,
         String search,
         List<String> source,
-        List<String> assignedTo) {
+        List<String> assignedTo,
+        List<String> statusName) {
 
     /** Pre-search shape, kept so callers that never search do not have to say so. */
     public IncidentFilterRequest(LocalDate dateFrom, LocalDate dateTo, List<String> tracker,
@@ -55,7 +56,7 @@ public record IncidentFilterRequest(
             Integer page, Integer size, String sort, String direction, String scope,
             Boolean matrixMissing) {
         this(dateFrom, dateTo, tracker, stage, priority, institusi, category, hasWorkaround,
-                status, sla, page, size, sort, direction, scope, matrixMissing, null, null, null);
+                status, sla, page, size, sort, direction, scope, matrixMissing, null, null, null, null);
     }
 
     /** Pre-scope shape, kept so callers that never scope do not have to say so. */
@@ -64,7 +65,7 @@ public record IncidentFilterRequest(
             List<String> category, Boolean hasWorkaround, String status, String sla,
             Integer page, Integer size, String sort, String direction) {
         this(dateFrom, dateTo, tracker, stage, priority, institusi, category, hasWorkaround,
-                status, sla, page, size, sort, direction, null, null, null, null, null);
+                status, sla, page, size, sort, direction, null, null, null, null, null, null);
     }
 
     /**
@@ -81,7 +82,7 @@ public record IncidentFilterRequest(
                 facet("sla", sla, SlaFacet.class),
                 scope(scope),
                 matrixMissing,
-                search, source, assignedTo,
+                search, source, assignedTo, statusName,
                 page == null ? 0 : page,
                 size == null ? IncidentFilter.DEFAULT_PAGE_SIZE : size,
                 sort, direction);
