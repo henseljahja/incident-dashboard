@@ -1,0 +1,79 @@
+- generic [ref=f2e750]:
+  - complementary [ref=f2e751]:
+    - link "Incident Dashboard home" [ref=f2e753] [cursor=pointer]:
+      - /url: /
+      - img "Yokke" [ref=f2e754]
+    - generic [ref=f2e755]: Incident Dashboard
+    - navigation "Main" [ref=f2e756]:
+      - link "Operations" [ref=f2e757] [cursor=pointer]:
+        - /url: /ops
+        - generic [ref=f2e758]: 
+      - link "Wallboard" [ref=f2e760] [cursor=pointer]:
+        - /url: /wallboard
+        - generic [ref=f2e761]: 
+      - link "Executive" [ref=f2e763] [cursor=pointer]:
+        - /url: /exec
+        - generic [ref=f2e764]: 
+      - link "User Management" [ref=f2e766] [cursor=pointer]:
+        - /url: /admin/users
+        - generic [ref=f2e767]: 
+    - generic [ref=f2e769]:
+      - generic [ref=f2e770]: 
+      - generic [ref=f2e772]:
+        - generic "Bootstrap Administrator" [ref=f2e773]
+        - generic [ref=f2e774]: Signed in
+      - button "Log out" [ref=f2e775] [cursor=pointer]:
+        - generic [ref=f2e776]: 
+  - generic [ref=f2e778]:
+    - generic [ref=f2e780]:
+      - button "Toggle navigation" [ref=f2e781] [cursor=pointer]:
+        - generic [ref=f2e782]: 
+      - heading "User Management" [level=1] [ref=f2e783]
+    - generic [ref=f2e787]:
+      - generic [ref=f2e789]:
+        - button "Refresh" [ref=f2e790] [cursor=pointer]:
+          - generic [ref=f2e791]: 
+        - button "Create User" [ref=f2e793] [cursor=pointer]:
+          - generic [ref=f2e794]: 
+      - generic [ref=f2e796]:
+        - textbox "Search username, name or email" [ref=f2e797]
+        - button "Clear" [ref=f2e798] [cursor=pointer]
+        - button "Search" [ref=f2e800] [cursor=pointer]
+      - generic [ref=f2e802]:
+        - table [ref=f2e804]:
+          - rowgroup [ref=f2e805]:
+            - row [ref=f2e806]:
+              - columnheader "No." [ref=f2e807]
+              - columnheader "Username" [ref=f2e810]
+              - columnheader "Name" [ref=f2e813]
+              - columnheader "Email" [ref=f2e816]
+              - columnheader "Role" [ref=f2e819]
+              - columnheader "Last Sign-in" [ref=f2e822]
+              - columnheader "Status" [ref=f2e825]
+              - columnheader "Action" [ref=f2e828]
+          - rowgroup [ref=f2e831]:
+            - row [ref=f2e832]:
+              - cell "1" [ref=f2e833]
+              - cell "ops.lead" [ref=f2e834]
+              - cell "Operations Lead" [ref=f2e835]
+              - cell "ops.lead@yokke.co.id" [ref=f2e836]
+              - cell "Ops Manager" [ref=f2e837]
+              - cell "—" [ref=f2e838]
+              - cell [ref=f2e839]:
+                - alert [ref=f2e841]:
+                  - generic [ref=f2e842]: Pending
+              - cell [ref=f2e845]:
+                - generic [ref=f2e846]:
+                  - button "View" [ref=f2e847] [cursor=pointer]
+                  - button "Edit" [ref=f2e849] [cursor=pointer]
+        - navigation [ref=f2e851]:
+          - generic [ref=f2e852]:
+            - generic [ref=f2e854]:
+              - generic [ref=f2e855]: Rows per page
+              - combobox "Rows per page" [ref=f2e857] [cursor=pointer]: "10"
+            - generic [ref=f2e861]:
+              - button "First Page" [disabled]
+              - button "Previous Page" [disabled]
+              - button "Page 1" [ref=f2e863] [cursor=pointer]: "1"
+              - button "Next Page" [disabled]
+              - button "Last Page" [disabled]

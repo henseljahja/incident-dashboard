@@ -1,0 +1,424 @@
+- generic [ref=f4e3]:
+  - complementary [ref=f4e4]:
+    - link "Incident Dashboard home" [ref=f4e6] [cursor=pointer]:
+      - /url: /
+      - img "Yokke" [ref=f4e7]
+    - generic [ref=f4e8]: Incident Dashboard
+    - navigation "Main" [ref=f4e9]:
+      - link "Operations" [ref=f4e10] [cursor=pointer]:
+        - /url: /ops
+        - generic [ref=f4e11]: 
+      - link "Wallboard" [ref=f4e13] [cursor=pointer]:
+        - /url: /wallboard
+        - generic [ref=f4e14]: 
+      - link "Executive" [ref=f4e16] [cursor=pointer]:
+        - /url: /exec
+        - generic [ref=f4e17]: 
+      - link "User Management" [ref=f4e19] [cursor=pointer]:
+        - /url: /admin/users
+        - generic [ref=f4e20]: 
+    - generic [ref=f4e22]:
+      - generic [ref=f4e23]: 
+      - generic [ref=f4e25]:
+        - generic "Bootstrap Administrator" [ref=f4e26]
+        - generic [ref=f4e27]: Signed in
+      - button "Log out" [ref=f4e28] [cursor=pointer]:
+        - generic [ref=f4e29]: 
+  - generic [ref=f4e31]:
+    - generic [ref=f4e33]:
+      - button "Toggle navigation" [ref=f4e34] [cursor=pointer]:
+        - generic [ref=f4e35]: 
+      - heading "Operations" [level=1] [ref=f4e36]
+      - alert [ref=f4e39]:
+        - generic [ref=f4e41]: Dashboard data is stale — last mirrored 8/26/2026, 4:23:04 PM (mirror-lagging).
+    - generic [ref=f4e45]:
+      - generic [ref=f4e46]:
+        - 'button "Backlog: 95. Scroll to the incident table." [ref=f4e47] [cursor=pointer]':
+          - generic [ref=f4e49]:
+            - generic [ref=f4e50]: Backlog
+            - generic [ref=f4e51]: 
+          - generic [ref=f4e52]:
+            - generic [ref=f4e53]: "95"
+            - generic [ref=f4e54]: 
+        - 'button "Open: 5. Scroll to the incident table." [ref=f4e55] [cursor=pointer]':
+          - generic [ref=f4e57]:
+            - generic [ref=f4e58]: Open
+            - generic [ref=f4e59]: 
+          - generic [ref=f4e60]:
+            - generic [ref=f4e61]: "5"
+            - generic [ref=f4e62]: 
+        - 'button "Breached: 2. Scroll to the incident table." [ref=f4e63] [cursor=pointer]':
+          - generic [ref=f4e65]:
+            - generic [ref=f4e66]: Breached
+            - generic [ref=f4e67]: 
+          - generic [ref=f4e68]:
+            - generic [ref=f4e69]: "2"
+            - generic [ref=f4e70]: 
+        - 'button "At Risk: 38. Scroll to the incident table." [ref=f4e71] [cursor=pointer]':
+          - generic [ref=f4e73]:
+            - generic [ref=f4e74]: At Risk
+            - generic [ref=f4e75]: 
+          - generic [ref=f4e76]:
+            - generic [ref=f4e77]: "38"
+            - generic [ref=f4e78]: 
+        - 'button "MTTR (workaround, days): 1.0. Scroll to the incident table." [ref=f4e79] [cursor=pointer]':
+          - generic [ref=f4e81]:
+            - generic [ref=f4e82]: MTTR (workaround, days)
+            - generic [ref=f4e83]: 
+          - generic [ref=f4e84]:
+            - generic [ref=f4e85]: "1.0"
+            - generic [ref=f4e86]: 
+        - 'button "MTTR (permanent, days): 4.0. Scroll to the incident table." [ref=f4e87] [cursor=pointer]':
+          - generic [ref=f4e89]:
+            - generic [ref=f4e90]: MTTR (permanent, days)
+            - generic [ref=f4e91]: 
+          - generic [ref=f4e92]:
+            - generic [ref=f4e93]: "4.0"
+            - generic [ref=f4e94]: 
+        - 'button "Workaround Debt: 1. Filter the table to incidents that have a workaround." [ref=f4e95] [cursor=pointer]':
+          - generic [ref=f4e97]:
+            - generic [ref=f4e98]: Workaround Debt
+            - generic [ref=f4e99]: 
+          - generic [ref=f4e100]:
+            - generic [ref=f4e101]: "1"
+            - generic [ref=f4e102]: 
+      - generic [ref=f4e103]:
+        - generic [ref=f4e104]:
+          - generic [ref=f4e105]: Impact × Urgency
+          - table [ref=f4e106]:
+            - rowgroup [ref=f4e107]:
+              - row [ref=f4e108]:
+                - columnheader [ref=f4e109]
+                - columnheader "Unclassified" [ref=f4e110]
+                - columnheader "Unknown (160)" [ref=f4e111]:
+                  - generic [ref=f4e112]: 
+                  - text: Unknown (160)
+                - columnheader "Unknown (999999)" [ref=f4e113]:
+                  - generic [ref=f4e114]: 
+                  - text: Unknown (999999)
+            - rowgroup [ref=f4e115]:
+              - row [ref=f4e116]:
+                - rowheader "Unclassified" [ref=f4e117]
+                - cell [ref=f4e118]:
+                  - button "Impact Unclassified, urgency Unclassified, 93 incidents" [ref=f4e119]: "93"
+                - cell [ref=f4e120]:
+                  - button "Impact Unknown (160), urgency Unclassified, 0 incidents" [ref=f4e121]: "0"
+                - cell [ref=f4e122]:
+                  - button "Impact Unknown (999999), urgency Unclassified, 1 incidents" [ref=f4e123]: "1"
+              - row [ref=f4e124]:
+                - rowheader "Unknown (164)" [ref=f4e125]:
+                  - generic [ref=f4e126]: 
+                  - text: Unknown (164)
+                - cell [ref=f4e127]:
+                  - button "Impact Unclassified, urgency Unknown (164), 0 incidents" [ref=f4e128]: "0"
+                - cell [ref=f4e129]:
+                  - button "Impact Unknown (160), urgency Unknown (164), 1 incidents" [ref=f4e130]: "1"
+                - cell [ref=f4e131]:
+                  - button "Impact Unknown (999999), urgency Unknown (164), 0 incidents" [ref=f4e132]: "0"
+          - generic [ref=f4e133]: "Total: 95"
+        - generic [ref=f4e134]:
+          - generic [ref=f4e135]: SLA Buckets
+          - generic [ref=f4e136]:
+            - generic [ref=f4e137]: 0-50%
+            - generic [ref=f4e140]: "4"
+          - generic [ref=f4e141]:
+            - generic [ref=f4e142]: 50-80%
+            - generic [ref=f4e145]: "49"
+          - generic [ref=f4e146]:
+            - generic [ref=f4e147]: 80-100%
+            - generic [ref=f4e150]: "38"
+          - generic [ref=f4e151]:
+            - generic [ref=f4e152]: Breached
+            - generic [ref=f4e155]: "2"
+          - generic [ref=f4e156]:
+            - generic [ref=f4e157]: Unknown
+            - generic [ref=f4e160]: "2"
+          - generic [ref=f4e161]: "Total: 95"
+        - generic [ref=f4e162]:
+          - generic [ref=f4e163]: Created / Closed / Backlog
+          - table [ref=f4e165]:
+            - caption [ref=f4e166]: Created, closed, and backlog counts by period
+            - rowgroup [ref=f4e167]:
+              - row [ref=f4e168]:
+                - columnheader "Period" [ref=f4e169]
+                - columnheader "Created" [ref=f4e170]
+                - columnheader "Closed" [ref=f4e171]
+                - columnheader "Backlog" [ref=f4e172]
+            - rowgroup [ref=f4e173]:
+              - row [ref=f4e174]:
+                - rowheader "2026-07" [ref=f4e175]
+                - cell "95" [ref=f4e176]
+                - cell "89" [ref=f4e177]
+                - cell "6" [ref=f4e178]
+              - row [ref=f4e179]:
+                - rowheader "2026-08" [ref=f4e180]
+                - cell "0" [ref=f4e181]
+                - cell "1" [ref=f4e182]
+                - cell "5" [ref=f4e183]
+      - search "Incident filters" [ref=f4e184]:
+        - generic [ref=f4e185]:
+          - generic [ref=f4e186]: From
+          - generic [ref=f4e187]:
+            - combobox "From" [ref=f4e188]
+            - button "Choose Date" [ref=f4e189] [cursor=pointer]
+        - generic [ref=f4e192]:
+          - generic [ref=f4e193]: To
+          - generic [ref=f4e194]:
+            - combobox "To" [ref=f4e195]
+            - button "Choose Date" [ref=f4e196] [cursor=pointer]
+        - generic [ref=f4e199]:
+          - generic [ref=f4e200]: Tracker
+          - generic [ref=f4e201] [cursor=pointer]:
+            - generic:
+              - combobox "Tracker"
+            - generic [ref=f4e202]: Any tracker
+        - generic [ref=f4e207]:
+          - generic [ref=f4e208]: Stage
+          - generic [ref=f4e209] [cursor=pointer]:
+            - generic:
+              - combobox "Stage"
+            - generic [ref=f4e210]: Any stage
+        - generic [ref=f4e215]:
+          - generic [ref=f4e216]: Priority
+          - generic [ref=f4e217] [cursor=pointer]:
+            - generic:
+              - combobox "Priority"
+            - generic [ref=f4e218]: Any priority
+        - generic [ref=f4e223]:
+          - generic [ref=f4e224]: Institusi
+          - listbox [ref=f4e226]:
+            - option [ref=f4e227]:
+              - textbox "Institusi" [ref=f4e228]:
+                - /placeholder: Type and press Enter
+        - generic [ref=f4e229]:
+          - generic [ref=f4e230]: Category
+          - listbox [ref=f4e232]:
+            - option [ref=f4e233]:
+              - textbox "Category" [ref=f4e234]:
+                - /placeholder: Type and press Enter
+        - generic [ref=f4e235]:
+          - generic [ref=f4e236]: Has workaround
+          - combobox "Has workaround" [ref=f4e238] [cursor=pointer]
+        - button "Clear filters" [ref=f4e242]
+      - generic [ref=f4e244]:
+        - generic [ref=f4e245]:
+          - generic [ref=f4e246]: 95 incident(s)
+          - button "Export" [ref=f4e247] [cursor=pointer]:
+            - generic [ref=f4e248]: 
+        - table [ref=f4e251]:
+          - rowgroup [ref=f4e252]:
+            - row [ref=f4e253]:
+              - columnheader "Subject" [ref=f4e254]
+              - columnheader "Tracker" [ref=f4e255]
+              - columnheader "Status" [ref=f4e256]
+              - columnheader "Priority" [ref=f4e257]
+              - columnheader "SLA" [ref=f4e258]
+              - columnheader "Aging (days)" [ref=f4e259]
+          - rowgroup [ref=f4e260]:
+            - row [ref=f4e261]:
+              - cell [ref=f4e262]:
+                - button "Open incident Kendala Transaksi Update Balance Prepaid BNI mengalami kendala (Dominan Decline & Timeout)" [ref=f4e263] [cursor=pointer]: Kendala Transaksi Update Balance Prepaid BNI mengalami kendala (Dominan Decline & Timeout)
+              - cell "Incident" [ref=f4e264]
+              - cell "Closed Wkaround" [ref=f4e265]
+              - cell "Low" [ref=f4e266]
+              - cell "0-50%" [ref=f4e269]
+              - cell "29" [ref=f4e272]
+            - row [ref=f4e273]:
+              - cell [ref=f4e274]:
+                - button "Open incident Kendala Transaksi EDC BNI Mengalami peningkatan reversal dan timeout" [ref=f4e275] [cursor=pointer]: Kendala Transaksi EDC BNI Mengalami peningkatan reversal dan timeout
+              - cell "Incident" [ref=f4e276]
+              - cell "Closed Wkaround" [ref=f4e277]
+              - cell "Low" [ref=f4e278]
+              - cell "0-50%" [ref=f4e281]
+              - cell "29" [ref=f4e284]
+            - row [ref=f4e285]:
+              - cell [ref=f4e286]:
+                - button "Open incident Transaksi QRIS CPM mengalami kenaikan timeout" [ref=f4e287] [cursor=pointer]: Transaksi QRIS CPM mengalami kenaikan timeout
+              - cell "Incident" [ref=f4e288]
+              - cell "Closed Wkaround" [ref=f4e289]
+              - cell "Low" [ref=f4e290]
+              - cell "50-80%" [ref=f4e293]
+              - cell "30" [ref=f4e296]
+            - row [ref=f4e297]:
+              - cell [ref=f4e298]:
+                - button "Open incident Kendala Transaksi QRIS Switching AJ dengan issuer Bank BNI mengalami penurunan Transaksi" [ref=f4e299] [cursor=pointer]: Kendala Transaksi QRIS Switching AJ dengan issuer Bank BNI mengalami penurunan Transaksi
+              - cell "Incident" [ref=f4e300]
+              - cell "Closed Wkaround" [ref=f4e301]
+              - cell "Low" [ref=f4e302]
+              - cell "50-80%" [ref=f4e305]
+              - cell "31" [ref=f4e308]
+            - row [ref=f4e309]:
+              - cell [ref=f4e310]:
+                - button "Open incident Kendala proses outgoing VISA mengalami full reject." [ref=f4e311] [cursor=pointer]: Kendala proses outgoing VISA mengalami full reject.
+              - cell "Incident" [ref=f4e312]
+              - cell "Closed Wkaround" [ref=f4e313]
+              - cell "Medium" [ref=f4e314]
+              - cell "Breached" [ref=f4e317]
+              - cell "31" [ref=f4e320]
+            - row [ref=f4e321]:
+              - cell [ref=f4e322]:
+                - button "Open incident Kendala File TC33A_CYBERSOURCE blm tersedia di EAS VISA" [ref=f4e323] [cursor=pointer]: Kendala File TC33A_CYBERSOURCE blm tersedia di EAS VISA
+              - cell "Incident" [ref=f4e324]
+              - cell "Closed Wkaround" [ref=f4e325]
+              - cell "Low" [ref=f4e326]
+              - cell "50-80%" [ref=f4e329]
+              - cell "32" [ref=f4e332]
+            - row [ref=f4e333]:
+              - cell [ref=f4e334]:
+                - button "Open incident Kendala CALLBACK Mandiri mengalami down" [ref=f4e335] [cursor=pointer]: Kendala CALLBACK Mandiri mengalami down
+              - cell "Incident" [ref=f4e336]
+              - cell "Closed Wkaround" [ref=f4e337]
+              - cell "Low" [ref=f4e338]
+              - cell "50-80%" [ref=f4e341]
+              - cell "33" [ref=f4e344]
+            - row [ref=f4e345]:
+              - cell [ref=f4e346]:
+                - button "Open incident Kendala CALLBACK Mandiri mengalami down" [ref=f4e347] [cursor=pointer]: Kendala CALLBACK Mandiri mengalami down
+              - cell "Incident" [ref=f4e348]
+              - cell "Closed Wkaround" [ref=f4e349]
+              - cell "Low" [ref=f4e350]
+              - cell "50-80%" [ref=f4e353]
+              - cell "33" [ref=f4e356]
+            - row [ref=f4e357]:
+              - cell [ref=f4e358]:
+                - button "Open incident Optimalisasi Batch Response Payment File API LM R4" [ref=f4e359] [cursor=pointer]: Optimalisasi Batch Response Payment File API LM R4
+              - cell "Incident" [ref=f4e360]
+              - cell "Analysis" [ref=f4e361]
+              - cell "Low" [ref=f4e362]
+              - cell "50-80%" [ref=f4e365]
+              - cell "33" [ref=f4e368]
+            - row [ref=f4e369]:
+              - cell [ref=f4e370]:
+                - button "Open incident Issue EDC Sunmi aplikasi Mandiri Payment versi 26.02.13.008" [ref=f4e371] [cursor=pointer]: Issue EDC Sunmi aplikasi Mandiri Payment versi 26.02.13.008
+              - cell "Incident" [ref=f4e372]
+              - cell "UAT" [ref=f4e373]
+              - cell "Low" [ref=f4e374]
+              - cell "50-80%" [ref=f4e377]
+              - cell "34" [ref=f4e380]
+            - row [ref=f4e381]:
+              - cell [ref=f4e382]:
+                - button "Open incident Transaksi OCBC veri code 505 tidak bisa dikoreksi" [ref=f4e383] [cursor=pointer]: Transaksi OCBC veri code 505 tidak bisa dikoreksi
+              - cell "Incident" [ref=f4e384]
+              - cell "Closed (No CCB)" [ref=f4e385]
+              - cell "Low" [ref=f4e386]
+              - cell "50-80%" [ref=f4e389]
+              - cell "34" [ref=f4e392]
+            - row [ref=f4e393]:
+              - cell [ref=f4e394]:
+                - button "Open incident Kendala Screen MAAS dan muncul popup error" [ref=f4e395] [cursor=pointer]: Kendala Screen MAAS dan muncul popup error
+              - cell "Incident" [ref=f4e396]
+              - cell "UAT-DF" [ref=f4e397]
+              - cell "Low" [ref=f4e398]
+              - cell "50-80%" [ref=f4e401]
+              - cell "34" [ref=f4e404]
+            - row [ref=f4e405]:
+              - cell [ref=f4e406]:
+                - button "Open incident Pending payment veri_cd 403" [ref=f4e407] [cursor=pointer]: Pending payment veri_cd 403
+              - cell "Incident" [ref=f4e408]
+              - cell "Closed Wkaround" [ref=f4e409]
+              - cell "Low" [ref=f4e410]
+              - cell "50-80%" [ref=f4e413]
+              - cell "34" [ref=f4e416]
+            - row [ref=f4e417]:
+              - cell [ref=f4e418]:
+                - button "Open incident Kendala CALLBACK Mandiri mengalami down" [ref=f4e419] [cursor=pointer]: Kendala CALLBACK Mandiri mengalami down
+              - cell "Incident" [ref=f4e420]
+              - cell "Closed Wkaround" [ref=f4e421]
+              - cell "Low" [ref=f4e422]
+              - cell "50-80%" [ref=f4e425]
+              - cell "34" [ref=f4e428]
+            - row [ref=f4e429]:
+              - cell [ref=f4e430]:
+                - button "Open incident Kendala pada aplilkasi AOB terkait something bad happen setelah submit rekening" [ref=f4e431] [cursor=pointer]: Kendala pada aplilkasi AOB terkait something bad happen setelah submit rekening
+              - cell "Incident" [ref=f4e432]
+              - cell "Closed Wkaround" [ref=f4e433]
+              - cell "Low" [ref=f4e434]
+              - cell "50-80%" [ref=f4e437]
+              - cell "35" [ref=f4e440]
+            - row [ref=f4e441]:
+              - cell [ref=f4e442]:
+                - button "Open incident Penurunan Transaksi QRIS MPM Onus Issuer Bank Mandiri ( livin )" [ref=f4e443] [cursor=pointer]: Penurunan Transaksi QRIS MPM Onus Issuer Bank Mandiri ( livin )
+              - cell "Incident" [ref=f4e444]
+              - cell "Closed Wkaround" [ref=f4e445]
+              - cell "Low" [ref=f4e446]
+              - cell "50-80%" [ref=f4e449]
+              - cell "35" [ref=f4e452]
+            - row [ref=f4e453]:
+              - cell [ref=f4e454]:
+                - button "Open incident Kendala Transaksi EDC BRI mengalami peningkatan timeout" [ref=f4e455] [cursor=pointer]: Kendala Transaksi EDC BRI mengalami peningkatan timeout
+              - cell "Incident" [ref=f4e456]
+              - cell "Closed Wkaround" [ref=f4e457]
+              - cell "Low" [ref=f4e458]
+              - cell "50-80%" [ref=f4e461]
+              - cell "36" [ref=f4e464]
+            - row [ref=f4e465]:
+              - cell [ref=f4e466]:
+                - button "Open incident Kendala Transaksi Credit dan Debit BNI mengalami kenaikan decline RC 91 dan RC 30" [ref=f4e467] [cursor=pointer]: Kendala Transaksi Credit dan Debit BNI mengalami kenaikan decline RC 91 dan RC 30
+              - cell "Incident" [ref=f4e468]
+              - cell "Closed Wkaround" [ref=f4e469]
+              - cell "Low" [ref=f4e470]
+              - cell "50-80%" [ref=f4e473]
+              - cell "36" [ref=f4e476]
+            - row [ref=f4e477]:
+              - cell [ref=f4e478]:
+                - button "Open incident Kendala Transaksi Jalin mengarah ke Bank BCA Mengalami decline RC 91" [ref=f4e479] [cursor=pointer]: Kendala Transaksi Jalin mengarah ke Bank BCA Mengalami decline RC 91
+              - cell "Incident" [ref=f4e480]
+              - cell "Closed Wkaround" [ref=f4e481]
+              - cell "Low" [ref=f4e482]
+              - cell "50-80%" [ref=f4e485]
+              - cell "36" [ref=f4e488]
+            - row [ref=f4e489]:
+              - cell [ref=f4e490]:
+                - button "Open incident Kendala transaksi QRIS BRI Acq Mandiri mengalami penurunan hit" [ref=f4e491] [cursor=pointer]: Kendala transaksi QRIS BRI Acq Mandiri mengalami penurunan hit
+              - cell "Incident" [ref=f4e492]
+              - cell "Closed Wkaround" [ref=f4e493]
+              - cell "Low" [ref=f4e494]
+              - cell "50-80%" [ref=f4e497]
+              - cell "39" [ref=f4e500]
+            - row [ref=f4e501]:
+              - cell [ref=f4e502]:
+                - button "Open incident Kendala gagal settlement di EDC GST merchant Alfamart yang disebabkan oleh gagal logon" [ref=f4e503] [cursor=pointer]: Kendala gagal settlement di EDC GST merchant Alfamart yang disebabkan oleh gagal logon
+              - cell "Incident" [ref=f4e504]
+              - cell "Closed Wkaround" [ref=f4e505]
+              - cell "Low" [ref=f4e506]
+              - cell "50-80%" [ref=f4e509]
+              - cell "39" [ref=f4e512]
+            - row [ref=f4e513]:
+              - cell [ref=f4e514]:
+                - button "Open incident Ketidaksesuaian Status Transaksi ECR H2H antara EDC dan POS" [ref=f4e515] [cursor=pointer]: Ketidaksesuaian Status Transaksi ECR H2H antara EDC dan POS
+              - cell "Incident" [ref=f4e516]
+              - cell "UAT" [ref=f4e517]
+              - cell "Low" [ref=f4e518]
+              - cell "50-80%" [ref=f4e521]
+              - cell "41" [ref=f4e524]
+            - row [ref=f4e525]:
+              - cell [ref=f4e526]:
+                - button "Open incident Kendala saat proses infochange penambahan member bank BTN di EDC sharing android inhouse merchant MR DIY" [ref=f4e527] [cursor=pointer]: Kendala saat proses infochange penambahan member bank BTN di EDC sharing android inhouse merchant MR DIY
+              - cell "Incident" [ref=f4e528]
+              - cell "Closed" [ref=f4e529]
+              - cell "Low" [ref=f4e530]
+              - cell "50-80%" [ref=f4e533]
+              - cell "41" [ref=f4e536]
+            - row [ref=f4e537]:
+              - cell [ref=f4e538]:
+                - button "Open incident Kendala Job DisbursementLMR3/QR_STATIC_PAYMENT_NEW/QRPayment06/BAC04V338U00 ended abnormally" [ref=f4e539] [cursor=pointer]: Kendala Job DisbursementLMR3/QR_STATIC_PAYMENT_NEW/QRPayment06/BAC04V338U00 ended abnormally
+              - cell "Incident" [ref=f4e540]
+              - cell "Closed Wkaround" [ref=f4e541]
+              - cell "Low" [ref=f4e542]
+              - cell "50-80%" [ref=f4e545]
+              - cell "41" [ref=f4e548]
+            - row [ref=f4e549]:
+              - cell [ref=f4e550]:
+                - button "Open incident Pending payment veri_cd 403" [ref=f4e551] [cursor=pointer]: Pending payment veri_cd 403
+              - cell "Incident" [ref=f4e552]
+              - cell "Closed Wkaround" [ref=f4e553]
+              - cell "Low" [ref=f4e554]
+              - cell "50-80%" [ref=f4e557]
+              - cell "42" [ref=f4e560]
+        - generic [ref=f4e561]:
+          - generic [ref=f4e562]: Page 1 of 4
+          - generic [ref=f4e563]:
+            - button "Prev" [disabled] [ref=f4e564]:
+              - generic [ref=f4e565]: 
+            - button "Next" [ref=f4e567] [cursor=pointer]:
+              - generic [ref=f4e568]: 

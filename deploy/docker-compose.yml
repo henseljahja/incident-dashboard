@@ -1,0 +1,168 @@
+# =============================================================================
+# DEMO / EVALUATION STACK — Oracle + incident-service + incident-dashboard.
+#
+# Purpose: bring the whole thing up on one machine so a human can log in and click around.
+#
+# THIS IS NOT THE TEST STACK and it is NOT a production manifest.
+#   - Tier 2/3 run against the Testcontainers Oracle (`OracleTestContainer`), which is the
+#     isolated stack this repo declares in AGENTS.md. Do not point test fixtures here: they
+#     TRUNCATE tables.
+#   - `BackEnd/local-infra/docker-compose.yml` is the Oracle-only DEV stack. Separate project
+#     name, separate volume, separate port (1522). This file uses 1523 so all three can coexist.
+#
+# ONE DELIBERATE DIVERGENCE FROM PRODUCTION, stated up front:
+#   Production reads the mirror from a real second schema, `REDMINE_MIRROR.` (dot separator).
+#   This stack uses the PREFIX form, `REDMINE_MIRROR_` (underscore) in a single schema, because
+#   that is what `MirrorFixtureLoader` creates and therefore what tier 2 and tier 3 exercise
+#   every run. Using the tested shape here means the demo cannot drift from the tested one.
+#   Both values carry their own trailing separator — consumers concatenate and never add a dot.
+# =============================================================================
+
+name: incident-dashboard-demo
+
+services:
+  oracle:
+    image: gvenzl/oracle-free:23-slim
+    container_name: incident-demo-oracle
+    environment:
+      ORACLE_PASSWORD: ${ORACLE_PASSWORD:-localdev}
+      ORACLE_DATABASE: INCIDENTDB
+      APP_USER: INCIDENT_DASH
+      APP_USER_PASSWORD: ${INCIDENT_DASH_DB_PASSWORD:?set INCIDENT_DASH_DB_PASSWORD in deploy/.env}
+      TZ: Asia/Jakarta
+    ports:
+      # 1523: 1521 is the conventional default, 1522 belongs to the dev stack above.
+      - "1523:1521"
+    volumes:
+      - incident-demo-oracle-data:/opt/oracle/oradata
+    healthcheck:
+      # The service waits on this. A cold oracle-free needs ~95s to uncompress its data files
+      # and report "DATABASE IS READY TO USE!" — start_period covers that without the retries
+      # budget being burned before the DB has had a fair chance.
+      test: ["CMD", "healthcheck.sh"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 120s
+
+  incident-service:
+    build:
+      context: ../BackEnd/incident-service
+      dockerfile: Dockerfile
+    container_name: incident-demo-service
+    depends_on:
+      oracle:
+        condition: service_healthy
+    environment:
+      TZ: Asia/Jakarta
+      SPRING_DATASOURCE_URL: jdbc:oracle:thin:@//oracle:1521/INCIDENTDB
+      SPRING_DATASOURCE_USERNAME: INCIDENT_DASH
+      SPRING_DATASOURCE_PASSWORD: ${INCIDENT_DASH_DB_PASSWORD:?set INCIDENT_DASH_DB_PASSWORD in deploy/.env}
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: oracle.jdbc.OracleDriver
+
+      # Mirror location. Note the trailing underscore — see the header.
+      INCIDENT_MIRROR_SCHEMA: REDMINE_MIRROR_
+      SPRING_FLYWAY_PLACEHOLDERS_MIRROR: REDMINE_MIRROR_
+
+      # Flyway MUST be able to run here. The exclusion that used to disable it lives under the
+      # `scaffold` profile now; if you ever see "no DataSource" or an empty schema, check that
+      # SPRING_PROFILES_ACTIVE has not picked up `scaffold`.
+      SPRING_FLYWAY_ENABLED: "true"
+
+      # start-demo.sh creates the mirror tables BEFORE the service starts (V3__mart.sql declares
+      # V_INCIDENT over them), which leaves a non-empty schema. Flyway refuses to migrate one
+      # without a history table, so it has to be baselined. Version 0, NOT Flyway's default of 1:
+      # at the default the baseline marker sits at version 1 and V1__config_tables.sql is silently
+      # skipped forever. AbstractOracleIT sets exactly this pair, for exactly this reason.
+      SPRING_FLYWAY_BASELINE_ON_MIGRATE: "true"
+      SPRING_FLYWAY_BASELINE_VERSION: "0"
+
+      # Bootstrap admin. R__SeedAdmin hard-fails startup if this is set and under 12 characters,
+      # and warns-and-skips if unset — so the app would come up with no way to log in.
+      INCIDENT_ADMIN_PASSWORD: ${INCIDENT_ADMIN_PASSWORD:?set INCIDENT_ADMIN_PASSWORD (>=12 chars) in deploy/.env}
+
+      # >= 32 bytes: jjwt rejects an HS256 key shorter than the digest.
+      INCIDENT_JWT_SECRET: ${INCIDENT_JWT_SECRET:?set INCIDENT_JWT_SECRET (>=32 chars) in deploy/.env}
+
+      # The refresh cookie's Secure attribute. TRUE everywhere real; false ONLY here, and only
+      # because this stack is served over plain HTTP.
+      #
+      # A browser DISCARDS a Secure cookie that arrives from a non-HTTPS origin. It makes one
+      # exception — localhost — which is exactly why this never showed up in local testing: at
+      # http://localhost:8090 the cookie is kept and everything works. Point a browser at
+      # http://<ip>:8090 instead and the login still returns 200 with a token, the cookie is
+      # silently dropped, and every /auth/refresh answers 401: the session dies on the first
+      # reload and the silent refresh-on-401 can never recover it. No response header says
+      # "rejected"; it only looks like the user was logged out for no reason.
+      #
+      # This puts a 24h bearer credential in cleartext on the network. Acceptable only for an
+      # internal demo box on a VPN. THE FIX IS TLS — put a certificate in front of nginx and
+      # delete this line.
+      INCIDENT_JWT_COOKIE_SECURE: "${INCIDENT_JWT_COOKIE_SECURE:-false}"
+
+      # Browser talks to the SPA's origin, and nginx proxies onward, so the allowlist is the
+      # dashboard's public origin — never the service's. Never `*`: the refresh cookie needs
+      # Access-Control-Allow-Credentials, which is incompatible with a wildcard origin.
+      INCIDENT_CORS_ALLOWED_ORIGINS: ${DASHBOARD_ORIGIN:-http://localhost:8090}
+
+      # Scheduler ON. deploy/seed-demo.sh populates only the MIRROR; the service's own ETL then
+      # builds INCIDENT_FACT from it on the next tick — the real path, not a bypass. 30s here
+      # instead of the 120s default so the demo has data a few seconds after seeding.
+      INCIDENT_ETL_SCHEDULING_ENABLED: "true"
+      INCIDENT_ETL_REFRESH_INTERVAL_MS: "30000"
+    ports:
+      - "8081:8080"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 60s
+
+  incident-dashboard:
+    build:
+      context: ../FrontEnd/incident-dashboard
+      dockerfile: Dockerfile
+      args:
+        # Baked into the bundle at build time (Vite inlines import.meta.env.*), so this is a
+        # build arg and not an `environment:` entry — setting it below would do nothing.
+        # Empty by default: the demo stack has no Redmine to point at, and the drawer renders
+        # a disabled control saying so rather than linking to a placeholder domain. Set
+        # REDMINE_BASE_URL in deploy/.env to enable the deep links.
+        VITE_REDMINE_BASE_URL: "${REDMINE_BASE_URL:-}"
+    container_name: incident-demo-dashboard
+    depends_on:
+      incident-service:
+        condition: service_started
+    environment:
+      TZ: Asia/Jakarta
+    ports:
+      - "8090:80"
+
+# PIN THE BRIDGE SUBNET. Do not delete this block and let Docker choose.
+#
+# Left to itself, Docker allocates from its default pool (172.17.0.0/16, then 172.18.0.0/16, …)
+# and this stack took 172.18.0.0/16 on 2026-08-24. That range is NOT free here: the corporate
+# network hands 172.18.x.x to real clients. The moment the network came up, the host gained a
+# LOCAL route for 172.18.0.0/16, so every reply to a 172.18 client went to the bridge instead of
+# out ens18 to the gateway — 65,534 addresses blackholed.
+#
+# It is silent and it is total. Not "port 8090 is blocked": that host stopped answering those
+# clients on every port, SSH included. `hafizh` (172.18.28.165) logged in on 2026-08-19 and was
+# never able to reach the box again after the 24th. Users on 172.16.x noticed nothing, which is
+# why it presents as "it works for me".
+#
+# 10.103.0.0/24 continues this host's existing convention — docker0 is 10.65, and the llm /
+# aim / langfuse / monitoring stacks sit on 10.99-10.102. Every other stack here was already
+# moved off 172.x for this exact reason; this one was the straggler.
+#
+# Verify before changing: `ip route` on the host must show no route covering the client subnets.
+networks:
+  default:
+    ipam:
+      config:
+        - subnet: 10.103.0.0/24
+
+volumes:
+  incident-demo-oracle-data:
+    name: incident-demo-oracle-data

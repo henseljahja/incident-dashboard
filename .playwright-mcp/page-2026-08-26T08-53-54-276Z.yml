@@ -1,0 +1,26 @@
+- generic [ref=e4]:
+  - generic [ref=e5]:
+    - img "Yokke" [ref=e6]
+    - generic [ref=e7]:
+      - heading "Incident Dashboard" [level=1] [ref=e8]
+      - paragraph [ref=e9]: Incidents, problems and service requests, in one view.
+      - paragraph [ref=e10]: Reporting only — Redmine remains the system of record for every change.
+  - generic [ref=e13]:
+    - heading "Welcome back" [level=2] [ref=e14]
+    - paragraph [ref=e15]: Sign in with your dashboard account to continue.
+    - generic [ref=e16]:
+      - generic [ref=e17]:
+        - generic [ref=e18]: Username
+        - textbox "Username" [ref=e19]:
+          - /placeholder: Enter your username
+          - text: admin
+      - generic [ref=e20]:
+        - generic [ref=e21]: Password
+        - generic [ref=e22]:
+          - textbox "Password" [ref=e23]:
+            - /placeholder: Enter your password
+            - text: WrongPassword#1
+          - generic: Enter a password
+      - alert [ref=e26]:
+        - generic [ref=e27]: Invalid username or password.
+      - button "Sign in" [ref=e30] [cursor=pointer]

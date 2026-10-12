@@ -1,0 +1,66 @@
+- generic [ref=f2e565]:
+  - complementary [ref=f2e566]:
+    - link "Incident Dashboard home" [ref=f2e568] [cursor=pointer]:
+      - /url: /
+      - img "Yokke" [ref=f2e569]
+    - generic [ref=f2e570]: Incident Dashboard
+    - navigation "Main" [ref=f2e571]:
+      - link "Operations" [ref=f2e572] [cursor=pointer]:
+        - /url: /ops
+        - generic [ref=f2e573]: 
+      - link "Wallboard" [ref=f2e575] [cursor=pointer]:
+        - /url: /wallboard
+        - generic [ref=f2e576]: 
+      - link "Executive" [ref=f2e578] [cursor=pointer]:
+        - /url: /exec
+        - generic [ref=f2e579]: 
+      - link "User Management" [ref=f2e581] [cursor=pointer]:
+        - /url: /admin/users
+        - generic [ref=f2e582]: 
+    - generic [ref=f2e584]:
+      - generic [ref=f2e585]: 
+      - generic [ref=f2e587]:
+        - generic "Bootstrap Administrator" [ref=f2e588]
+        - generic [ref=f2e589]: Signed in
+      - button "Log out" [ref=f2e590] [cursor=pointer]:
+        - generic [ref=f2e591]: 
+  - generic [ref=f2e593]:
+    - generic [ref=f2e595]:
+      - button "Toggle navigation" [ref=f2e596] [cursor=pointer]:
+        - generic [ref=f2e597]: 
+      - heading "User Management" [level=1] [ref=f2e598]
+    - generic [ref=f2e602]:
+      - generic [ref=f2e604]:
+        - button "Refresh" [ref=f2e605] [cursor=pointer]:
+          - generic [ref=f2e606]: 
+        - button "Create User" [active] [ref=f2e608] [cursor=pointer]:
+          - generic [ref=f2e609]: 
+      - generic [ref=f2e611]:
+        - textbox "Search username, name or email" [ref=f2e612]
+        - button "Clear" [ref=f2e613] [cursor=pointer]
+        - button "Search" [ref=f2e615] [cursor=pointer]
+      - generic [ref=f2e617]:
+        - table [ref=f2e619]:
+          - rowgroup [ref=f2e620]:
+            - row [ref=f2e621]:
+              - columnheader "No." [ref=f2e622]
+              - columnheader "Username" [ref=f2e625]
+              - columnheader "Name" [ref=f2e628]
+              - columnheader "Email" [ref=f2e631]
+              - columnheader "Role" [ref=f2e634]
+              - columnheader "Last Sign-in" [ref=f2e637]
+              - columnheader "Status" [ref=f2e640]
+              - columnheader "Action" [ref=f2e643]
+          - rowgroup [ref=f2e646]:
+            - row [ref=f2e647]:
+              - cell "No users found." [ref=f2e648]
+        - navigation [ref=f2e650]:
+          - generic [ref=f2e651]:
+            - generic [ref=f2e653]:
+              - generic [ref=f2e654]: Rows per page
+              - combobox "Rows per page" [ref=f2e656] [cursor=pointer]: "10"
+            - generic [ref=f2e660]:
+              - button "First Page" [disabled]
+              - button "Previous Page" [disabled]
+              - button "Next Page" [disabled]
+              - button "Last Page" [disabled]

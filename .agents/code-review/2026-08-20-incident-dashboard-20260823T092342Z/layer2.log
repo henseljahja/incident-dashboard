@@ -1,0 +1,91 @@
+LAYER 2 — AI QUALITY ANALYSIS
+Reviewers: staff-engineer (diff-wide) + conditional specialists dispatched on domain match:
+  security-engineer        (auth filter, JWT, password hashing, export audit)
+  db-migration-reviewer    (V1-V7 + R__SeedAdmin)
+  api-contract-reviewer    (REST controllers)
+  accessibility-reviewer   (Vue views/components)
+  observability-reviewer   (GlobalExceptionHandler, ETL scheduler)
+
+═══ BLOCKERS (all fixed and re-verified) ═══════════════════════════════════════
+
+[B1] db-migration-reviewer — Flyway disabled unconditionally; app cannot boot a real DB.
+  application.yml set spring.autoconfigure.exclude for DataSourceAutoConfiguration,
+  HibernateJpaAutoConfiguration and FlywayAutoConfiguration in the BASE document, and
+  nothing anywhere re-enabled them. Testcontainers ITs build their own DataSource, so the
+  whole suite was green while the shipping configuration would come up with no DataSource
+  and never run V4/V5 or R__SeedAdmin. Fails closed, but the entire auth migration path
+  had never executed in the shape it ships.
+  FIX: moved the exclusion into a `spring.config.activate.on-profile: scaffold` document.
+  Only IncidentDashboardApplicationTests (a context-load smoke test that deliberately wants
+  no database) activates it, via @ActiveProfiles("scaffold").
+
+[B2] staff-engineer — every Ops date filter off by one day.
+  IncidentFilterBar formatted picked dates with toISOString().slice(0,10). PrimeVue's
+  DatePicker emits LOCAL midnight; toISOString renders UTC. At UTC+7 picking 2 Aug sent
+  2026-08-01, and the round trip back into the picker was lossy.
+  Invisible in use: KPI row, heatmap, SLA buckets, trend, table and export all read the
+  same filter store, so every number shifted TOGETHER and stayed mutually consistent while
+  being uniformly wrong. It also wrote a window the operator never chose into
+  EXPORT_AUDIT.FILTER_JSON.
+  FIX: shared src/utils/date.ts (local-component formatDate + local-midnight parseDate),
+  and TZ=Asia/Jakarta pinned in vitest.config.ts — under TZ=UTC the broken version PASSES,
+  so the pin is what makes the test a tripwire. Verified by reverting to the broken
+  implementation: 3 failures.
+
+[B3] Change-password was a dead end that locked out the only account.
+  R__SeedAdmin seeds the bootstrap admin with MUST_CHANGE_PASSWORD='Y' and the auth filter
+  restricts such a session to the change-password scope — but the route rendered
+  ChangePasswordPlaceholder, a component of static text with no form. A first-time admin
+  could log in and then do nothing at all. Backend endpoint was complete and tested; only
+  the UI was a stub, so no test caught it.
+  FIX: real ChangePasswordView + 6 tests, incl. two that prove the post-change redirect
+  reads auth.defaultRoute rather than a hardcoded /ops.
+
+═══ MAJOR (fixed) ══════════════════════════════════════════════════════════════
+
+[M1] security-engineer — credentials recoverable from a stack trace.
+  LoginRequest and ChangePasswordRequest are records, so the compiler-generated toString()
+  prints every component, password included. Any framework path that formats the request
+  object (bind failure, @Valid rejection, an ERROR log carrying the argument) would put a
+  plaintext password in the log file.
+  FIX: explicit toString() on both, masking to ***. Rule recorded in .agents/patterns/logging.md.
+
+[M2] observability-reviewer — 4xx minted a correlation id and logged nothing.
+  GlobalExceptionHandler returned the id to the caller without ever writing it. A user
+  reporting "I got error abc-123" could not be matched to anything server-side.
+  FIX: all 4xx paths pass the exception through respond(status, message, e), logged at WARN
+  with the correlation id.
+
+[M3] An expired access token dead-ended the SPA.
+  The API client surfaced 401 to the caller with no refresh attempt, so a session that
+  outlived the access-token TTL broke mid-use even though a valid refresh cookie was held.
+  FIX: one silent refresh-and-retry on 401, skipped for /auth/** so a genuinely bad login
+  still fails fast instead of looping.
+
+[M4] The wallboard could not distinguish "mirror is lagging" from "service is down".
+  A failed refresh left the last successful figures on screen under the stale-mirror
+  banner. A responder would chase a lagging ETL when the actual fault was the dashboard
+  being offline.
+  FIX: refreshFailed state and a distinct message naming the real condition.
+
+[M5] accessibility-reviewer — PrimeVue controls unlabelled to assistive tech.
+  PrimeVue 4 puts `id` on the outer wrapper <div> and forwards only `input-id` to the real
+  focusable control, so every <label for="..."> resolved to a div. Also: incident rows had
+  no keyboard path, and the trend chart exposed no accessible data.
+  FIX: input-id throughout, keyboard-activatable rows, chart data exposed to AT. Regression
+  test asserts each label's `for` target is a real form control, not a wrapper.
+
+═══ MINOR — batched to deferred-followups.md #9, not fixed here ════════════════
+Naming inconsistencies, a handful of long methods in the mart-building SQL layer, and
+several public methods without doc comments. None affect behaviour.
+
+═══ NOT FIXED — recorded, needs a decision rather than code ════════════════════
+[#5] Paging reconstructs an export with no audit row. /api/incidents/export is airtight,
+     but a VIEWER holding only incident.ops:view can page ?size=200 and rebuild the same
+     dataset with ZERO EXPORT_AUDIT rows and no rate limit. The `export` privilege is a
+     bulk/convenience boundary, not a confidentiality one — worth stating explicitly
+     wherever the roles are documented, because the name implies otherwise.
+[#6] Redmine's is_private ACL is dropped at the mirror, so issues marked private are
+     surfaced to every incident.ops:view holder. This MATCHES the source report query, so
+     it may well be an accepted decision — but it is recorded nowhere, so nobody can tell
+     whether it was decided or overlooked. Needs a business answer.

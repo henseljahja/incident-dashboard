@@ -1,0 +1,489 @@
+{
+  "common": {
+    "appName": "Incident Dashboard",
+    "language": "Bahasa",
+    "retry": "Coba lagi",
+    "noPriorPeriod": "Tidak ada periode sebelumnya",
+    "noDataYet": "Belum ada data",
+    "total": "Total: {total}",
+    "never": "belum pernah",
+    "days": "{value} hari",
+    "daysShort": "{value} h",
+    "yes": "Ya",
+    "no": "Tidak",
+    "any": "Semua",
+    "freshness": {
+      "live": "Terkini · terakhir diperbarui {time}",
+      "stale": "Data dasbor usang — terakhir diperbarui {time}",
+      "error": "Kebaruan data tidak dapat diperiksa.",
+      "reason": {
+        "etl-never-run": "pembaruan data belum pernah berjalan",
+        "etl-stalled": "pembaruan data terhenti",
+        "mirror-lagging": "data Redmine terlambat masuk"
+      }
+    }
+  },
+  "nav": {
+    "menu": {
+      "ops": "Insiden",
+      "problem": "Problem",
+      "sr": "Permintaan Layanan",
+      "exec": "Eksekutif",
+      "wallboard": "Wallboard",
+      "admin": "Manajemen Pengguna"
+    },
+    "toggle": "Buka/tutup navigasi",
+    "skipToContent": "Langsung ke konten utama",
+    "home": "Beranda Incident Dashboard",
+    "main": "Utama",
+    "logout": "Keluar"
+  },
+  "kpi": {
+    "heading": "Indikator utama",
+    "open": "Terbuka",
+    "closed": "Ditutup",
+    "breached": "Melewati SLA",
+    "atRisk": "Berisiko",
+    "workaroundDebt": "Utang workaround",
+    "error": "Angka ini gagal dimuat",
+    "filterHint": "Klik untuk memfilter tabel",
+    "filterActive": "Filter aktif, klik lagi untuk menghapusnya",
+    "filterWorkaround": "Filter tabel ke insiden yang memiliki workaround",
+    "scrollToTable": "Gulir ke tabel insiden",
+    "cardLabel": "{label}: {value}.",
+    "trendUnchanged": "Tidak berubah dari periode sebelumnya.",
+    "trendWorse": "{delta} lebih buruk dari periode sebelumnya.",
+    "trendBetter": "{delta} lebih baik dari periode sebelumnya.",
+    "exec": {
+      "thisMonth": "Bulan ini",
+      "loading": "Memuat ringkasan bulan ini…",
+      "headline": "Angka utama",
+      "compared": "dibandingkan dengan periode sebelumnya"
+    },
+    "mttr": "MTTR",
+    "mttrHint": "rata-rata hari, tiket tertutup"
+  },
+  "filters": {
+    "region": "Filter insiden",
+    "from": "Dari",
+    "to": "Sampai",
+    "tracker": "Tracker",
+    "stage": "Tahap",
+    "priority": "Prioritas",
+    "institusi": "Institusi",
+    "category": "Kategori",
+    "hasWorkaround": "Ada workaround",
+    "anyTracker": "Semua tracker",
+    "anyStage": "Semua tahap",
+    "anyPriority": "Semua prioritas",
+    "moreFilters": "Filter lainnya",
+    "fewerFilters": "Sembunyikan filter",
+    "clearAll": "Hapus filter",
+    "institusiHint": "Tekan Enter untuk menambahkan setiap nama",
+    "categoryHint": "Tekan Enter untuk menambahkan setiap kategori",
+    "active": "Aktif",
+    "removeChip": "Hapus filter {label}",
+    "chip": {
+      "status": {
+        "OPEN": "Status: Terbuka",
+        "CLOSED": "Status: Ditutup"
+      },
+      "sla": {
+        "BREACHED": "SLA: Melewati SLA",
+        "AT_RISK": "SLA: Berisiko"
+      },
+      "from": "Dari {value}",
+      "to": "Sampai {value}",
+      "field": "{name}: {value}",
+      "hasWorkaround": "Ada workaround: {value}",
+      "matrixMissing": "Dampak atau urgensi kosong"
+    }
+  },
+  "table": {
+    "heading": "Insiden",
+    "totalAnnouncement": "{count} insiden cocok dengan filter saat ini | {count} insiden cocok dengan filter saat ini",
+    "noRedmine": "No Redmine",
+    "openInRedmine": "Buka #{no} di Redmine",
+    "openIncident": "Buka insiden {subject}",
+    "subject": "Judul",
+    "tracker": "Tracker",
+    "status": "Status",
+    "priority": "Prioritas",
+    "sla": "SLA",
+    "agingSla": "Umur / SLA (hari)",
+    "agingUnknown": "Umur tidak diketahui",
+    "agingDaysOld": "Berumur {elapsed} hari",
+    "agingOfSla": "{elapsed} hari dari SLA {budget} hari",
+    "daysSuffix": "{value} h",
+    "dateIssue": "masalah tanggal",
+    "dateIssueTitle": "Satu atau lebih kolom tanggal pada insiden ini tidak dapat dibaca.",
+    "empty": "Tidak ada insiden yang cocok dengan filter ini",
+    "export": "Ekspor",
+    "exporting": "Mengekspor…",
+    "exportFailed": "Ekspor gagal.",
+    "exportTruncated": "Ekspor terpotong di batas server — tidak semua baris yang cocok disertakan. Persempit filter lalu ekspor lagi untuk sisanya.",
+    "page": "Halaman {page} dari {pages}",
+    "prev": "Sebelumnya",
+    "next": "Berikutnya",
+    "scrollHint": "Gulir untuk kolom lainnya",
+    "scrollRegion": "Tabel insiden. Gulir ke samping untuk kolom lainnya."
+  },
+  "drawer": {
+    "title": "Detail insiden",
+    "subject": "Judul",
+    "tracker": "Tracker",
+    "status": "Status",
+    "priority": "Prioritas",
+    "stage": "Tahap",
+    "slaBucket": "Kelompok SLA",
+    "aging": "Umur (hari)",
+    "institusi": "Institusi",
+    "category": "Kategori",
+    "workaround": "Workaround",
+    "rootCause": "Akar masalah",
+    "openInRedmine": "Buka di Redmine",
+    "redmineUnconfigured": "Tautan ke Redmine tidak tersedia — deployment ini belum mengatur {name}."
+  },
+  "charts": {
+    "empty": "Tidak ada insiden yang cocok dengan filter saat ini.",
+    "bucket": {
+      "breached": "Melewati SLA",
+      "p80to100": "80-100%",
+      "p50to80": "50-80%",
+      "p0to50": "0-50%",
+      "unknown": "Tidak diketahui"
+    },
+    "trend": {
+      "title": "Dibuat / Ditutup",
+      "caption": "Jumlah tiket dibuat dan ditutup per periode",
+      "period": "Periode",
+      "created": "Dibuat",
+      "closed": "Ditutup"
+    },
+    "slaBuckets": {
+      "title": "Kelompok SLA"
+    },
+    "matrix": {
+      "title": "Dampak × Urgensi",
+      "unresolvedTitle": "ID ini tidak ada di data referensi, sehingga labelnya tidak dapat ditampilkan. Jalankan ulang ekstrak referensi.",
+      "cellLabel": "Dampak {impact}, urgensi {urgency}, {count} insiden",
+      "missing": "Tidak ada tiket yang dampak atau urgensinya kosong | {count} tiket dampak atau urgensinya kosong | {count} tiket dampak atau urgensinya kosong",
+      "missingAction": "Tampilkan di tabel",
+      "scrollRegion": "Matriks dampak dan urgensi. Gulir ke samping untuk kolom lainnya.",
+      "axis": {
+        "impact": "Dampak",
+        "urgency": "Urgensi"
+      },
+      "legend": "Warna prioritas, dari matriks SPO",
+      "priority": {
+        "Critical": "Kritis",
+        "High": "Tinggi",
+        "Medium": "Sedang",
+        "Low": "Rendah"
+      },
+      "cellLabelPriority": "Dampak {impact}, urgensi {urgency}, prioritas {priority}, {count} insiden"
+    },
+    "mttr": {
+      "title": "Waktu ke Workaround vs. Waktu ke Solusi Permanen",
+      "workaround": "Waktu ke Workaround",
+      "permanent": "Waktu ke Solusi Permanen",
+      "gap": "Selisih workaround ke solusi permanen:"
+    },
+    "topCategories": {
+      "title": "Kategori Teratas",
+      "empty": "Tidak ada kategori pada periode ini."
+    }
+  },
+  "wallboard": {
+    "heading": "Wallboard insiden",
+    "staleTitle": "⚠ Data Usang",
+    "unreachable": "Layanan dasbor tidak dapat dihubungi — angka ini adalah pembacaan terakhir yang berhasil dan tidak lagi diperbarui.",
+    "stale": "Data dasbor usang",
+    "fullscreenEnter": "Layar penuh",
+    "fullscreenExit": "Keluar dari layar penuh",
+    "back": "Kembali ke dasbor",
+    "screenNow": "Saat ini",
+    "screenTrend": "Tren",
+    "status": "Layar {current} dari {total} · berikutnya dalam {seconds} dtk",
+    "statusPaused": "Layar {current} dari {total} · dijeda",
+    "controls": "Rotasi layar",
+    "interval": "Ganti setiap",
+    "intervalOption": {
+      "30000": "30 dtk",
+      "60000": "1 menit",
+      "120000": "2 menit",
+      "300000": "5 menit"
+    },
+    "pause": "Jeda rotasi",
+    "resume": "Lanjutkan rotasi",
+    "next": "Layar berikutnya",
+    "loading": "Memuat wallboard…",
+    "noData": "Belum ada data",
+    "total": "Total",
+    "open": "Terbuka",
+    "closed": "Ditutup",
+    "resolved": "Selesai",
+    "breached": "Melewati SLA",
+    "atRisk": "Berisiko",
+    "slaCompliance": "Kepatuhan SLA",
+    "slaComplianceDetail": "{met} dari {closed} tiket yang ditutup memenuhi SLA",
+    "slaComplianceNone": "Belum ada tiket yang ditutup tahun ini",
+    "byStage": "Menurut tahap",
+    "byPriority": "Menurut prioritas",
+    "criticalHigh": "Critical dan High yang masih terbuka",
+    "criticalHighEmpty": "Tidak ada insiden Critical atau High yang terbuka",
+    "criticalHighAge": "{elapsed} dari {sla} hari",
+    "topCategories": "5 kategori teratas",
+    "topCategoriesEmpty": "Belum ada kategori tahun ini",
+    "monthly": "Dibuat dan ditutup per bulan",
+    "created": "Dibuat",
+    "avgResolution": "Rata-rata penyelesaian",
+    "avgResolutionValue": "{value} hari",
+    "year": "Januari sampai hari ini, {year}",
+    "groupCounts": "Kelompok tiket"
+  },
+  "auth": {
+    "tagline": "Insiden, problem, dan service request dalam satu tampilan.",
+    "readOnly": "Hanya untuk pelaporan — Redmine tetap menjadi sistem pencatatan resmi untuk setiap perubahan.",
+    "welcome": "Selamat datang kembali",
+    "signInPrompt": "Masuk dengan akun dasbor Anda untuk melanjutkan.",
+    "username": "Nama pengguna",
+    "usernamePlaceholder": "Masukkan nama pengguna",
+    "password": "Kata sandi",
+    "passwordPlaceholder": "Masukkan kata sandi",
+    "sessionExpired": "Sesi Anda telah berakhir. Silakan masuk kembali.",
+    "passwordChanged": "Kata sandi berhasil diubah. Masuk dengan kata sandi baru Anda.",
+    "signIn": "Masuk",
+    "loginFailed": "Gagal masuk",
+    "changePassword": {
+      "title": "Ubah kata sandi",
+      "prompt": "Anda harus mengubah kata sandi sebelum melanjutkan.",
+      "current": "Kata sandi saat ini",
+      "new": "Kata sandi baru",
+      "confirm": "Konfirmasi kata sandi baru",
+      "mismatch": "Kata sandi baru dan konfirmasinya tidak sama.",
+      "failed": "Kata sandi tidak dapat diubah",
+      "submit": "Ubah kata sandi"
+    }
+  },
+  "errors": {
+    "execLoad": "Ringkasan eksekutif gagal dimuat.",
+    "notFound": {
+      "title": "Halaman tidak ditemukan",
+      "body": "Alamat tersebut tidak cocok dengan halaman mana pun di dasbor ini. Mungkin tautannya sudah usang, atau Anda tidak lagi memiliki akses ke tampilan tersebut.",
+      "back": "Kembali ke dasbor"
+    }
+  },
+  "admin": {
+    "refresh": "Muat ulang",
+    "create": "Buat Pengguna",
+    "searchPlaceholder": "Cari nama pengguna, nama, atau email",
+    "clear": "Bersihkan",
+    "search": "Cari",
+    "loadError": "Daftar pengguna gagal dimuat.",
+    "empty": "Tidak ada pengguna.",
+    "rowsPerPage": "Baris per halaman",
+    "view": "Lihat",
+    "edit": "Ubah",
+    "col": {
+      "no": "No.",
+      "username": "Nama pengguna",
+      "name": "Nama",
+      "email": "Email",
+      "role": "Peran",
+      "lastSignIn": "Terakhir masuk",
+      "status": "Status",
+      "action": "Aksi"
+    },
+    "status": {
+      "ACTIVE": "Aktif",
+      "PENDING": "Menunggu",
+      "INACTIVE": "Nonaktif",
+      "LOCKED": "Terkunci",
+      "unknown": "Tidak diketahui"
+    },
+    "form": {
+      "editHeading": "Ubah {username}",
+      "loadError": "Akun ini gagal dimuat.",
+      "loading": "Memuat akun…",
+      "unreadable": "Formulir tidak dapat dibaca. Periksa setiap kolom lalu coba lagi.",
+      "saveFailed": "Perubahan tidak dapat disimpan.",
+      "resetFailed": "Kata sandi tidak dapat direset.",
+      "tempPasswordTitle": "Kata sandi sekali pakai untuk {username} — hanya ditampilkan sekali, di sini.",
+      "tempPasswordBody": "Server hanya menyimpan hash-nya, sehingga kata sandi ini tidak dapat ditampilkan lagi. Serahkan melalui jalur terpisah; akun wajib menggantinya saat pertama kali masuk.",
+      "done": "Selesai",
+      "account": "Akun",
+      "usernamePlaceholder": "Masukkan nama pengguna",
+      "usernameHint": "Tidak dapat diubah nanti — akun dikenali dari nama ini.",
+      "rolePlaceholder": "Pilih peran",
+      "namePlaceholder": "Masukkan nama",
+      "emailPlaceholder": "Masukkan email (opsional)",
+      "activeLabel": "Aktif — {status}",
+      "deactivateHint": "Menonaktifkan akun langsung mengeluarkannya dari sesi; semua refresh token dicabut.",
+      "back": "Kembali",
+      "cancel": "Batal",
+      "resetPassword": "Reset Kata Sandi",
+      "create": "Buat",
+      "save": "Simpan"
+    },
+    "validation": {
+      "usernameMin": "Nama pengguna minimal 3 karakter.",
+      "usernameMax": "Nama pengguna maksimal 64 karakter.",
+      "usernamePattern": "Gunakan huruf, angka, titik, garis bawah, atau tanda hubung saja.",
+      "nameRequired": "Nama wajib diisi.",
+      "nameMax": "Nama maksimal 128 karakter.",
+      "emailMax": "Email maksimal 128 karakter.",
+      "emailInvalid": "Format email tidak valid.",
+      "roleRequired": "Peran wajib dipilih."
+    }
+  },
+  "definitions": {
+    "about": "Tentang {name}",
+    "meaning": "Artinya",
+    "formula": "Cara menghitung",
+    "source": "Sumber",
+    "numbersUnavailable": "Ambang saat ini gagal dimuat; lihat SPO ITSM 2023 hal. 14",
+    "dayList": "{list} hari",
+    "policyItem": "{name} {days}",
+    "slaDays": "SLA (hari): {list}",
+    "unknownPriority": "Tanpa prioritas",
+    "closeBasis": {
+      "CLOSE_DATE": "tanggal tutup",
+      "CLOSED_ON": "waktu tutup Redmine",
+      "STATUS_CHANGE": "perubahan status terakhir"
+    },
+    "sources": {
+      "spo": "SPO IT Service Management 2023, hal. 14"
+    },
+    "open": {
+      "name": "Terbuka",
+      "meaning": "Tiket yang belum ditutup pada periode terpilih",
+      "formula": "Jumlah tiket dengan status belum ditutup. PTR dan PTR with permission dihitung ditutup.",
+      "source": "Tiket Redmine yang disalin ke dasbor, dengan filter yang sama seperti tabel"
+    },
+    "closed": {
+      "name": "Ditutup",
+      "meaning": "Tiket yang ditutup di Redmine, atau berstatus yang dianggap ditutup",
+      "formula": "Jumlah tiket dengan status ditutup: {statuses}",
+      "statusList": "status tutup Redmine, ditambah {names}",
+      "redmineOnly": "status yang ditandai tutup oleh Redmine",
+      "source": "Status tiket Redmine, ditambah daftar status tutup dasbor"
+    },
+    "breached": {
+      "name": "Melewati SLA",
+      "meaning": "Tiket yang umurnya melewati SLA, termasuk yang ditutup terlambat",
+      "formula": "Umur (hari) > SLA (hari). Umur berhenti di tanggal tutup, lalu waktu tutup Redmine, lalu perubahan status terakhir.",
+      "source": "SLA (hari) per prioritas dari kebijakan SLA dasbor"
+    },
+    "atRisk": {
+      "name": "Berisiko",
+      "meaning": "Tiket terbuka yang hampir melewati SLA",
+      "formula": "Terbuka, belum melewati SLA, dan sisa hari ≤ batas. Batas: {cushions}",
+      "source": "SLA (hari) dan batas per prioritas dari kebijakan SLA dasbor"
+    },
+    "mttrWorkaround": {
+      "name": "MTTR (workaround)",
+      "meaning": "Rata-rata hari sejak tiket dibuat sampai workaround tersedia",
+      "formula": "Rata-rata (tanggal resolusi − tanggal dibuat) dalam hari penuh, untuk tiket yang memiliki tanggal resolusi. Dibulatkan 2 desimal.",
+      "source": "Custom field Redmine: tanggal resolusi"
+    },
+    "mttrPermanent": {
+      "name": "MTTR (permanen)",
+      "meaning": "Rata-rata hari sejak tiket dibuat sampai solusi permanen",
+      "formula": "Rata-rata (tanggal tutup − tanggal dibuat) dalam hari penuh, untuk tiket yang memiliki tanggal tutup. Dibulatkan 2 desimal.",
+      "source": "Custom field Redmine: tanggal tutup"
+    },
+    "workaroundDebt": {
+      "name": "Utang workaround",
+      "meaning": "Tiket yang masih berjalan dengan workaround dan belum memiliki solusi permanen",
+      "formula": "Jumlah tiket yang sudah memiliki tanggal resolusi tetapi tanggal tutupnya masih kosong",
+      "source": "Custom field Redmine: tanggal resolusi dan tanggal tutup"
+    },
+    "trend": {
+      "name": "Dibuat / Ditutup",
+      "meaning": "Jumlah tiket yang dibuka dan ditutup pada setiap periode",
+      "formula": "Dibuat dihitung dari tanggal dibuat. Ditutup dihitung dari hari jam SLA berhenti: {rule}.",
+      "source": "Tiket Redmine yang disalin ke dasbor"
+    },
+    "topCategories": {
+      "name": "Kategori teratas",
+      "meaning": "Kategori insiden dengan tiket terbanyak pada periode terpilih",
+      "formula": "Jumlah per kategori, terbanyak lebih dulu. Tiket tanpa kategori dihitung sebagai Unclassified. Perubahan dibandingkan dengan periode sebelumnya yang sama panjangnya.",
+      "source": "Custom field Redmine: kategori"
+    },
+    "matrix": {
+      "name": "Dampak × Urgensi",
+      "meaning": "Sebaran tiket menurut tingkat dampak dan urgensi",
+      "formula": "Jumlah per pasangan dampak dan urgensi. Unclassified berarti kolomnya kosong; Unknown berarti nilainya tidak memiliki label yang cocok. Warna mengikuti matriks dampak dan urgensi SPO; SLA tetap mengikuti prioritas yang tercatat pada tiket.",
+      "source": "Custom field Redmine: impact severity dan urgency severity"
+    },
+    "slaBuckets": {
+      "name": "Kelompok SLA",
+      "meaning": "Porsi waktu SLA yang terpakai untuk semua tiket. Berbeda dengan Berisiko yang hanya menghitung tiket terbuka.",
+      "formula": "Umur (hari) ÷ SLA (hari), dikelompokkan menjadi 0-50%, 50-80%, 80-100%, dan Melewati SLA. Tidak diketahui bila umur tidak dapat dihitung.",
+      "source": "SLA (hari) per prioritas dari kebijakan SLA dasbor"
+    },
+    "freshness": {
+      "name": "Kebaruan data",
+      "meaning": "Seberapa baru dasbor menyalin data dari Redmine",
+      "formula": "Salinan diperbarui kira-kira setiap {minutes} menit. Data dianggap usang bila tidak ada pembaruan yang selesai dalam empat interval, atau salinan tertinggal dari Redmine lebih dari satu jam.",
+      "source": "Log pembaruan dasbor"
+    },
+    "aging": {
+      "name": "Umur",
+      "meaning": "Berapa hari tiket sudah berjalan, dibandingkan dengan SLA (hari)-nya",
+      "formula": "Hari kalender sejak tiket dibuat sampai hari jam SLA berhenti ({rule}), atau sampai hari ini selama tiket masih terbuka",
+      "source": "Tiket Redmine yang disalin ke dasbor"
+    },
+    "slaColumn": {
+      "name": "SLA",
+      "meaning": "Posisi tiket terhadap SLA-nya",
+      "formula": "Umur (hari) ÷ SLA (hari) sesuai prioritas tiket, ditampilkan sebagai 0-50%, 50-80%, 80-100%, atau Melewati SLA",
+      "source": "SLA (hari) per prioritas dari kebijakan SLA dasbor"
+    },
+    "noRedmine": {
+      "name": "No Redmine",
+      "meaning": "Nomor tiket Redmine; membuka tiket di Redmine",
+      "formula": "ID tiket Redmine, apa adanya",
+      "source": "Tiket Redmine"
+    },
+    "slaCompliance": {
+      "name": "Kepatuhan SLA",
+      "meaning": "Persentase tiket yang ditutup tahun ini dan selesai dalam batas SLA-nya",
+      "formula": "Tiket tertutup yang tidak melewati SLA, dibagi seluruh tiket tertutup, dalam persen. Kosong jika belum ada tiket yang ditutup.",
+      "source": "Hari SLA per prioritas dari kebijakan SLA dasbor, atas insiden yang ditutup sejak 1 Januari"
+    },
+    "groupCounts": {
+      "name": "Kelompok tiket",
+      "meaning": "Tiket terbuka dan yang melewati SLA untuk tiap kelompok: Insiden, Problem dan Permintaan Layanan",
+      "formula": "Per kelompok, terbuka ditambah ditutup sama dengan total. Melewati SLA adalah tiket terbuka dan tertutup yang usianya melewati SLA.",
+      "source": "Tracker Redmine yang dikelompokkan oleh konfigurasi cakupan tracker dasbor"
+    },
+    "matrixMissing": {
+      "name": "Dampak atau urgensi kosong",
+      "meaning": "Tiket yang tidak dapat ditempatkan di matriks karena dampak atau urgensinya dikosongkan",
+      "formula": "Jumlah tiket pada filter saat ini yang dampak atau urgensinya tidak berisi nilai. Tautannya membuka tepat tiket-tiket ini.",
+      "source": "Custom field Redmine: impact severity dan urgency severity"
+    },
+    "avgResolution": {
+      "name": "Rata-rata penyelesaian",
+      "meaning": "Rata-rata berapa hari sebuah insiden tertutup diselesaikan, dari dibuat sampai ditutup",
+      "formula": "Rata-rata usia dalam hari insiden tertutup sejak 1 Januari. Usia berhenti pada tanggal tutup, lalu waktu tutup Redmine, lalu perubahan status terakhir.",
+      "source": "Tanggal isu dan riwayat status Redmine"
+    },
+    "mttr": {
+      "name": "MTTR",
+      "meaning": "Rata-rata hari yang dibutuhkan tiket tertutup, dari dibuat sampai ditutup",
+      "formula": "Rata-rata (tanggal tutup − tanggal dibuat) dalam hari atas tiket tertutup pada filter saat ini. Mengklik kartu menampilkan tepat tiket-tiket tersebut.",
+      "source": "Tanggal isu Redmine; tanggal tutup, lalu waktu tutup Redmine, lalu perubahan status terakhir"
+    }
+  },
+  "scopeCounts": {
+    "heading": "Kelompok tiket",
+    "open": "Terbuka",
+    "breached": "{count} melewati SLA",
+    "tileLabel": "{name}: {open} terbuka, {breached} melewati SLA",
+    "none": "Belum ada",
+    "error": "Jumlah kelompok gagal dimuat"
+  }
+}

@@ -1,0 +1,58 @@
+# --- Production-derived reference data: NEVER commit. -------------------------
+# Customer names, staff names and incident descriptions. Keep local.
+# Anchored at both the current root paths and the post-Task-1 docs/reference/ home.
+/ddl.sql
+/Query Detail Redmine Incident, Problem, SR.sql
+/Detail Incident, Problem, SR 2025 - 2026.xlsx
+/0[1-7]. redmine.*.sql
+docs/reference/*.sql
+docs/reference/*.xlsx
+!docs/reference/README.md
+!docs/reference/PARITY.md
+
+# --- Test fixtures extracted from production ---------------------------------
+BackEnd/incident-service/src/test/resources/fixtures/**/*.csv
+# custom_values.csv is HAND-AUTHORED and synthetic (the real export was unusable —
+# extracted on the wrong column). It is unregenerable, so it IS tracked.
+!BackEnd/incident-service/src/test/resources/fixtures/custom_values.csv
+# ref_custom_field_enum.csv / ref_user.csv are synthetic on the same argument, and a
+# stronger one: redmine.custom_field_enumerations, users and email_addresses were never
+# delivered at all, so there is no export to regenerate them from. The names and addresses
+# in them are machine-generated placeholders, not staff. Tracked.
+# (Production seeds come from scripts/extract-ref-tables.py and stay ignored above.)
+!BackEnd/incident-service/src/test/resources/fixtures/ref_custom_field_enum.csv
+!BackEnd/incident-service/src/test/resources/fixtures/ref_user.csv
+
+# --- Secrets ------------------------------------------------------------------
+.env
+.env.*
+!.env.example
+*.p12
+*.jks
+
+# --- Build output -------------------------------------------------------------
+BackEnd/incident-service/target/
+FrontEnd/incident-dashboard/node_modules/
+FrontEnd/incident-dashboard/dist/
+FrontEnd/incident-dashboard/coverage/
+FrontEnd/incident-dashboard/test-results/
+FrontEnd/incident-dashboard/playwright-report/
+
+# --- Local session state ------------------------------------------------------
+.remember/
+.agents/compaction-state.md
+.DS_Store
+
+# --- Pipeline runtime state (evidence bundles are verify-wave-owned, not source) ---
+.agents/artifacts/
+.worktrees/
+
+# --- Tier-3 walkthrough captures ------------------------------------------
+# Playwright screenshots render real incident subjects, customer names and
+# staff names pulled from the seeded mirror. They are evidence, not source.
+FrontEnd/incident-dashboard/e2e/screenshots/
+FrontEnd/incident-dashboard/test-results/
+FrontEnd/incident-dashboard/playwright-report/
+
+# Demo stack env — real local credentials.
+deploy/.env

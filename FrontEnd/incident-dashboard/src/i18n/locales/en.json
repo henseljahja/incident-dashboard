@@ -1,0 +1,489 @@
+{
+  "common": {
+    "appName": "Incident Dashboard",
+    "language": "Language",
+    "retry": "Retry",
+    "noPriorPeriod": "No prior period",
+    "noDataYet": "No data yet",
+    "total": "Total: {total}",
+    "never": "never",
+    "days": "{value} days",
+    "daysShort": "{value}d",
+    "yes": "Yes",
+    "no": "No",
+    "any": "Any",
+    "freshness": {
+      "live": "Live · last mirrored {time}",
+      "stale": "Dashboard data is stale — last mirrored {time}",
+      "error": "Couldn't check how fresh the data is.",
+      "reason": {
+        "etl-never-run": "the data refresh has not run yet",
+        "etl-stalled": "the data refresh has stopped",
+        "mirror-lagging": "Redmine data is arriving late"
+      }
+    }
+  },
+  "nav": {
+    "menu": {
+      "ops": "Incident",
+      "problem": "Problem",
+      "sr": "Service Request",
+      "exec": "Executive",
+      "wallboard": "Wallboard",
+      "admin": "User Management"
+    },
+    "toggle": "Toggle navigation",
+    "skipToContent": "Skip to main content",
+    "home": "Incident Dashboard home",
+    "main": "Main",
+    "logout": "Log out"
+  },
+  "kpi": {
+    "heading": "Key indicators",
+    "open": "Open",
+    "closed": "Closed",
+    "breached": "Breached",
+    "atRisk": "At risk",
+    "workaroundDebt": "Workaround debt",
+    "error": "Couldn't load this number",
+    "filterHint": "Click to filter the table",
+    "filterActive": "Filter applied, click again to clear it",
+    "filterWorkaround": "Filter the table to incidents that have a workaround",
+    "scrollToTable": "Scroll to the incident table",
+    "cardLabel": "{label}: {value}.",
+    "trendUnchanged": "Unchanged from the previous period.",
+    "trendWorse": "{delta} worse than the previous period.",
+    "trendBetter": "{delta} better than the previous period.",
+    "exec": {
+      "thisMonth": "This month",
+      "loading": "Loading this month's summary…",
+      "headline": "Headline figures",
+      "compared": "compared with the previous period"
+    },
+    "mttr": "MTTR",
+    "mttrHint": "mean days, closed tickets"
+  },
+  "filters": {
+    "region": "Incident filters",
+    "from": "From",
+    "to": "To",
+    "tracker": "Tracker",
+    "stage": "Stage",
+    "priority": "Priority",
+    "institusi": "Institusi",
+    "category": "Category",
+    "hasWorkaround": "Has workaround",
+    "anyTracker": "Any tracker",
+    "anyStage": "Any stage",
+    "anyPriority": "Any priority",
+    "moreFilters": "More filters",
+    "fewerFilters": "Fewer filters",
+    "clearAll": "Clear filters",
+    "institusiHint": "Press Enter to add each name",
+    "categoryHint": "Press Enter to add each category",
+    "active": "Active",
+    "removeChip": "Remove filter {label}",
+    "chip": {
+      "status": {
+        "OPEN": "Status: Open",
+        "CLOSED": "Status: Closed"
+      },
+      "sla": {
+        "BREACHED": "SLA: Breached",
+        "AT_RISK": "SLA: At risk"
+      },
+      "from": "From {value}",
+      "to": "To {value}",
+      "field": "{name}: {value}",
+      "hasWorkaround": "Has workaround: {value}",
+      "matrixMissing": "Missing impact or urgency"
+    }
+  },
+  "table": {
+    "heading": "Incidents",
+    "totalAnnouncement": "{count} incident matches the current filters | {count} incidents match the current filters",
+    "noRedmine": "No Redmine",
+    "openInRedmine": "Open #{no} in Redmine",
+    "openIncident": "Open incident {subject}",
+    "subject": "Subject",
+    "tracker": "Tracker",
+    "status": "Status",
+    "priority": "Priority",
+    "sla": "SLA",
+    "agingSla": "Aging / SLA (days)",
+    "agingUnknown": "Aging unknown",
+    "agingDaysOld": "{elapsed} days old",
+    "agingOfSla": "{elapsed} days of a {budget} day SLA",
+    "daysSuffix": "{value} d",
+    "dateIssue": "date issue",
+    "dateIssueTitle": "One or more date fields on this incident could not be parsed.",
+    "empty": "No incidents match these filters",
+    "export": "Export",
+    "exporting": "Exporting…",
+    "exportFailed": "Export failed.",
+    "exportTruncated": "Export truncated at the server cap — not every matching row was included. Narrow the filters and export again to get the rest.",
+    "page": "Page {page} of {pages}",
+    "prev": "Prev",
+    "next": "Next",
+    "scrollHint": "Scroll for more columns",
+    "scrollRegion": "Incident table. Scroll sideways for more columns."
+  },
+  "drawer": {
+    "title": "Incident detail",
+    "subject": "Subject",
+    "tracker": "Tracker",
+    "status": "Status",
+    "priority": "Priority",
+    "stage": "Stage",
+    "slaBucket": "SLA bucket",
+    "aging": "Aging (days)",
+    "institusi": "Institusi",
+    "category": "Category",
+    "workaround": "Workaround",
+    "rootCause": "Root cause",
+    "openInRedmine": "Open in Redmine",
+    "redmineUnconfigured": "Redmine deep links are unavailable — this deployment has no {name} configured."
+  },
+  "charts": {
+    "empty": "No incidents match the current filters.",
+    "bucket": {
+      "breached": "Breached",
+      "p80to100": "80-100%",
+      "p50to80": "50-80%",
+      "p0to50": "0-50%",
+      "unknown": "Unknown"
+    },
+    "trend": {
+      "title": "Created / Closed",
+      "caption": "Created and closed counts by period",
+      "period": "Period",
+      "created": "Created",
+      "closed": "Closed"
+    },
+    "slaBuckets": {
+      "title": "SLA Buckets"
+    },
+    "matrix": {
+      "title": "Impact × Urgency",
+      "unresolvedTitle": "This id has no row in the reference seed, so its label could not be resolved. Re-run the reference extract.",
+      "cellLabel": "Impact {impact}, urgency {urgency}, {count} incidents",
+      "missing": "No tickets are missing impact or urgency | {count} ticket missing impact or urgency | {count} tickets missing impact or urgency",
+      "missingAction": "Show them in the table",
+      "scrollRegion": "Impact by urgency matrix. Scroll sideways for more columns.",
+      "axis": {
+        "impact": "Impact",
+        "urgency": "Urgency"
+      },
+      "legend": "Priority colours, from the SPO matrix",
+      "priority": {
+        "Critical": "Critical",
+        "High": "High",
+        "Medium": "Medium",
+        "Low": "Low"
+      },
+      "cellLabelPriority": "Impact {impact}, urgency {urgency}, priority {priority}, {count} incidents"
+    },
+    "mttr": {
+      "title": "Time to Workaround vs. Time to Permanent",
+      "workaround": "Time to Workaround",
+      "permanent": "Time to Permanent",
+      "gap": "Workaround-to-permanent gap:"
+    },
+    "topCategories": {
+      "title": "Top Categories",
+      "empty": "No categories in this window."
+    }
+  },
+  "wallboard": {
+    "heading": "Incident wallboard",
+    "staleTitle": "⚠ Stale Data",
+    "unreachable": "Cannot reach the dashboard service — these figures are the last successful read and are no longer being updated.",
+    "stale": "Dashboard data is stale",
+    "fullscreenEnter": "Enter fullscreen",
+    "fullscreenExit": "Exit fullscreen",
+    "back": "Back to the dashboard",
+    "screenNow": "Now",
+    "screenTrend": "Trend",
+    "status": "Screen {current} of {total} · next in {seconds} s",
+    "statusPaused": "Screen {current} of {total} · paused",
+    "controls": "Screen rotation",
+    "interval": "Rotate every",
+    "intervalOption": {
+      "30000": "30 s",
+      "60000": "1 min",
+      "120000": "2 min",
+      "300000": "5 min"
+    },
+    "pause": "Pause rotation",
+    "resume": "Resume rotation",
+    "next": "Next screen",
+    "loading": "Loading the wallboard…",
+    "noData": "No data yet",
+    "total": "Total",
+    "open": "Open",
+    "closed": "Closed",
+    "resolved": "Resolved",
+    "breached": "Breached",
+    "atRisk": "At risk",
+    "slaCompliance": "SLA compliance",
+    "slaComplianceDetail": "{met} of {closed} closed tickets met their SLA",
+    "slaComplianceNone": "Nothing closed yet this year",
+    "byStage": "By stage",
+    "byPriority": "By priority",
+    "criticalHigh": "Critical and High, still open",
+    "criticalHighEmpty": "No Critical or High incidents are open",
+    "criticalHighAge": "{elapsed} of {sla} days",
+    "topCategories": "Top 5 categories",
+    "topCategoriesEmpty": "No categories this year",
+    "monthly": "Created and closed by month",
+    "created": "Created",
+    "avgResolution": "Average resolution",
+    "avgResolutionValue": "{value} days",
+    "year": "January to today, {year}",
+    "groupCounts": "Ticket groups"
+  },
+  "auth": {
+    "tagline": "Incidents, problems and service requests, in one view.",
+    "readOnly": "Reporting only — Redmine remains the system of record for every change.",
+    "welcome": "Welcome back",
+    "signInPrompt": "Sign in with your dashboard account to continue.",
+    "username": "Username",
+    "usernamePlaceholder": "Enter your username",
+    "password": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "sessionExpired": "Your session ended. Sign in again to continue.",
+    "passwordChanged": "Password changed. Sign in with your new password.",
+    "signIn": "Sign in",
+    "loginFailed": "Login failed",
+    "changePassword": {
+      "title": "Change password",
+      "prompt": "Your password must be changed before you can continue.",
+      "current": "Current password",
+      "new": "New password",
+      "confirm": "Confirm new password",
+      "mismatch": "New password and confirmation do not match.",
+      "failed": "Unable to change password",
+      "submit": "Change password"
+    }
+  },
+  "errors": {
+    "execLoad": "Could not load the executive summary.",
+    "notFound": {
+      "title": "Page not found",
+      "body": "That address does not match any screen in this dashboard. It may have been a stale link, or a view you no longer have access to.",
+      "back": "Back to the dashboard"
+    }
+  },
+  "admin": {
+    "refresh": "Refresh",
+    "create": "Create User",
+    "searchPlaceholder": "Search username, name or email",
+    "clear": "Clear",
+    "search": "Search",
+    "loadError": "Could not load users.",
+    "empty": "No users found.",
+    "rowsPerPage": "Rows per page",
+    "view": "View",
+    "edit": "Edit",
+    "col": {
+      "no": "No.",
+      "username": "Username",
+      "name": "Name",
+      "email": "Email",
+      "role": "Role",
+      "lastSignIn": "Last Sign-in",
+      "status": "Status",
+      "action": "Action"
+    },
+    "status": {
+      "ACTIVE": "Active",
+      "PENDING": "Pending",
+      "INACTIVE": "Inactive",
+      "LOCKED": "Locked",
+      "unknown": "Unknown"
+    },
+    "form": {
+      "editHeading": "Edit {username}",
+      "loadError": "Could not load this account.",
+      "loading": "Loading account…",
+      "unreadable": "The form could not be read. Check every field and try again.",
+      "saveFailed": "The change could not be saved.",
+      "resetFailed": "The password could not be reset.",
+      "tempPasswordTitle": "One-time password for {username} — shown once, and only here.",
+      "tempPasswordBody": "The server stores only a hash of this, so it cannot be shown again. Hand it over out of band; the account must change it at first sign-in.",
+      "done": "Done",
+      "account": "Account",
+      "usernamePlaceholder": "Enter username",
+      "usernameHint": "Cannot be changed later — the account is identified by it.",
+      "rolePlaceholder": "Select role",
+      "namePlaceholder": "Enter name",
+      "emailPlaceholder": "Enter email (optional)",
+      "activeLabel": "Active — {status}",
+      "deactivateHint": "Deactivating signs the account out immediately; every refresh token is revoked.",
+      "back": "Back",
+      "cancel": "Cancel",
+      "resetPassword": "Reset Password",
+      "create": "Create",
+      "save": "Save"
+    },
+    "validation": {
+      "usernameMin": "Username must be at least 3 characters.",
+      "usernameMax": "Username must be 64 characters or fewer.",
+      "usernamePattern": "Use letters, digits, dot, underscore or hyphen only.",
+      "nameRequired": "Name is required.",
+      "nameMax": "Name must be 128 characters or fewer.",
+      "emailMax": "Email must be 128 characters or fewer.",
+      "emailInvalid": "Email is invalid.",
+      "roleRequired": "Role is required."
+    }
+  },
+  "definitions": {
+    "about": "About {name}",
+    "meaning": "What it shows",
+    "formula": "How it's calculated",
+    "source": "Source",
+    "numbersUnavailable": "Current thresholds couldn't be loaded; see SPO ITSM 2023 p.14",
+    "dayList": "{list} days",
+    "policyItem": "{name} {days}",
+    "slaDays": "SLA days: {list}",
+    "unknownPriority": "No priority",
+    "closeBasis": {
+      "CLOSE_DATE": "close date",
+      "CLOSED_ON": "Redmine close time",
+      "STATUS_CHANGE": "last status change"
+    },
+    "sources": {
+      "spo": "SPO IT Service Management 2023, p.14"
+    },
+    "open": {
+      "name": "Open",
+      "meaning": "Tickets not yet closed in the selected period",
+      "formula": "Count where status is not closed. PTR and PTR with permission count as closed.",
+      "source": "Redmine issues mirrored into the dashboard, filtered like the table"
+    },
+    "closed": {
+      "name": "Closed",
+      "meaning": "Tickets closed in Redmine, or in a status the business treats as closed",
+      "formula": "Count where status is closed: {statuses}",
+      "statusList": "Redmine closed statuses, plus {names}",
+      "redmineOnly": "the statuses Redmine marks as closed",
+      "source": "Redmine issue status, with the dashboard's closed-status list"
+    },
+    "breached": {
+      "name": "Breached",
+      "meaning": "Tickets whose age passed their SLA, including tickets that closed late",
+      "formula": "Age in days > SLA days. Age stops at close date, then Redmine close time, then last status change.",
+      "source": "SLA days by priority from the dashboard's SLA policy"
+    },
+    "atRisk": {
+      "name": "At risk",
+      "meaning": "Open tickets close to breaching their SLA",
+      "formula": "Open, not breached, and days left ≤ cushion. Cushion: {cushions}",
+      "source": "SLA days and cushions by priority from the dashboard's SLA policy"
+    },
+    "mttrWorkaround": {
+      "name": "MTTR (workaround)",
+      "meaning": "Average days from a ticket being created to a workaround being in place",
+      "formula": "Average of (resolution date − created date) in whole days, over tickets that have a resolution date. Rounded to 2 decimals.",
+      "source": "Redmine custom field: resolution date"
+    },
+    "mttrPermanent": {
+      "name": "MTTR (permanent)",
+      "meaning": "Average days from a ticket being created to its permanent fix",
+      "formula": "Average of (close date − created date) in whole days, over tickets that have a close date. Rounded to 2 decimals.",
+      "source": "Redmine custom field: close date"
+    },
+    "workaroundDebt": {
+      "name": "Workaround debt",
+      "meaning": "Tickets running on a workaround that still have no permanent fix",
+      "formula": "Count where a resolution date is set and the close date is empty",
+      "source": "Redmine custom fields: resolution date and close date"
+    },
+    "trend": {
+      "name": "Created / Closed",
+      "meaning": "How many tickets were opened and closed in each period",
+      "formula": "Created counts by creation date. Closed counts by the day the clock stopped: {rule}.",
+      "source": "Redmine issues mirrored into the dashboard"
+    },
+    "topCategories": {
+      "name": "Top categories",
+      "meaning": "The incident categories with the most tickets in the selected period",
+      "formula": "Count per category, highest first. Tickets without a category count as Unclassified. The change compares with the preceding period of the same length.",
+      "source": "Redmine custom field: category"
+    },
+    "matrix": {
+      "name": "Impact × Urgency",
+      "meaning": "How tickets spread across impact and urgency severity",
+      "formula": "Count per impact and urgency pair. Unclassified means the field is empty; Unknown means the value has no matching label. Colours follow the SPO impact and urgency matrix; the SLA still follows each ticket's recorded priority.",
+      "source": "Redmine custom fields: impact severity and urgency severity"
+    },
+    "slaBuckets": {
+      "name": "SLA buckets",
+      "meaning": "Share of SLA time used, for all tickets. Different from At risk, which counts open tickets only.",
+      "formula": "Age in days ÷ SLA days, grouped as 0-50%, 50-80%, 80-100% and Breached. Unknown when the age cannot be worked out.",
+      "source": "SLA days by priority from the dashboard's SLA policy"
+    },
+    "freshness": {
+      "name": "Data freshness",
+      "meaning": "How recently the dashboard copied data from Redmine",
+      "formula": "The mirror refreshes about every {minutes} minutes. Data is stale when no refresh has finished within four intervals, or the copy lags Redmine by more than an hour.",
+      "source": "The dashboard's refresh log"
+    },
+    "aging": {
+      "name": "Aging",
+      "meaning": "How many days a ticket has been in progress, next to its SLA days",
+      "formula": "Calendar days from creation to the day the clock stopped ({rule}), or to today while the ticket is open",
+      "source": "Redmine issues mirrored into the dashboard"
+    },
+    "slaColumn": {
+      "name": "SLA",
+      "meaning": "Where a ticket stands against its SLA",
+      "formula": "Age in days ÷ SLA days for the ticket's priority, shown as 0-50%, 50-80%, 80-100% or Breached",
+      "source": "SLA days by priority from the dashboard's SLA policy"
+    },
+    "noRedmine": {
+      "name": "No Redmine",
+      "meaning": "Redmine ticket number; opens the ticket in Redmine",
+      "formula": "The Redmine issue id, unchanged",
+      "source": "Redmine issues"
+    },
+    "slaCompliance": {
+      "name": "SLA compliance",
+      "meaning": "Share of tickets closed this year that were closed within their SLA",
+      "formula": "Closed tickets that did not breach, divided by all closed tickets, as a percentage. Empty when nothing has closed.",
+      "source": "SLA days by priority from the dashboard SLA policy, over the incidents closed from 1 January"
+    },
+    "groupCounts": {
+      "name": "Ticket groups",
+      "meaning": "Open and breached tickets for each group: Incident, Problem and Service Request",
+      "formula": "Per group, open plus closed equals total. Breached is the open and closed tickets whose age passed their SLA.",
+      "source": "Redmine trackers grouped by the dashboard tracker scope configuration"
+    },
+    "matrixMissing": {
+      "name": "Missing impact or urgency",
+      "meaning": "Tickets that cannot be placed in the matrix because impact or urgency was left blank",
+      "formula": "Count of tickets in the current filters where impact or urgency has no value. The link opens exactly these tickets.",
+      "source": "Redmine custom fields: impact severity and urgency severity"
+    },
+    "avgResolution": {
+      "name": "Average resolution",
+      "meaning": "How many days a closed incident took on average, from creation to close",
+      "formula": "Mean age in days of closed incidents from 1 January. Age stops at close date, then Redmine close time, then last status change.",
+      "source": "Redmine issue dates and status history"
+    },
+    "mttr": {
+      "name": "MTTR",
+      "meaning": "Average days a closed ticket took, from creation to close",
+      "formula": "Mean of (close date − created date) in days over the closed tickets in the current filters. Clicking the tile lists exactly those tickets.",
+      "source": "Redmine issue dates; close date, then Redmine close time, then last status change"
+    }
+  },
+  "scopeCounts": {
+    "heading": "Ticket groups",
+    "open": "Open",
+    "breached": "{count} breached",
+    "tileLabel": "{name}: {open} open, {breached} breached",
+    "none": "None yet",
+    "error": "Couldn't load the group counts"
+  }
+}

@@ -1,0 +1,136 @@
+@import 'tailwindcss';
+
+/*
+ * Design tokens, kept in step with yob/FrontEnd/backoffice/src/main.css. This dashboard and
+ * the Yokke backoffice are the same product family and must not disagree about type, radius
+ * or breakpoints.
+ */
+@theme {
+  --breakpoint-2xs: 20rem;
+  --breakpoint-xs: 30rem;
+
+  --text-2xs: 0.625rem;
+  --text-2xs--line-height: calc(0.75 / 0.625);
+
+  --font-sans: Arial, Helvetica, sans-serif;
+
+  /* Figma Border-Radius/Large -> Tailwind `rounded-panel` */
+  --radius-panel: 18px;
+}
+
+@import 'tailwindcss-primeui';
+
+@layer base {
+  /*
+   * The page background is painted EXPLICITLY.
+   *
+   * Without this the body was transparent, so the page took the browser's
+   * `prefers-color-scheme` while PrimeVue rendered its light theme regardless. On a machine
+   * set to dark that produced near-black surface text on a near-black page — the login form
+   * was unreadable, and the Ops page rendered as white cards floating on black. That was not
+   * a "dark mode": it was two half-applied themes fighting.
+   *
+   * `surface-100` (not white) is the same ground yob's AppLayout uses, so the elevated white
+   * cards on top of it actually read as elevated.
+   */
+  html,
+  body,
+  #app {
+    height: 100%;
+  }
+
+  body {
+    background-color: var(--p-surface-100);
+    color: var(--p-text-color);
+  }
+
+  /*
+   * Table column headers stay on ONE line. A wrapped header ("Aging (days)" breaking after
+   * "Aging") reads as two columns. Wide tables already scroll horizontally, so the extra
+   * width costs nothing. Same rule as yob.
+   */
+  .p-datatable-thead > tr > th .p-datatable-column-title,
+  .p-datatable-thead > tr > th {
+    white-space: nowrap;
+  }
+}
+
+@utility scrollbar-hide {
+  /* Firefox */
+  scrollbar-width: none;
+
+  /* IE and Edge */
+  -ms-overflow-style: none;
+
+  /* Chrome, Safari and Opera */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/*
+ * Chart palette. Charts are the one place a component library cannot pick colours for you,
+ * and hard-coded hexes scattered through chart options are how a dashboard ends up with six
+ * unrelated blues. These are the yob values, so a Yokke person reading either console sees
+ * the same series colours mean the same things.
+ */
+:root {
+  --chart-blue: #087ef8;
+  --chart-lime: #98d91f;
+  --chart-purple: #bc08f8;
+  --chart-magenta: #fb2774;
+  --chart-teal: #14d6d6;
+  --chart-yellow: #ffc107;
+  --chart-success: #11b170;
+  --chart-error: #e70e2e;
+
+  /* SLA severity ramp — ordered, and deliberately NOT the categorical palette above.
+     A breach is not "another category", it is the far end of a scale. */
+  --sla-ok: #11b170;
+  --sla-warn: #ffc107;
+  --sla-risk: #f97316;
+  --sla-breach: #e70e2e;
+  --sla-unknown: #94a3b8;
+
+  /*
+   * TEXT variants of the two semantic colours, and they exist because a fill colour and a text
+   * colour are held to different thresholds.
+   *
+   * WCAG asks 3:1 of a graphical object (a bar, a chart series, a border) and 4.5:1 of body
+   * text. `--chart-success` (#11b170) measures 2.78:1 on white and `--chart-error` (#e70e2e)
+   * measures 4.66:1 — fine on a bar, and the green outright fails as the 14px delta caption it
+   * was being used for on the Executive tiles and on every KPI card's trend arrow.
+   *
+   * Darkened until each clears 4.5 with room to spare (5.36 and 6.39), while staying visibly
+   * the same hue as the series it annotates. Use these ANY time the value paints glyphs or
+   * type; use the chart tokens above for fills, strokes and borders. Do not merge them back
+   * into one token — that is the change that reintroduced the failure.
+   */
+  --chart-success-text: #0f7a50;
+  --chart-error-text: #c00a26;
+}
+
+/*
+ * UNLAYERED on purpose — see the cssLayer note in main.ts. PrimeVue's own theme CSS is
+ * declared after `base`, so a layered rule here would lose no matter how specific it is.
+ */
+.p-paginator-page[data-p-active='true'] {
+  border-radius: 0;
+  border: 1px solid #000;
+  background: #fff;
+  color: #000;
+}
+
+.link {
+  @apply underline text-primary-600 hover:text-primary-800 visited:text-primary-700;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.25s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}

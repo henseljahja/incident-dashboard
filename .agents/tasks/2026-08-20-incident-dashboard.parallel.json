@@ -1,0 +1,338 @@
+{
+  "plan": "2026-08-20-incident-dashboard",
+  "tasks": [
+    {
+      "id": "T001",
+      "phase": "phase_-1",
+      "parallelizable": false,
+      "risk": "medium",
+      "changed_files": [
+        ".gitignore",
+        "CLAUDE.md",
+        "docs/reference/README.md",
+        "docs/reference/ddl.sql",
+        "docs/reference/Query Detail Redmine Incident, Problem, SR.sql",
+        "docs/reference/Detail Incident, Problem, SR 2025 - 2026.xlsx",
+        "docs/reference/01. redmine.issues.sql",
+        "docs/reference/02. redmine.issue_statuses.sql",
+        "docs/reference/03. redmine.enumerations.sql",
+        "docs/reference/04. redmine.trackers.sql",
+        "docs/reference/05. redmine.custom_values.sql",
+        "docs/reference/06. redmine.journals.sql",
+        "docs/reference/07. redmine.journal_details.sql"
+      ]
+    },
+    {
+      "id": "T002",
+      "phase": "phase_-1",
+      "parallelizable": true,
+      "risk": "low",
+      "changed_files": [
+        "BackEnd/local-infra/docker-compose.yml",
+        "BackEnd/local-infra/init/01-schemas.sql",
+        "BackEnd/local-infra/README.md"
+      ]
+    },
+    {
+      "id": "T003",
+      "phase": "phase_-1",
+      "parallelizable": true,
+      "risk": "low",
+      "changed_files": [
+        "BackEnd/incident-service/pom.xml",
+        "BackEnd/incident-service/mvnw",
+        "BackEnd/incident-service/src/main/java/id/co/yokke/incidentdashboard/IncidentDashboardApplication.java",
+        "BackEnd/incident-service/src/main/java/id/co/yokke/incidentdashboard/infrastructure/rest/HealthController.java",
+        "BackEnd/incident-service/src/main/resources/application.yml",
+        "BackEnd/incident-service/src/main/resources/application-localdocker.yml",
+        "BackEnd/incident-service/src/test/java/id/co/yokke/incidentdashboard/IncidentDashboardApplicationTests.java"
+      ]
+    },
+    {
+      "id": "T004",
+      "phase": "phase_-1",
+      "parallelizable": true,
+      "risk": "low",
+      "changed_files": [
+        "FrontEnd/incident-dashboard/package.json",
+        "FrontEnd/incident-dashboard/vite.config.ts",
+        "FrontEnd/incident-dashboard/tsconfig.json",
+        "FrontEnd/incident-dashboard/tsconfig.app.json",
+        "FrontEnd/incident-dashboard/tsconfig.node.json",
+        "FrontEnd/incident-dashboard/eslint.config.ts",
+        "FrontEnd/incident-dashboard/src/main.ts",
+        "FrontEnd/incident-dashboard/src/main.css",
+        "FrontEnd/incident-dashboard/src/App.vue",
+        "FrontEnd/incident-dashboard/src/queryClient.ts",
+        "FrontEnd/incident-dashboard/src/router/index.ts",
+        "FrontEnd/incident-dashboard/src/views/OpsView.vue",
+        "FrontEnd/incident-dashboard/src/utils/severity.ts",
+        "FrontEnd/incident-dashboard/src/utils/__tests__/severity.spec.ts"
+      ]
+    },
+    {
+      "id": "T005",
+      "phase": "phase_0",
+      "parallelizable": false,
+      "risk": "medium",
+      "changed_files": [
+        "AGENTS.md",
+        ".agents/stack-map.md"
+      ]
+    },
+    {
+      "id": "T006",
+      "phase": "phase_0",
+      "parallelizable": false,
+      "risk": "high",
+      "changed_files": [
+        "BackEnd/incident-service/src/test/java/id/co/yokke/incidentdashboard/support/OracleTestContainer.java",
+        "BackEnd/incident-service/src/test/java/id/co/yokke/incidentdashboard/support/MirrorFixtureLoader.java",
+        "BackEnd/incident-service/src/test/java/id/co/yokke/incidentdashboard/support/AbstractOracleIT.java",
+        "BackEnd/incident-service/src/test/java/id/co/yokke/incidentdashboard/support/MirrorFixtureLoaderIT.java",
+        "BackEnd/incident-service/scripts/extract-fixtures.py",
+        "BackEnd/incident-service/src/test/resources/fixtures/README.md"
+      ]
+    },
+    {
+      "id": "T007",
+      "phase": "phase_1",
+      "parallelizable": false,
+      "risk": "high",
+      "changed_files": [
+        "BackEnd/incident-service/src/main/resources/db/migration/V1__config_tables.sql",
+        "BackEnd/incident-service/src/main/resources/db/migration/V2__seed_config.sql",
+        "BackEnd/incident-service/src/test/java/id/co/yokke/incidentdashboard/config/ConfigTablesIT.java",
+        "BackEnd/incident-service/scripts/extract-ref-tables.py",
+        "BackEnd/incident-service/src/test/resources/fixtures/ref/README.md"
+      ]
+    },
+    {
+      "id": "T008",
+      "phase": "phase_1",
+      "parallelizable": true,
+      "risk": "medium",
+      "changed_files": [
+        "BackEnd/incident-service/src/main/java/id/co/yokke/incidentdashboard/domain/usecase/label/EnumLabelResolver.java",
+        "BackEnd/incident-service/src/main/java/id/co/yokke/incidentdashboard/domain/usecase/label/UserLabelResolver.java",
+        "BackEnd/incident-service/src/main/java/id/co/yokke/incidentdashboard/infrastructure/datasource/label/LocalRefEnumLabelResolver.java",
+        "BackEnd/incident-service/src/main/java/id/co/yokke/incidentdashboard/infrastructure/datasource/label/MirrorEnumLabelResolver.java",
+        "BackEnd/incident-service/src/main/java/id/co/yokke/incidentdashboard/infrastructure/datasource/label/LocalRefUserLabelResolver.java",
+        "BackEnd/incident-service/src/test/java/id/co/yokke/incidentdashboard/label/EnumLabelResolverTest.java"
+      ]
+    },
+    {
+      "id": "T009",
+      "phase": "phase_2",
+      "parallelizable": false,
+      "risk": "high",
+      "changed_files": [
+        "BackEnd/incident-service/src/main/resources/db/migration/V3__mart.sql",
+        "BackEnd/incident-service/src/test/java/id/co/yokke/incidentdashboard/mart/MartSchemaIT.java"
+      ]
+    },
+    {
+      "id": "T010",
+      "phase": "phase_2",
+      "parallelizable": true,
+      "risk": "medium",
+      "changed_files": [
+        "BackEnd/incident-service/src/main/java/id/co/yokke/incidentdashboard/domain/model/SolutionType.java",
+        "BackEnd/incident-service/src/main/java/id/co/yokke/incidentdashboard/domain/usecase/etl/DerivedFields.java",
+        "BackEnd/incident-service/src/test/java/id/co/yokke/incidentdashboard/etl/DerivedFieldsTest.java"
+      ]
+    },
+    {
+      "id": "T011",
+      "phase": "phase_2",
+      "parallelizable": false,
+      "risk": "high",
+      "changed_files": [
+        "BackEnd/incident-service/src/main/java/id/co/yokke/incidentdashboard/domain/usecase/etl/MartRefreshUseCase.java",
+        "BackEnd/incident-service/src/main/java/id/co/yokke/incidentdashboard/infrastructure/datasource/service/MartRefreshRepository.java",
+        "BackEnd/incident-service/src/main/resources/sql/incident-delta.sql",
+        "BackEnd/incident-service/src/test/java/id/co/yokke/incidentdashboard/etl/MartRefreshIT.java"
+      ]
+    },
+    {
+      "id": "T012",
+      "phase": "phase_2",
+      "parallelizable": false,
+      "risk": "high",
+      "changed_files": [
+        "BackEnd/incident-service/src/main/java/id/co/yokke/incidentdashboard/domain/usecase/etl/ReconcileUseCase.java",
+        "BackEnd/incident-service/src/main/java/id/co/yokke/incidentdashboard/domain/usecase/etl/FreshnessUseCase.java",
+        "BackEnd/incident-service/src/main/java/id/co/yokke/incidentdashboard/domain/config/SchedulingConfig.java",
+        "BackEnd/incident-service/src/main/java/id/co/yokke/incidentdashboard/infrastructure/rest/FreshnessController.java",
+        "BackEnd/incident-service/src/test/java/id/co/yokke/incidentdashboard/etl/ReconcileIT.java"
+      ]
+    },
+    {
+      "id": "T013",
+      "phase": "phase_3",
+      "parallelizable": false,
+      "risk": "high",
+      "changed_files": [
+        "BackEnd/incident-service/src/main/resources/db/migration/V4__auth.sql",
+        "BackEnd/incident-service/src/main/resources/db/migration/V5__seed_rbac.sql",
+        "BackEnd/incident-service/src/main/resources/db/migration/R__SeedAdmin.java",
+        "BackEnd/incident-service/src/test/resources/db/migration/V7__seed_test_users.sql",
+        "BackEnd/incident-service/src/main/java/id/co/yokke/incidentdashboard/domain/config/security/SecurityProps.java",
+        "BackEnd/incident-service/src/main/java/id/co/yokke/incidentdashboard/domain/config/security/JwtService.java",
+        "BackEnd/incident-service/src/test/java/id/co/yokke/incidentdashboard/security/JwtServiceTest.java"
+      ]
+    },
+    {
+      "id": "T014",
+      "phase": "phase_3",
+      "parallelizable": false,
+      "risk": "high",
+      "changed_files": [
+        "BackEnd/incident-service/src/main/java/id/co/yokke/incidentdashboard/domain/config/security/AuthFilter.java",
+        "BackEnd/incident-service/src/main/java/id/co/yokke/incidentdashboard/domain/config/security/RequirePrivilege.java",
+        "BackEnd/incident-service/src/main/java/id/co/yokke/incidentdashboard/domain/config/security/PrivilegeInterceptor.java",
+        "BackEnd/incident-service/src/main/java/id/co/yokke/incidentdashboard/domain/config/security/WebConfig.java",
+        "BackEnd/incident-service/src/main/java/id/co/yokke/incidentdashboard/domain/config/error/exception/AccessDeniedException.java",
+        "BackEnd/incident-service/src/main/java/id/co/yokke/incidentdashboard/domain/config/error/GlobalExceptionHandler.java",
+        "BackEnd/incident-service/src/main/java/id/co/yokke/incidentdashboard/domain/config/error/ErrorMapping.java",
+        "BackEnd/incident-service/src/main/java/id/co/yokke/incidentdashboard/infrastructure/rest/AuthController.java",
+        "BackEnd/incident-service/src/main/java/id/co/yokke/incidentdashboard/domain/usecase/auth/LoginUseCase.java",
+        "BackEnd/incident-service/src/main/java/id/co/yokke/incidentdashboard/domain/usecase/auth/PermissionUseCase.java",
+        "BackEnd/incident-service/src/test/java/id/co/yokke/incidentdashboard/security/AuthFlowIT.java"
+      ]
+    },
+    {
+      "id": "T015",
+      "phase": "phase_3",
+      "parallelizable": true,
+      "risk": "medium",
+      "changed_files": [
+        "FrontEnd/incident-dashboard/src/stores/auth.ts",
+        "FrontEnd/incident-dashboard/src/utils/can.ts",
+        "FrontEnd/incident-dashboard/src/utils/usePermission.ts",
+        "FrontEnd/incident-dashboard/src/apis/client.ts",
+        "FrontEnd/incident-dashboard/src/apis/auth.ts",
+        "FrontEnd/incident-dashboard/src/views/LoginView.vue",
+        "FrontEnd/incident-dashboard/src/router/index.ts",
+        "FrontEnd/incident-dashboard/src/stores/__tests__/auth.spec.ts",
+        "FrontEnd/incident-dashboard/src/utils/__tests__/can.spec.ts"
+      ]
+    },
+    {
+      "id": "T016",
+      "phase": "phase_4",
+      "parallelizable": false,
+      "risk": "high",
+      "changed_files": [
+        "BackEnd/incident-service/src/main/java/id/co/yokke/incidentdashboard/domain/usecase/query/IncidentQueryUseCase.java",
+        "BackEnd/incident-service/src/main/java/id/co/yokke/incidentdashboard/domain/model/IncidentFilter.java",
+        "BackEnd/incident-service/src/main/java/id/co/yokke/incidentdashboard/infrastructure/rest/IncidentController.java",
+        "BackEnd/incident-service/src/main/java/id/co/yokke/incidentdashboard/infrastructure/rest/dto/req/IncidentFilterRequest.java",
+        "BackEnd/incident-service/src/main/java/id/co/yokke/incidentdashboard/infrastructure/rest/dto/res/IncidentRowDto.java",
+        "BackEnd/incident-service/src/main/java/id/co/yokke/incidentdashboard/infrastructure/rest/dto/res/PageResponse.java",
+        "BackEnd/incident-service/src/main/java/id/co/yokke/incidentdashboard/domain/usecase/query/IncidentExportUseCase.java",
+        "BackEnd/incident-service/src/test/java/id/co/yokke/incidentdashboard/query/IncidentQueryIT.java"
+      ]
+    },
+    {
+      "id": "T017",
+      "phase": "phase_4",
+      "parallelizable": true,
+      "risk": "medium",
+      "changed_files": [
+        "BackEnd/incident-service/src/test/java/id/co/yokke/incidentdashboard/parity/ExcelParityIT.java",
+        "BackEnd/incident-service/src/test/java/id/co/yokke/incidentdashboard/parity/XlsxReader.java",
+        "BackEnd/incident-service/src/test/java/id/co/yokke/incidentdashboard/parity/ParityDiff.java",
+        "docs/reference/PARITY.md"
+      ]
+    },
+    {
+      "id": "T018",
+      "phase": "phase_4",
+      "parallelizable": true,
+      "risk": "medium",
+      "changed_files": [
+        "FrontEnd/incident-dashboard/src/views/OpsView.vue",
+        "FrontEnd/incident-dashboard/src/layout/AppLayout.vue",
+        "FrontEnd/incident-dashboard/src/components/filters/IncidentFilterBar.vue",
+        "FrontEnd/incident-dashboard/src/components/table/IncidentTable.vue",
+        "FrontEnd/incident-dashboard/src/components/table/IncidentDetailDrawer.vue",
+        "FrontEnd/incident-dashboard/src/stores/filters.ts",
+        "FrontEnd/incident-dashboard/src/apis/incidents.ts",
+        "FrontEnd/incident-dashboard/src/utils/export.ts",
+        "FrontEnd/incident-dashboard/src/stores/__tests__/filters.spec.ts",
+        "FrontEnd/incident-dashboard/src/components/table/__tests__/IncidentTable.spec.ts"
+      ]
+    },
+    {
+      "id": "T019",
+      "phase": "phase_5",
+      "parallelizable": true,
+      "risk": "medium",
+      "changed_files": [
+        "BackEnd/incident-service/src/main/java/id/co/yokke/incidentdashboard/domain/usecase/query/MetricsUseCase.java",
+        "BackEnd/incident-service/src/main/java/id/co/yokke/incidentdashboard/infrastructure/rest/MetricsController.java",
+        "BackEnd/incident-service/src/main/java/id/co/yokke/incidentdashboard/infrastructure/rest/dto/res/KpiResponse.java",
+        "BackEnd/incident-service/src/main/java/id/co/yokke/incidentdashboard/infrastructure/rest/dto/res/MatrixResponse.java",
+        "BackEnd/incident-service/src/main/java/id/co/yokke/incidentdashboard/infrastructure/rest/dto/res/TrendResponse.java",
+        "BackEnd/incident-service/src/test/java/id/co/yokke/incidentdashboard/query/MetricsIT.java"
+      ]
+    },
+    {
+      "id": "T020",
+      "phase": "phase_5",
+      "parallelizable": true,
+      "risk": "medium",
+      "changed_files": [
+        "FrontEnd/incident-dashboard/src/components/kpi/KpiRow.vue",
+        "FrontEnd/incident-dashboard/src/components/kpi/KpiCard.vue",
+        "FrontEnd/incident-dashboard/src/components/charts/ImpactUrgencyHeatmap.vue",
+        "FrontEnd/incident-dashboard/src/components/charts/SlaBucketBars.vue",
+        "FrontEnd/incident-dashboard/src/components/charts/CreatedClosedTrend.vue",
+        "FrontEnd/incident-dashboard/src/components/common/FreshnessIndicator.vue",
+        "FrontEnd/incident-dashboard/src/apis/metrics.ts",
+        "FrontEnd/incident-dashboard/src/components/charts/__tests__/ImpactUrgencyHeatmap.spec.ts",
+        "FrontEnd/incident-dashboard/src/components/kpi/__tests__/KpiRow.spec.ts"
+      ]
+    },
+    {
+      "id": "T021",
+      "phase": "phase_5",
+      "parallelizable": false,
+      "risk": "medium",
+      "changed_files": [
+        "FrontEnd/incident-dashboard/src/views/WallboardView.vue",
+        "FrontEnd/incident-dashboard/src/layout/WallboardLayout.vue",
+        "FrontEnd/incident-dashboard/src/views/__tests__/WallboardView.spec.ts"
+      ]
+    },
+    {
+      "id": "T022",
+      "phase": "phase_5",
+      "parallelizable": false,
+      "risk": "medium",
+      "changed_files": [
+        "FrontEnd/incident-dashboard/src/views/ExecView.vue",
+        "FrontEnd/incident-dashboard/src/components/charts/MttrComparison.vue",
+        "FrontEnd/incident-dashboard/src/components/charts/WorkaroundDebtCard.vue",
+        "FrontEnd/incident-dashboard/src/components/charts/TopCategories.vue",
+        "FrontEnd/incident-dashboard/src/views/__tests__/ExecView.spec.ts"
+      ]
+    },
+    {
+      "id": "T023",
+      "phase": "phase_5",
+      "parallelizable": false,
+      "risk": "high",
+      "changed_files": [
+        "FrontEnd/incident-dashboard/playwright.config.ts",
+        "FrontEnd/incident-dashboard/e2e/login.spec.ts",
+        "FrontEnd/incident-dashboard/e2e/ops-happy-path.spec.ts",
+        "FrontEnd/incident-dashboard/e2e/ops-error-paths.spec.ts",
+        "FrontEnd/incident-dashboard/e2e/wallboard.spec.ts",
+        "FrontEnd/incident-dashboard/e2e/exec.spec.ts",
+        "FrontEnd/incident-dashboard/e2e/fixtures/seed.ts"
+      ]
+    }
+  ]
+}

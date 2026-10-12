@@ -1,0 +1,59 @@
+- generic [ref=f2e661]:
+  - complementary [ref=f2e662]:
+    - link "Incident Dashboard home" [ref=f2e664] [cursor=pointer]:
+      - /url: /
+      - img "Yokke" [ref=f2e665]
+    - generic [ref=f2e666]: Incident Dashboard
+    - navigation "Main" [ref=f2e667]:
+      - link "Operations" [ref=f2e668] [cursor=pointer]:
+        - /url: /ops
+        - generic [ref=f2e669]: 
+      - link "Wallboard" [ref=f2e671] [cursor=pointer]:
+        - /url: /wallboard
+        - generic [ref=f2e672]: 
+      - link "Executive" [ref=f2e674] [cursor=pointer]:
+        - /url: /exec
+        - generic [ref=f2e675]: 
+      - link "User Management" [ref=f2e677] [cursor=pointer]:
+        - /url: /admin/users
+        - generic [ref=f2e678]: 
+    - generic [ref=f2e680]:
+      - generic [ref=f2e681]: 
+      - generic [ref=f2e683]:
+        - generic "Bootstrap Administrator" [ref=f2e684]
+        - generic [ref=f2e685]: Signed in
+      - button "Log out" [ref=f2e686] [cursor=pointer]:
+        - generic [ref=f2e687]: 
+  - generic [ref=f2e689]:
+    - generic [ref=f2e691]:
+      - button "Toggle navigation" [ref=f2e692] [cursor=pointer]:
+        - generic [ref=f2e693]: 
+      - heading "User Management" [level=1] [ref=f2e694]
+    - generic [ref=f2e698]:
+      - heading "Create User" [level=2] [ref=f2e699]
+      - generic [ref=f2e700]:
+        - generic [ref=f2e701]:
+          - generic [ref=f2e702]: Account
+          - generic [ref=f2e703]:
+            - generic [ref=f2e704]:
+              - generic [ref=f2e705]: Username
+              - textbox "Username" [ref=f2e706]:
+                - /placeholder: Enter username
+                - text: ops.lead
+              - generic [ref=f2e707]: Cannot be changed later — the account is identified by it.
+            - generic [ref=f2e708]:
+              - generic [ref=f2e709]: Role
+              - combobox "Role" [active] [ref=f2e711] [cursor=pointer]: Ops Manager
+            - generic [ref=f2e715]:
+              - generic [ref=f2e716]: Name
+              - textbox "Name" [ref=f2e717]:
+                - /placeholder: Enter name
+                - text: Operations Lead
+            - generic [ref=f2e718]:
+              - generic [ref=f2e719]: Email
+              - textbox "Email" [ref=f2e720]:
+                - /placeholder: Enter email (optional)
+                - text: ops.lead@yokke.co.id
+        - generic [ref=f2e721]:
+          - button "Cancel" [ref=f2e722] [cursor=pointer]
+          - button "Create" [ref=f2e724] [cursor=pointer]

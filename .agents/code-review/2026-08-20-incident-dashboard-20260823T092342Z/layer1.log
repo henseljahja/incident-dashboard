@@ -1,0 +1,105 @@
+=== TOOL AVAILABILITY ===
+semgrep: FOUND
+trufflehog: absent
+gitleaks: FOUND
+trivy: FOUND
+osv-scanner: FOUND
+
+=== SECRETS: manual pattern scan over tracked diff ===
+no high-confidence secret patterns
+
+=== SECRETS: credential-shaped assignments ===
+2450:+    public static final String SCOPE_CHANGE_PASSWORD = "change-password";
+11146:+    private static final String OPS_PASSWORD = "OpsManager#2026";
+11800:+    private static final String OPS_PASSWORD = "OpsManager#2026";
+12301:+    private static final String ADMIN_PASSWORD = "AdminTest#2026";
+12303:+    private static final String OPS_PASSWORD = "OpsManager#2026";
+12305:+    private static final String EXEC_PASSWORD = "ExecUser#2026";
+12307:+    private static final String WALLBOARD_PASSWORD = "Wallboard#2026";
+12309:+    private static final String VIEWER_PASSWORD = "Viewer#2026";
+12311:+    private static final String INACTIVE_PASSWORD = "Inactive#2026";
+12313:+    private static final String ROTATE_PASSWORD = "RotateMe#2026";
+12797:+    private static final String SECRET = "unit-test-signing-secret-0123456789abcdef";
+12799:+    private static final String OTHER_SECRET = "a-completely-different-signing-key-abcdef";
+22548:+    token: 'access-token',
+22613:+      auth.accessToken = 'scoped-token'
+22622:+    auth.accessToken = 'scoped-token'
+22630:+    auth.accessToken = 'access-token'
+22703:+    vi.mocked(authApi.login).mockResolvedValue(tokenResponse({ token: 'abc123' }))
+22730:+    vi.mocked(authApi.refreshToken).mockResolvedValue({ token: 'refreshed-token' })
+
+=== .env / keystore files added ===
+none
+=== GITLEAKS (full history) ===
+findings: 0
+=== SEMGREP (auto config, src only) ===
+total findings: 1
+by severity: {'WARNING': 1}
+  [WARNING] BackEnd/incident-service/src/main/java/id/co/yokke/incidentdashboard/domain/usecase/query/MetricsUseCase.java:242  spring-sqli
+        Detected a string argument from a public method contract in a raw SQL statement. This could lead to SQL injection if variables in the SQL statement ar
+
+=== OSV-SCANNER (dependency vulnerabilities) — run 2026-08-23, AFTER the initial pass ===
+Scanned: BackEnd/incident-service/pom.xml, FrontEnd/incident-dashboard/pnpm-lock.yaml
+
+BEFORE (Spring Boot 3.1.5):
+  total: 77 findings
+  CRITICAL 4  — all org.apache.tomcat.embed:tomcat-embed-core@10.1.15
+      GHSA-5m62-pw8w-7w9f  security constraints not correctly applied
+      GHSA-83qj-6fr2-vhqg  potential RCE / information disclosure
+      GHSA-h6fc-48rj-7qqh  digest authenticator authenticates any unknown user
+      GHSA-r29c-68gh-xp6x  HTTP/2 request headers not validated
+  HIGH 36 — tomcat-embed-core (x17), spring-web/webmvc/core 6.0.13 (x7),
+            jackson-core/databind 2.15.3 (x3), logback 1.4.11 (x2),
+            snakeyaml 1.33, spring-security-crypto 6.1.5 (password length not enforced),
+            spring-boot 3.1.5, assertj-core 3.24.2 (XXE), xlsx 0.20.3 (x2, see below)
+  MODERATE/LOW 37
+
+  Root cause: a single EOL parent. Spring Boot 3.1.x went out of OSS support and stopped
+  receiving the managed-dependency bumps, so every transitive CVE above accumulated behind
+  one version number. This was tracked as deferred follow-up #8 as a currency concern; the
+  dependency scan reclassifies it as a Layer-1 CRITICAL.
+
+FIX: spring-boot-starter-parent 3.1.5 -> 3.5.3, plus
+     org.apache.poi 5.2.5 -> 5.4.0 (GHSA-gmg8-593g-7mv3, test scope)
+     testcontainers 1.19.8 -> 1.20.6 (compatibility, not a CVE)
+     + NEW dependency org.flywaydb:flyway-database-oracle — Flyway 10 split per-database
+       support out of flyway-core; without it startup fails "Unsupported Database: Oracle".
+     jjwt deliberately held at 0.11.5 — no advisory against it, and 0.12 is an API break.
+
+AFTER: see the re-scan block at the end of this file.
+
+--- SUPPRESSED, with reasons ---
+
+[FALSE POSITIVE] xlsx@0.20.3 — GHSA-4r6h-8v6p-xvw6 (prototype pollution),
+                               GHSA-5pgg-2g8v-p4x9 (ReDoS)
+  Verified against the OSV API: BOTH advisories carry `{"introduced": "0"}` and NO `fixed`
+  event, so every version matches forever. That is a packaging artifact, not a live bug —
+  the npm-registry `xlsx` package was abandoned at 0.18.5 when SheetJS moved distribution to
+  their own CDN, so OSV has no release after 0.18.5 to attach a fix to.
+  We do not install from npm. package.json pins the official tarball:
+      "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
+  and node_modules/xlsx/package.json confirms 0.20.3 installed. Prototype pollution was
+  fixed in 0.19.3 and the ReDoS in 0.20.2 — both are already in the code we ship.
+  Independently, neither is reachable here: src/utils/export.ts only ever calls
+  XLSX.writeFile. Both advisories live in the PARSER (XLSX.read); this app never parses a
+  workbook. Grep for `XLSX.read` returns nothing.
+  ACTION: none. Re-check if a workbook-import feature is ever added — that would put the
+  parse path in scope and this suppression would no longer hold.
+
+[FALSE POSITIVE] semgrep spring-sqli at MetricsUseCase.java:242
+  The flagged `format` argument never reaches SQL as caller-controlled text: it is a key
+  into a fixed 3-entry GRANULARITIES map that throws on an unknown key, so only one of three
+  compile-time-constant format strings can ever be interpolated. Read the map definition
+  above the call site before re-flagging this.
+
+[NOT A FINDING] credential-shaped literals at diff lines 11146-12313
+  Test-fixture passwords in V7__seed_test_users.sql and the auth ITs. Test classpath only,
+  never packaged into the jar, and the seeded accounts do not exist in any deployment.
+  Confirmed by gitleaks over FULL history: 0 findings.
+
+=== OSV RE-SCAN after the Spring Boot 3.5.3 bump ===
+  total: 2 findings (was 77)
+  CRITICAL 0 (was 4)   HIGH 2 (was 36)   MODERATE 0   LOW 0
+  Both remaining HIGHs are xlsx@0.20.3, the suppressed scanner artifact documented above.
+  Backend re-verified on the new parent: BUILD SUCCESS, 44 unit (2 skipped by design) +
+  74 integration (1 skipped by design) against the Testcontainers Oracle.

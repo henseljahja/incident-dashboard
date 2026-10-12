@@ -1,0 +1,23 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "yob-backoffice",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--dir", "/Users/henseljahja/Project/mti/yob/FrontEnd/backoffice", "dev", "--port", "5199"],
+      "port": 5199
+    },
+    {
+      "name": "incident-dashboard",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": [
+        "--dir",
+        "/Users/henseljahja/Project/mti/incident-dashboard/FrontEnd/incident-dashboard",
+        "dev",
+        "--port",
+        "5176"
+      ],
+      "port": 5176
+    }
+  ]
+}

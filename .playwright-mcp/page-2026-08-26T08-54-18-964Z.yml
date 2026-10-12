@@ -1,0 +1,224 @@
+- generic [ref=e32]:
+  - complementary [ref=e33]:
+    - link "Incident Dashboard home" [ref=e35] [cursor=pointer]:
+      - /url: /
+      - img "Yokke" [ref=e36]
+    - generic [ref=e37]: Incident Dashboard
+    - navigation "Main" [ref=e38]:
+      - link "Operations" [ref=e39] [cursor=pointer]:
+        - /url: /ops
+        - generic [ref=e40]: 
+      - link "Wallboard" [ref=e42] [cursor=pointer]:
+        - /url: /wallboard
+        - generic [ref=e43]: 
+      - link "Executive" [ref=e45] [cursor=pointer]:
+        - /url: /exec
+        - generic [ref=e46]: 
+      - link "User Management" [ref=e48] [cursor=pointer]:
+        - /url: /admin/users
+        - generic [ref=e49]: 
+    - generic [ref=e51]:
+      - generic [ref=e52]: 
+      - generic [ref=e54]:
+        - generic "Bootstrap Administrator" [ref=e55]
+        - generic [ref=e56]: Signed in
+      - button "Log out" [ref=e57] [cursor=pointer]:
+        - generic [ref=e58]: 
+  - generic [ref=e60]:
+    - generic [ref=e62]:
+      - button "Toggle navigation" [ref=e63] [cursor=pointer]:
+        - generic [ref=e64]: 
+      - heading "Operations" [level=1] [ref=e65]
+      - alert [ref=e68]:
+        - generic [ref=e70]: Dashboard data is stale — last mirrored 8/26/2026, 3:54:15 PM (mirror-lagging).
+    - generic [ref=e74]:
+      - generic [ref=e75]:
+        - 'button "Backlog: 95. Scroll to the incident table." [ref=e76] [cursor=pointer]':
+          - generic [ref=e78]:
+            - generic [ref=e79]: Backlog
+            - generic [ref=e80]: 
+          - generic [ref=e81]:
+            - generic [ref=e82]: "95"
+            - generic [ref=e83]: 
+        - 'button "Open: 5. Scroll to the incident table." [ref=e84] [cursor=pointer]':
+          - generic [ref=e86]:
+            - generic [ref=e87]: Open
+            - generic [ref=e88]: 
+          - generic [ref=e89]:
+            - generic [ref=e90]: "5"
+            - generic [ref=e91]: 
+        - 'button "Breached: 2. Scroll to the incident table." [ref=e92] [cursor=pointer]':
+          - generic [ref=e94]:
+            - generic [ref=e95]: Breached
+            - generic [ref=e96]: 
+          - generic [ref=e97]:
+            - generic [ref=e98]: "2"
+            - generic [ref=e99]: 
+        - 'button "At Risk: 38. Scroll to the incident table." [ref=e100] [cursor=pointer]':
+          - generic [ref=e102]:
+            - generic [ref=e103]: At Risk
+            - generic [ref=e104]: 
+          - generic [ref=e105]:
+            - generic [ref=e106]: "38"
+            - generic [ref=e107]: 
+        - 'button "MTTR (workaround, days): 1.0. Scroll to the incident table." [ref=e108] [cursor=pointer]':
+          - generic [ref=e110]:
+            - generic [ref=e111]: MTTR (workaround, days)
+            - generic [ref=e112]: 
+          - generic [ref=e113]:
+            - generic [ref=e114]: "1.0"
+            - generic [ref=e115]: 
+        - 'button "MTTR (permanent, days): 4.0. Scroll to the incident table." [ref=e116] [cursor=pointer]':
+          - generic [ref=e118]:
+            - generic [ref=e119]: MTTR (permanent, days)
+            - generic [ref=e120]: 
+          - generic [ref=e121]:
+            - generic [ref=e122]: "4.0"
+            - generic [ref=e123]: 
+        - 'button "Workaround Debt: 1. Filter the table to incidents that have a workaround." [ref=e124] [cursor=pointer]':
+          - generic [ref=e126]:
+            - generic [ref=e127]: Workaround Debt
+            - generic [ref=e128]: 
+          - generic [ref=e129]:
+            - generic [ref=e130]: "1"
+            - generic [ref=e131]: 
+      - generic [ref=e132]:
+        - generic [ref=e133]:
+          - generic [ref=e134]: Impact × Urgency
+          - table [ref=e135]:
+            - rowgroup [ref=e136]:
+              - row [ref=e137]:
+                - columnheader [ref=e138]
+                - columnheader "Unclassified" [ref=e139]
+                - columnheader "Unknown (160)" [ref=e140]:
+                  - generic [ref=e141]: 
+                  - text: Unknown (160)
+                - columnheader "Unknown (999999)" [ref=e142]:
+                  - generic [ref=e143]: 
+                  - text: Unknown (999999)
+            - rowgroup [ref=e144]:
+              - row [ref=e145]:
+                - rowheader "Unclassified" [ref=e146]
+                - cell [ref=e147]:
+                  - button "Impact Unclassified, urgency Unclassified, 93 incidents" [ref=e148]: "93"
+                - cell [ref=e149]:
+                  - button "Impact Unknown (160), urgency Unclassified, 0 incidents" [ref=e150]: "0"
+                - cell [ref=e151]:
+                  - button "Impact Unknown (999999), urgency Unclassified, 1 incidents" [ref=e152]: "1"
+              - row [ref=e153]:
+                - rowheader "Unknown (164)" [ref=e154]:
+                  - generic [ref=e155]: 
+                  - text: Unknown (164)
+                - cell [ref=e156]:
+                  - button "Impact Unclassified, urgency Unknown (164), 0 incidents" [ref=e157]: "0"
+                - cell [ref=e158]:
+                  - button "Impact Unknown (160), urgency Unknown (164), 1 incidents" [ref=e159]: "1"
+                - cell [ref=e160]:
+                  - button "Impact Unknown (999999), urgency Unknown (164), 0 incidents" [ref=e161]: "0"
+          - generic [ref=e162]: "Total: 95"
+        - generic [ref=e163]:
+          - generic [ref=e164]: SLA Buckets
+          - generic [ref=e165]:
+            - generic [ref=e166]: 0-50%
+            - generic [ref=e169]: "4"
+          - generic [ref=e170]:
+            - generic [ref=e171]: 50-80%
+            - generic [ref=e174]: "49"
+          - generic [ref=e175]:
+            - generic [ref=e176]: 80-100%
+            - generic [ref=e179]: "38"
+          - generic [ref=e180]:
+            - generic [ref=e181]: Breached
+            - generic [ref=e184]: "2"
+          - generic [ref=e185]:
+            - generic [ref=e186]: Unknown
+            - generic [ref=e189]: "2"
+          - generic [ref=e190]: "Total: 95"
+        - generic [ref=e191]:
+          - generic [ref=e192]: Created / Closed / Backlog
+          - table [ref=e194]:
+            - caption [ref=e195]: Created, closed, and backlog counts by period
+            - rowgroup [ref=e196]:
+              - row [ref=e197]:
+                - columnheader "Period" [ref=e198]
+                - columnheader "Created" [ref=e199]
+                - columnheader "Closed" [ref=e200]
+                - columnheader "Backlog" [ref=e201]
+            - rowgroup [ref=e202]:
+              - row [ref=e203]:
+                - rowheader "2026-07" [ref=e204]
+                - cell "95" [ref=e205]
+                - cell "89" [ref=e206]
+                - cell "6" [ref=e207]
+              - row [ref=e208]:
+                - rowheader "2026-08" [ref=e209]
+                - cell "0" [ref=e210]
+                - cell "1" [ref=e211]
+                - cell "5" [ref=e212]
+      - search "Incident filters" [ref=e213]:
+        - generic [ref=e214]:
+          - generic [ref=e215]: From
+          - generic [ref=e216]:
+            - combobox "From" [ref=e217]
+            - button "Choose Date" [ref=e218] [cursor=pointer]
+        - generic [ref=e221]:
+          - generic [ref=e222]: To
+          - generic [ref=e223]:
+            - combobox "To" [ref=e224]
+            - button "Choose Date" [ref=e225] [cursor=pointer]
+        - generic [ref=e228]:
+          - generic [ref=e229]: Tracker
+          - generic [ref=e230] [cursor=pointer]:
+            - generic:
+              - combobox "Tracker"
+            - generic [ref=e231]: Any tracker
+        - generic [ref=e236]:
+          - generic [ref=e237]: Stage
+          - generic [ref=e238] [cursor=pointer]:
+            - generic:
+              - combobox "Stage"
+            - generic [ref=e239]: Any stage
+        - generic [ref=e244]:
+          - generic [ref=e245]: Priority
+          - generic [ref=e246] [cursor=pointer]:
+            - generic:
+              - combobox "Priority"
+            - generic [ref=e247]: Any priority
+        - generic [ref=e252]:
+          - generic [ref=e253]: Institusi
+          - listbox [ref=e255]:
+            - option [ref=e256]:
+              - textbox "Institusi" [ref=e257]:
+                - /placeholder: Type and press Enter
+        - generic [ref=e258]:
+          - generic [ref=e259]: Category
+          - listbox [ref=e261]:
+            - option [ref=e262]:
+              - textbox "Category" [ref=e263]:
+                - /placeholder: Type and press Enter
+        - generic [ref=e264]:
+          - generic [ref=e265]: Has workaround
+          - combobox "Has workaround" [ref=e267] [cursor=pointer]
+        - button "Clear filters" [ref=e271]
+      - generic [ref=e273]:
+        - generic [ref=e274]:
+          - generic [ref=e275]: 0 incident(s)
+          - button "Export" [ref=e276] [cursor=pointer]:
+            - generic [ref=e277]: 
+        - table [ref=e280]:
+          - rowgroup [ref=e281]:
+            - row [ref=e282]:
+              - columnheader "Subject" [ref=e283]
+              - columnheader "Tracker" [ref=e284]
+              - columnheader "Status" [ref=e285]
+              - columnheader "Priority" [ref=e286]
+              - columnheader "SLA" [ref=e287]
+              - columnheader "Aging (days)" [ref=e288]
+          - rowgroup
+        - generic [ref=e289]:
+          - generic [ref=e290]: Page 1 of 1
+          - generic [ref=e291]:
+            - button "Prev" [disabled] [ref=e292]:
+              - generic [ref=e293]: 
+            - button "Next" [disabled] [ref=e295]:
+              - generic [ref=e296]: 

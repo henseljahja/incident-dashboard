@@ -1,0 +1,7 @@
+(skipped — --with-spec-check not set)
+
+Layer 3 is opt-in. Spec alignment was nevertheless covered from a different direction
+during the TDD run itself: the final wave verified 35/35 scope-census items, and the
+3-persona validation quorum (staff-engineer + domain expert + security) reviewed the
+implementation against the plan. The domain persona confirmed the Redmine semantics hold
+end to end. See .agents/artifacts/2026-08-20-incident-dashboard/recap.md.

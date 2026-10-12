@@ -1,0 +1,11 @@
+{
+  "run_id": "2026-08-20-incident-dashboard-20260823T092342Z",
+  "plan_id": "2026-08-20-incident-dashboard",
+  "started_at": "2026-08-23T09:23:42Z",
+  "status": "passed",
+  "layers": {
+    "layer1": {"status": "pass", "git_head_at_pass": "05519356be84adedd1793667579926382cd98565", "log": "layer1.log", "issues": {"critical": 0, "high": 0, "medium": 0}},
+    "layer2": {"status": "pass", "git_head_at_pass": "05519356be84adedd1793667579926382cd98565", "log": "layer2.log", "issues": {"high": 0, "medium": 0, "low": 0}},
+    "layer3": {"status": "skipped", "log": "layer3.log", "criteria_covered": "n/a"}
+  }
+}

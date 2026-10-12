@@ -1,0 +1,39 @@
+# =============================================================================
+# LOCAL DEV Oracle stack for the incident dashboard.
+#
+# THIS IS NOT THE TEST STACK. Tier-2/Tier-3 automated tests (integration and
+# E2E fixtures) MUST run against the separate, isolated
+# `docker-compose.test.yml` stack (its own compose project name, host ports,
+# and named volumes). Those fixtures TRUNCATE tables — pointing them at this
+# dev stack would destroy local dev data. If `docker-compose.test.yml` does
+# not exist yet in this directory, it needs to be created before any
+# integration/E2E test run; do not repurpose this file for that.
+# =============================================================================
+
+name: incident-dashboard-dev
+
+services:
+  oracle:
+    image: gvenzl/oracle-free:23-slim
+    container_name: incident-dashboard-dev-oracle
+    environment:
+      # Local dev only — never a real secret. Override via .env if you like.
+      ORACLE_PASSWORD: ${ORACLE_PASSWORD:-localdev}
+      ORACLE_DATABASE: INCIDENTDB
+    ports:
+      # Non-default host port (1522, not 1521) so this dev stack can never
+      # collide with, or be mistaken for, the isolated test stack.
+      - "1522:1521"
+    volumes:
+      - incident-dashboard-dev-oracle-data:/opt/oracle/oradata
+      - ./init:/container-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD", "healthcheck.sh"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 60s
+
+volumes:
+  incident-dashboard-dev-oracle-data:
+    name: incident-dashboard-dev-oracle-data

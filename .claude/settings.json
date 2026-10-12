@@ -1,0 +1,27 @@
+{
+  "//": "Strict-mode evidence gate for mti/incident-dashboard (same wiring as payops/ops). PreToolUse hook fires when Claude is launched FROM this dir or a subdir. Rejects TaskUpdate->completed without a fresh sha256-signed, PASSING, task-bound evidence bundle. Script: $HOME/.agents/straventa/verify-wave/hooks/task-update-gate.sh",
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "TaskUpdate|TodoWrite",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.agents/straventa/verify-wave/hooks/task-update-gate.sh"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '[incident-dashboard] strict-mode pipeline active. Read-only over the Oracle Redmine mirror; Redmine is the write side.'"
+          }
+        ]
+      }
+    ]
+  }
+}

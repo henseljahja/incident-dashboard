@@ -1,0 +1,13 @@
+# Local dev Oracle, run via docker-compose. Note the non-default host port:
+# 1522, NOT the usual 1521 — chosen to avoid clashing with any other local
+# Oracle instance already bound to 1521.
+spring:
+  datasource:
+    url: jdbc:oracle:thin:@//localhost:1522/FREEPDB1
+    username: INCIDENT_DASH
+    password: ${INCIDENT_DASH_DB_PASSWORD:changeme}
+    driver-class-name: oracle.jdbc.OracleDriver
+
+incident:
+  mirror:
+    schema: REDMINE_MIRROR.
