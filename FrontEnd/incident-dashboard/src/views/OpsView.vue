@@ -10,7 +10,6 @@ import ImpactUrgencyHeatmap from '@/components/charts/ImpactUrgencyHeatmap.vue'
 import SlaBucketBars from '@/components/charts/SlaBucketBars.vue'
 import FreshnessIndicator from '@/components/common/FreshnessIndicator.vue'
 import IncidentFilterBar from '@/components/filters/IncidentFilterBar.vue'
-import InsightsSection from '@/components/insights/InsightsSection.vue'
 import KpiRow from '@/components/kpi/KpiRow.vue'
 import ScopeCounts from '@/components/kpi/ScopeCounts.vue'
 import IncidentDetailDrawer from '@/components/table/IncidentDetailDrawer.vue'
@@ -39,12 +38,6 @@ watch(scope, (next) => filters.setScope(next), { immediate: true })
 
 /** Impact x urgency only exists for incidents; Problem and SR tickets do not carry it (D8). */
 const showMatrix = computed(() => scope.value === 'INCIDENT')
-
-/**
- * The RD 22524 analytics block is opt-in: it adds seven aggregate queries, which an operator who
- * only wants the list should not pay for on every page load.
- */
-const insightsOpen = ref(false)
 
 function scrollToTable() {
   tableAnchor.value?.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -182,18 +175,6 @@ const totalAnnouncement = computed(() =>
         />
         <SlaBucketBars :class="showMatrix ? '' : 'lg:col-span-3'" />
         <CreatedClosedTrend class="lg:col-span-3" />
-      </div>
-      <div class="flex flex-col gap-3">
-        <button
-          type="button"
-          class="min-h-11 self-start rounded border border-surface-300 bg-surface-0 px-4 text-sm"
-          data-testid="insights-toggle"
-          :aria-expanded="insightsOpen"
-          @click="insightsOpen = !insightsOpen"
-        >
-          {{ insightsOpen ? t('insights.hide') : t('insights.show') }}
-        </button>
-        <InsightsSection v-if="insightsOpen" />
       </div>
       <IncidentFilterBar />
       <p class="sr-only" aria-live="polite" data-testid="table-total-announcement">

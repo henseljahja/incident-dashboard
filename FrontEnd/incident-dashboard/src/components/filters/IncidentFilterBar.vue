@@ -43,6 +43,7 @@ const {
   search,
   source,
   assignedTo,
+  statusName,
 } = storeToRefs(filters)
 
 /** Data values of the External/Internal custom field (cf 349), so never translated. */
@@ -109,6 +110,7 @@ const advancedActiveCount = computed(
     category.value.length +
     source.value.length +
     assignedTo.value.length +
+    statusName.value.length +
     (hasWorkaround.value === null ? 0 : 1),
 )
 
@@ -219,6 +221,7 @@ const activeFilters = computed<ActiveFilter[]>(() => {
     { key: 'category', name: t('filters.category'), ref: category },
     { key: 'source', name: t('filters.source'), ref: source },
     { key: 'assignedTo', name: t('filters.assignedTo'), ref: assignedTo },
+    { key: 'statusName', name: t('filters.statusName'), ref: statusName },
   ]
   for (const { key, name, ref: list } of lists) {
     for (const value of list.value) {
@@ -451,6 +454,22 @@ const activeFilters = computed<ActiveFilter[]>(() => {
           class="min-w-48"
           @update:model-value="resetPage"
         />
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label class="text-xs uppercase text-surface-600" for="filter-status-name">{{
+          t('filters.statusName')
+        }}</label>
+        <InputChips
+          input-id="filter-status-name"
+          v-model="statusName"
+          aria-describedby="filter-status-name-hint"
+          class="min-w-48"
+          @update:model-value="resetPage"
+        />
+        <small id="filter-status-name-hint" class="text-xs text-surface-600">
+          {{ t('filters.statusNameHint') }}
+        </small>
       </div>
 
       <div class="flex flex-col gap-1">

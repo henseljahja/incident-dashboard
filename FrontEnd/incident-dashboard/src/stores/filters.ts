@@ -80,6 +80,8 @@ export const useFiltersStore = defineStore('filters', () => {
   const search = ref('')
   const source = ref<string[]>([])
   const assignedTo = ref<string[]>([])
+  /** Redmine status NAME, as typed in the list's Status box (distinct from the Open/Closed facet). */
+  const statusName = ref<string[]>([])
   const sort = ref<string | null>(null)
   const direction = ref<string | null>(null)
   const page = ref(0)
@@ -108,6 +110,7 @@ export const useFiltersStore = defineStore('filters', () => {
     if (search.value.trim()) params.set('search', search.value.trim())
     for (const value of source.value) params.append('source', value)
     for (const value of assignedTo.value) params.append('assignedTo', value)
+    for (const value of statusName.value) params.append('statusName', value)
     if (scope.value) params.set('scope', scope.value)
     if (sort.value) params.set('sort', sort.value)
     if (direction.value) params.set('direction', direction.value)
@@ -179,6 +182,7 @@ export const useFiltersStore = defineStore('filters', () => {
     search.value = params.get('search') ?? ''
     source.value = params.getAll('source')
     assignedTo.value = params.getAll('assignedTo')
+    statusName.value = params.getAll('statusName')
 
     const hasWorkaroundRaw = params.get('hasWorkaround')
     hasWorkaround.value = hasWorkaroundRaw === null ? null : hasWorkaroundRaw === 'true'
@@ -207,6 +211,7 @@ export const useFiltersStore = defineStore('filters', () => {
     search.value = ''
     source.value = []
     assignedTo.value = []
+    statusName.value = []
     hasWorkaround.value = null
     status.value = null
     sla.value = null
@@ -267,6 +272,7 @@ export const useFiltersStore = defineStore('filters', () => {
     search,
     source,
     assignedTo,
+    statusName,
     setPeriod,
     dateFrom,
     dateTo,

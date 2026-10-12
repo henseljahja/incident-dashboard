@@ -322,6 +322,9 @@ const hasActiveFilters = computed(() => {
               <th class="px-3 py-2 font-semibold text-surface-700">{{ t('table.tracker') }}</th>
               <th class="px-3 py-2 font-semibold text-surface-700">{{ t('table.status') }}</th>
               <th class="px-3 py-2 font-semibold text-surface-700">{{ t('table.priority') }}</th>
+              <th class="px-3 py-2 font-semibold text-surface-700">{{ t('table.institusi') }}</th>
+              <th class="px-3 py-2 font-semibold text-surface-700">{{ t('table.source') }}</th>
+              <th class="px-3 py-2 font-semibold text-surface-700">{{ t('table.assignedTo') }}</th>
               <th class="px-3 py-2 font-semibold whitespace-nowrap text-surface-700">
                 <span class="inline-flex items-center gap-2">
                   {{ t('table.sla') }}
@@ -434,6 +437,25 @@ const hasActiveFilters = computed(() => {
                   :value="String(row.PRIORITY ?? '—')"
                 />
               </td>
+              <td
+                class="px-3 py-2 whitespace-nowrap text-surface-700"
+                data-testid="incident-institusi"
+              >
+                {{ row.INSTITUSI ?? '—' }}
+              </td>
+              <td
+                class="px-3 py-2 whitespace-nowrap text-surface-700"
+                data-testid="incident-source"
+              >
+                {{ row.EXTERNAL_INTERNAL ?? '—' }}
+              </td>
+              <td
+                class="max-w-48 truncate px-3 py-2 text-surface-700"
+                data-testid="incident-assignee"
+                :title="String(row.ASSIGNED_TO ?? '')"
+              >
+                {{ row.ASSIGNED_TO ?? '—' }}
+              </td>
               <td class="px-3 py-2 whitespace-nowrap">
                 <Tag
                   :severity="severityFor(SLA_SEVERITY, row.SLA_BUCKET)"
@@ -456,7 +478,7 @@ const hasActiveFilters = computed(() => {
             -->
               <td
                 class="px-3 py-10 text-center text-surface-600"
-                colspan="7"
+                colspan="10"
                 data-testid="incident-table-empty"
               >
                 <i class="pi pi-inbox mb-2 block text-2xl text-surface-300" aria-hidden="true" />

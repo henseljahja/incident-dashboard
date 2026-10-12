@@ -30,7 +30,13 @@
       "sr": "Service Request",
       "exec": "Executive",
       "wallboard": "Wallboard",
-      "admin": "User Management"
+      "admin": "User Management",
+      "dashboard": "Dashboard",
+      "forecast": "Forecast",
+      "alerts": "Alerts",
+      "rca": "Problem & RCA",
+      "ai": "AI Insights",
+      "sla": "SLA Config"
     },
     "toggle": "Toggle navigation",
     "skipToContent": "Skip to main content",
@@ -103,7 +109,9 @@
     "source": "Source",
     "anySource": "Any source",
     "assignedTo": "Assigned to",
-    "assignedToHint": "Press Enter to add each name"
+    "assignedToHint": "Press Enter to add each name",
+    "statusName": "Status",
+    "statusNameHint": "Press Enter to add each status"
   },
   "table": {
     "heading": "Incidents",
@@ -132,7 +140,10 @@
     "prev": "Prev",
     "next": "Next",
     "scrollHint": "Scroll for more columns",
-    "scrollRegion": "Incident table. Scroll sideways for more columns."
+    "scrollRegion": "Incident table. Scroll sideways for more columns.",
+    "institusi": "Institusi",
+    "source": "Source",
+    "assignedTo": "Assigned to"
   },
   "drawer": {
     "title": "Incident detail",
@@ -493,67 +504,289 @@
     "error": "Couldn't load the group counts"
   },
   "insights": {
-    "title": "Analytics",
-    "show": "Show analytics",
-    "hide": "Hide analytics",
-    "empty": "No data for the current filters.",
+    "state": {
+      "error": "This widget could not be loaded.",
+      "retry": "Retry",
+      "empty": "No data for the current filters."
+    },
+    "priority": {
+      "critical": "Critical",
+      "high": "High",
+      "medium": "Medium",
+      "low": "Low",
+      "other": "Other"
+    },
+    "scope": {
+      "label": "Ticket group",
+      "all": "All",
+      "INCIDENT": "Incident",
+      "PROBLEM": "Problem",
+      "SERVICE_REQUEST": "Service Request"
+    },
     "period": {
       "label": "Period",
       "30d": "30 days",
       "60d": "60 days",
       "90d": "90 days",
       "6m": "6 months",
-      "all": "All"
+      "all": "All time"
     },
-    "tile": {
+    "unit": {
+      "days": "days"
+    },
+    "unassigned": "Unassigned",
+    "kpi": {
       "total": "Total tickets",
-      "mttr": "MTTR (days)",
+      "mttr": "MTTR (mean time to resolve)",
       "compliance": "SLA compliance",
-      "breached": "Breached",
-      "closure": "Closure rate"
+      "breach": "SLA breach (open)",
+      "closure": "Closure rate",
+      "totalSub": "{open} open · {closed} closed",
+      "mttrSub": "Min {min}d · Max {max}d",
+      "noClosed": "Nothing closed in this period",
+      "complianceSub": "{onTime} on time / {late} late",
+      "breachSub": "Open tickets past their SLA",
+      "closureSub": "Avg aging {days}d",
+      "noAging": "No aging data",
+      "vsPrev": "vs previous period"
     },
-    "donut": {
-      "priority": "By priority",
-      "source": "External vs Internal"
+    "trend": {
+      "title": "Daily trend",
+      "subtitle": "Tickets created per day, stacked by priority",
+      "total": "Total: {n}",
+      "date": "Date"
+    },
+    "priorityDonut": {
+      "title": "By priority"
+    },
+    "monthly": {
+      "title": "Monthly comparison",
+      "subtitle": "By month created. Avg resolution = closed tickets; avg open age = tickets still open.",
+      "month": "Month"
+    },
+    "assignees": {
+      "title": "Top 10 assigned to",
+      "subtitle": "Avg resolution and range are over closed tickets (days). Closure rate = closed ÷ total. Click a name to filter the incident list."
+    },
+    "aging": {
+      "title": "Top 10 aging incidents",
+      "subtitle": "Longest-running open tickets. SLA used = aging ÷ SLA target × 100; above 100% is overdue."
+    },
+    "source": {
+      "title": "External vs Internal"
     },
     "institusi": {
       "title": "Top institusi"
     },
-    "assignees": {
-      "title": "Top 10 assigned to",
-      "assignee": "Assignee",
+    "col": {
       "total": "Total",
-      "open": "Open",
-      "closed": "Closed",
-      "breached": "Breached",
-      "closureRate": "Closure rate"
-    },
-    "monthly": {
-      "title": "Monthly comparison",
-      "month": "Month",
-      "created": "Created",
-      "closed": "Closed",
-      "breached": "Breached",
-      "mttr": "MTTR (days)",
-      "compliance": "SLA compliance"
-    },
-    "aging": {
-      "title": "Top 10 aging open tickets",
-      "ticket": "Ticket",
       "priority": "Priority",
+      "closed": "Closed",
+      "open": "Open",
+      "avgResolution": "Avg resolution (d)",
+      "avgOpenAge": "Avg open age (d)",
+      "slaBreach": "SLA breach",
       "assignee": "Assigned to",
-      "days": "Age (days)",
-      "slaUsed": "SLA used"
+      "range": "Range (d)",
+      "closureRate": "Closure rate",
+      "ticket": "Ticket",
+      "subject": "Subject",
+      "status": "Status",
+      "institusi": "Institusi",
+      "aging": "Aging (d)",
+      "slaTarget": "SLA target (d)",
+      "slaUsed": "SLA used",
+      "source": "Source",
+      "avgAging": "Avg aging (d)",
+      "category": "Category"
+    },
+    "dashboard": {
+      "tabs": "Dashboard sections",
+      "tab": {
+        "overview": "Overview",
+        "summary": "Summary & assignment",
+        "aging": "Aging",
+        "category": "Category"
+      },
+      "openInList": "Open these filters in the incident list"
     },
     "forecast": {
-      "title": "Created tickets: forecast",
-      "horizon": "Forecast horizon in days",
+      "lower": "Lower bound",
+      "band": "95% range",
       "actual": "Actual",
-      "forecast": "Forecast",
-      "upper": "Upper (95%)",
-      "lower": "Lower (95%)",
-      "note": "Straight-line trend over the last 60 days with a 95% band. It does not model seasonality or planned changes.",
-      "slope": "Trend: {value} tickets/day each day."
+      "predicted": "Predicted",
+      "factor": "Weekday factor",
+      "horizon": "Forecast horizon",
+      "days": "{n} days",
+      "note": "A statistical projection of daily created tickets from the last 180 days: a weekday pattern plus a linear trend, with a 95% range. It does not know about releases, outages or holidays — treat it as a baseline, not a promise.",
+      "next7": "Next 7 days (total)",
+      "vsCurrent": "vs {n} in the last 7 days",
+      "change": "Change",
+      "noBaseline": "No baseline",
+      "rising": "Rising",
+      "falling": "Falling",
+      "flat": "Flat",
+      "avgDay": "Avg per day (7d)",
+      "avgSub": "14d: {d14} · 30d: {d30}",
+      "trend": "Trend",
+      "trendSub": "Linear regression slope",
+      "accuracy": "Model accuracy",
+      "noBacktest": "Not enough history to backtest",
+      "acc": {
+        "GOOD": "Good",
+        "FAIR": "Fair",
+        "POOR": "Poor",
+        "NA": "n/a"
+      },
+      "busiest": "Busiest day",
+      "quietest": "Quietest: {day}",
+      "recommendations": "Recommendations",
+      "rec": {
+        "STABLE": "Forecast is stable and within the normal range.",
+        "SURGE": "Volume is expected to rise 30% or more — consider extra cover.",
+        "DROP": "Volume is expected to fall 30% or more.",
+        "HIGH_RISK_DAY": "At least one forecast day is well above the recent average."
+      },
+      "chartTitle": "Daily volume forecast",
+      "chartSub": "Blue: history. Orange: forecast. Shaded: 95% range.",
+      "detail": "Forecast per day",
+      "date": "Date",
+      "day": "Day",
+      "range": "95% range",
+      "seasonal": "Seasonal factor",
+      "risk": "Risk",
+      "riskLevel": {
+        "LOW": "Low",
+        "MEDIUM": "Medium",
+        "HIGH": "High"
+      },
+      "quality": "Model quality",
+      "baseLevel": "Base level (smoothed)",
+      "trendPerDay": "Trend per day",
+      "stdDev": "Standard deviation",
+      "history": "History",
+      "mapeNote": "MAPE is the mean absolute percentage error of a backtest over the last 7 days. Under 20% is good, 20–40% fair, over 40% poor.",
+      "seasonality": "Weekly seasonality",
+      "seasonalitySub": "Volume relative to the daily average: above 1× is busier, below is quieter."
+    },
+    "alerts": {
+      "allClear": "No active alerts for this ticket group.",
+      "severity": {
+        "CRITICAL": "Critical",
+        "HIGH": "High",
+        "WARNING": "Warning",
+        "INFO": "Info"
+      },
+      "code": {
+        "DATA_STALE": {
+          "title": "Data is stale",
+          "rule": "The mirror has not refreshed within its expected interval; figures may be behind Redmine."
+        },
+        "BREACHED_OPEN": {
+          "title": "Open tickets past SLA",
+          "rule": "Open tickets whose age exceeds their SLA target. Worst first."
+        },
+        "AT_RISK": {
+          "title": "Tickets at risk of breaching",
+          "rule": "Open tickets with no more days left than their priority's cushion."
+        },
+        "CRITICAL_HIGH_OPEN": {
+          "title": "Critical and High tickets still open",
+          "rule": "Every open ticket with Critical or High priority."
+        },
+        "UNASSIGNED_OPEN": {
+          "title": "Open tickets with no assignee",
+          "rule": "Open tickets nobody owns yet."
+        },
+        "FORECAST_SURGE": {
+          "title": "Volume surge forecast",
+          "rule": "The forecast expects 30% or more tickets than the last 7 days. See Forecast."
+        }
+      }
+    },
+    "rca": {
+      "total": "Problem tickets",
+      "openSub": "{n} open",
+      "rootCause": "Root cause documented",
+      "workaround": "Workaround",
+      "permanent": "Permanent solution",
+      "ofTotal": "{n} of {total}",
+      "debt": "Workaround debt",
+      "debtSub": "Workaround, no permanent fix",
+      "byCategory": "By category",
+      "worklist": "Open problems without a root cause",
+      "worklistSub": "Oldest first — the analysis backlog."
+    },
+    "sla": {
+      "note": "The policy every SLA figure in this dashboard is computed with, read live from configuration. It is changed in the SLA policy table by the database administrator, and the mart re-derives on its next refresh.",
+      "ladder": "SLA by priority",
+      "ladderSub": "Days allowed to resolve, and the at-risk cushion (days left at which an open ticket is flagged).",
+      "days": "SLA (days)",
+      "cushion": "At-risk cushion (days)",
+      "unknownPriority": "Priority with no policy (fallback)",
+      "closeRule": "Where the SLA clock stops",
+      "closeRuleSub": "First rule that has a value wins.",
+      "closedByOverride": "Counted as closed",
+      "closedByOverrideSub": "Statuses Redmine leaves open that the business treats as closed.",
+      "refresh": "The mart refreshes every {n} minutes."
+    },
+    "ai": {
+      "privacy": "Everything here is computed on the dashboard server from the same data as the other pages; no ticket text is sent anywhere unless an administrator has configured an AI provider, in which case the card says so.",
+      "summary": {
+        "title": "Daily summary",
+        "sub": "What happened on a day, and what needs attention now."
+      },
+      "date": "Date",
+      "generate": "Generate",
+      "local": "Computed locally — no external AI provider configured.",
+      "provider": "Briefing written by {name}; the figures are computed locally.",
+      "created": "Created",
+      "closedToday": "Closed",
+      "openNow": "Open now",
+      "breached": "Breached",
+      "attention": "Needs attention",
+      "qa": {
+        "title": "Ask a question",
+        "sub": "Answers a defined set of questions about the filtered tickets and says when it cannot.",
+        "placeholder": "e.g. What is the average aging of BNI incidents?",
+        "notUnderstood": "I can answer questions about counts, open/closed, SLA compliance, breaches, MTTR, aging and closure rate — optionally for one institusi, priority, source or assignee. Try:",
+        "q1": "What is the average aging of BNI incidents?",
+        "q2": "How many open High incidents?",
+        "q3": "What is the SLA compliance for external tickets?"
+      },
+      "ask": "Ask",
+      "metric": {
+        "COMPLIANCE": "SLA compliance",
+        "CLOSURE": "Closure rate",
+        "MTTR": "Mean time to resolve",
+        "BREACHED_OPEN": "Open tickets past SLA",
+        "AVG_AGING": "Average aging",
+        "OPEN": "Open tickets",
+        "CLOSED": "Closed tickets",
+        "COUNT": "Tickets"
+      },
+      "basedOn": "Based on {n} tickets",
+      "search": {
+        "title": "Ticket search",
+        "sub": "Ranks tickets by word relevance (TF-IDF) over subject, category and institusi. It matches words, not meaning.",
+        "placeholder": "e.g. QRIS timeout",
+        "none": "No ticket shares a word with that query."
+      },
+      "searchGo": "Search",
+      "relevance": "Relevance (0–1)",
+      "patterns": {
+        "title": "Recurring patterns",
+        "sub": "Same institusi and category at least 3 times in the period.",
+        "none": "No recurring pattern in this period.",
+        "workaroundOf": "{w} closed on a workaround · {perm} with a permanent fix",
+        "keywords": "Common words",
+        "rec": {
+          "PERMANENT_FIX": "Closed on workarounds but it keeps coming back — plan a permanent fix.",
+          "DOCUMENT_ROOT_CAUSE": "Most occurrences have no root cause — analyse and document it.",
+          "MONITOR": "Keep monitoring."
+        }
+      },
+      "analyze": "Analyse patterns"
     }
   }
 }
