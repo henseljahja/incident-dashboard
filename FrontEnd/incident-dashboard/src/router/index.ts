@@ -39,6 +39,29 @@ const router = createRouter({
       component: () => import('../views/OpsView.vue'),
       meta: { scope: 'SERVICE_REQUEST' },
     },
+    /**
+     * The RD 22524 dashboard pages. Their menus (and who may open them) are seeded by
+     * V12__insight_menus.sql; the server authorizes every `/api/insights/**` call regardless of
+     * what the client routes to.
+     */
+    {
+      path: '/dashboard',
+      name: 'dashboard',
+      component: () => import('../views/DashboardView.vue'),
+    },
+    { path: '/forecast', name: 'forecast', component: () => import('../views/ForecastView.vue') },
+    { path: '/alerts', name: 'alerts', component: () => import('../views/AlertsView.vue') },
+    { path: '/rca', name: 'rca', component: () => import('../views/RcaView.vue') },
+    {
+      path: '/ai-insights',
+      name: 'ai-insights',
+      component: () => import('../views/AiInsightsView.vue'),
+    },
+    {
+      path: '/sla-config',
+      name: 'sla-config',
+      component: () => import('../views/SlaConfigView.vue'),
+    },
     {
       path: '/login',
       name: 'login',

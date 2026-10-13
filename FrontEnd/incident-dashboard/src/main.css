@@ -134,3 +134,21 @@
 .fade-leave-to {
   opacity: 0;
 }
+
+/*
+ * Dashboard tables (components/insights, the Forecast / Alerts / RCA / SLA views). Columns sit
+ * flush by default, which ran headers like "TOTAL" and "PRIORITY" into one word; a small inline
+ * gutter keeps every column legible without a wrapper element per cell.
+ */
+.insight-table th,
+.insight-table td {
+  padding-inline: 0.5rem;
+}
+.insight-table th:first-child,
+.insight-table td:first-child {
+  padding-inline-start: 0;
+}
+.insight-table th:last-child,
+.insight-table td:last-child {
+  padding-inline-end: 0;
+}

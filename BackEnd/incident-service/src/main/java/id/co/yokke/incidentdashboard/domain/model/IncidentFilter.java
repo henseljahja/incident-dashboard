@@ -43,6 +43,12 @@ public record IncidentFilter(
         // Both live in the base predicate, so KPI, charts, table and export cannot disagree.
         ScopeGroup scope,
         Boolean matrixMissing,
+        // Mock 5 list filters. All three live in the base predicate for the same reason scope does.
+        String search,
+        List<String> sources,
+        List<String> assignees,
+        // Redmine status NAME (e.g. 'Closed Wkaround'), as typed in the list mock-up's Status box.
+        List<String> statusNames,
         int page,
         int size,
         String sortColumn,
@@ -96,20 +102,35 @@ public record IncidentFilter(
 
     private static final Set<String> DIRECTIONS = Set.of("ASC", "DESC");
 
+    /** Longest free-text search term honoured; anything longer is truncated. */
+    public static final int MAX_SEARCH_LENGTH = 100;
+
+    /** Pre-search shape: scope and matrix narrowing, no search / source / assignee terms. */
+    public IncidentFilter(LocalDate dateFrom, LocalDate dateTo, List<String> trackers,
+            List<String> stages, List<String> priorities, List<String> institusi,
+            List<String> categories, Boolean hasWorkaround, StatusFacet status, SlaFacet sla,
+            ScopeGroup scope, Boolean matrixMissing, int page, int size, String sortColumn,
+            String sortDirection) {
+        this(dateFrom, dateTo, trackers, stages, priorities, institusi, categories,
+                hasWorkaround, status, sla, scope, matrixMissing, null, null, null, null, page, size,
+                sortColumn, sortDirection);
+    }
+
     /** Pre-scope shape: no scope, no matrix narrowing. */
     public IncidentFilter(LocalDate dateFrom, LocalDate dateTo, List<String> trackers,
             List<String> stages, List<String> priorities, List<String> institusi,
             List<String> categories, Boolean hasWorkaround, StatusFacet status, SlaFacet sla,
             int page, int size, String sortColumn, String sortDirection) {
         this(dateFrom, dateTo, trackers, stages, priorities, institusi, categories,
-                hasWorkaround, status, sla, null, null, page, size, sortColumn, sortDirection);
+                hasWorkaround, status, sla, null, null, null, null, null, null, page, size, sortColumn,
+                sortDirection);
     }
 
     /** Same filter, different scope; every other term unchanged. */
     public IncidentFilter withScope(ScopeGroup newScope) {
         return new IncidentFilter(dateFrom, dateTo, trackers, stages, priorities, institusi,
-                categories, hasWorkaround, status, sla, newScope, matrixMissing, page, size,
-                sortColumn, sortDirection);
+                categories, hasWorkaround, status, sla, newScope, matrixMissing, search, sources,
+                assignees, statusNames, page, size, sortColumn, sortDirection);
     }
 
     public IncidentFilter {
@@ -120,6 +141,11 @@ public record IncidentFilter(
         priorities = clean(priorities);
         institusi = clean(institusi);
         categories = clean(categories);
+        sources = clean(sources);
+        assignees = clean(assignees);
+        statusNames = clean(statusNames);
+        search = search == null || search.isBlank() ? null
+                : search.trim().substring(0, Math.min(search.trim().length(), MAX_SEARCH_LENGTH));
         page = Math.max(page, 0);
         size = size <= 0 ? DEFAULT_PAGE_SIZE : Math.min(size, MAX_PAGE_SIZE);
         sortColumn = sortColumn(sortColumn);

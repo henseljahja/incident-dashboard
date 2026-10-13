@@ -30,7 +30,13 @@
       "sr": "Permintaan Layanan",
       "exec": "Eksekutif",
       "wallboard": "Wallboard",
-      "admin": "Manajemen Pengguna"
+      "admin": "Manajemen Pengguna",
+      "dashboard": "Dasbor",
+      "forecast": "Prakiraan",
+      "alerts": "Peringatan",
+      "rca": "Problem & RCA",
+      "ai": "Wawasan AI",
+      "sla": "Konfigurasi SLA"
     },
     "toggle": "Buka/tutup navigasi",
     "skipToContent": "Langsung ke konten utama",
@@ -97,7 +103,15 @@
       "field": "{name}: {value}",
       "hasWorkaround": "Ada workaround: {value}",
       "matrixMissing": "Dampak atau urgensi kosong"
-    }
+    },
+    "search": "Cari",
+    "searchPlaceholder": "No. tiket, subjek, penanggung jawab…",
+    "source": "Sumber",
+    "anySource": "Semua sumber",
+    "assignedTo": "Ditugaskan ke",
+    "assignedToHint": "Tekan Enter untuk menambah tiap nama",
+    "statusName": "Status",
+    "statusNameHint": "Tekan Enter untuk menambah tiap status"
   },
   "table": {
     "heading": "Insiden",
@@ -126,7 +140,10 @@
     "prev": "Sebelumnya",
     "next": "Berikutnya",
     "scrollHint": "Gulir untuk kolom lainnya",
-    "scrollRegion": "Tabel insiden. Gulir ke samping untuk kolom lainnya."
+    "scrollRegion": "Tabel insiden. Gulir ke samping untuk kolom lainnya.",
+    "institusi": "Institusi",
+    "source": "Sumber",
+    "assignedTo": "Ditugaskan ke"
   },
   "drawer": {
     "title": "Detail insiden",
@@ -485,5 +502,291 @@
     "tileLabel": "{name}: {open} terbuka, {breached} melewati SLA",
     "none": "Belum ada",
     "error": "Jumlah kelompok gagal dimuat"
+  },
+  "insights": {
+    "state": {
+      "error": "Widget ini gagal dimuat.",
+      "retry": "Coba lagi",
+      "empty": "Tidak ada data untuk filter saat ini."
+    },
+    "priority": {
+      "critical": "Critical",
+      "high": "High",
+      "medium": "Medium",
+      "low": "Low",
+      "other": "Lainnya"
+    },
+    "scope": {
+      "label": "Kelompok tiket",
+      "all": "Semua",
+      "INCIDENT": "Incident",
+      "PROBLEM": "Problem",
+      "SERVICE_REQUEST": "Service Request"
+    },
+    "period": {
+      "label": "Periode",
+      "30d": "30 hari",
+      "60d": "60 hari",
+      "90d": "90 hari",
+      "6m": "6 bulan",
+      "all": "Semua"
+    },
+    "unit": {
+      "days": "hari"
+    },
+    "unassigned": "Belum ditugaskan",
+    "kpi": {
+      "total": "Total tiket",
+      "mttr": "MTTR (rata-rata waktu penyelesaian)",
+      "compliance": "Kepatuhan SLA",
+      "breach": "Pelanggaran SLA (terbuka)",
+      "closure": "Rasio penutupan",
+      "totalSub": "{open} terbuka · {closed} selesai",
+      "mttrSub": "Min {min}h · Maks {max}h",
+      "noClosed": "Belum ada yang selesai di periode ini",
+      "complianceSub": "{onTime} tepat waktu / {late} terlambat",
+      "breachSub": "Tiket terbuka yang melewati SLA",
+      "closureSub": "Rata-rata aging {days}h",
+      "noAging": "Tidak ada data aging",
+      "vsPrev": "dibanding periode sebelumnya"
+    },
+    "trend": {
+      "title": "Tren harian",
+      "subtitle": "Tiket dibuat per hari, ditumpuk per prioritas",
+      "total": "Total: {n}",
+      "date": "Tanggal"
+    },
+    "priorityDonut": {
+      "title": "Berdasarkan prioritas"
+    },
+    "monthly": {
+      "title": "Perbandingan bulanan",
+      "subtitle": "Per bulan pembuatan. Rata-rata resolusi = tiket selesai; usia terbuka = tiket yang masih terbuka.",
+      "month": "Bulan"
+    },
+    "assignees": {
+      "title": "10 penanggung jawab teratas",
+      "subtitle": "Rata-rata resolusi dan rentang dihitung dari tiket selesai (hari). Rasio penutupan = selesai ÷ total. Klik nama untuk memfilter daftar insiden."
+    },
+    "aging": {
+      "title": "10 insiden dengan aging terlama",
+      "subtitle": "Tiket terbuka yang paling lama berjalan. SLA terpakai = aging ÷ target SLA × 100; di atas 100% berarti melewati SLA."
+    },
+    "source": {
+      "title": "Eksternal vs Internal"
+    },
+    "institusi": {
+      "title": "Institusi teratas"
+    },
+    "col": {
+      "total": "Total",
+      "priority": "Prioritas",
+      "closed": "Selesai",
+      "open": "Terbuka",
+      "avgResolution": "Rata-rata resolusi (h)",
+      "avgOpenAge": "Rata-rata usia terbuka (h)",
+      "slaBreach": "Pelanggaran SLA",
+      "assignee": "Ditugaskan ke",
+      "range": "Rentang (h)",
+      "closureRate": "Rasio penutupan",
+      "ticket": "Tiket",
+      "subject": "Subjek",
+      "status": "Status",
+      "institusi": "Institusi",
+      "aging": "Aging (h)",
+      "slaTarget": "Target SLA (h)",
+      "slaUsed": "SLA terpakai",
+      "source": "Sumber",
+      "avgAging": "Rata-rata aging (h)",
+      "category": "Kategori"
+    },
+    "dashboard": {
+      "tabs": "Bagian dasbor",
+      "tab": {
+        "overview": "Ringkasan",
+        "summary": "Ringkasan & penugasan",
+        "aging": "Aging",
+        "category": "Kategori"
+      },
+      "openInList": "Buka filter ini di daftar insiden"
+    },
+    "forecast": {
+      "lower": "Batas bawah",
+      "band": "Rentang 95%",
+      "actual": "Aktual",
+      "predicted": "Prediksi",
+      "factor": "Faktor hari",
+      "horizon": "Horizon prakiraan",
+      "days": "{n} hari",
+      "note": "Proyeksi statistik tiket yang dibuat per hari dari 180 hari terakhir: pola mingguan ditambah tren linear, dengan rentang 95%. Tidak mengetahui rilis, gangguan, atau hari libur — anggap sebagai acuan dasar, bukan kepastian.",
+      "next7": "7 hari ke depan (total)",
+      "vsCurrent": "dibanding {n} dalam 7 hari terakhir",
+      "change": "Perubahan",
+      "noBaseline": "Tanpa pembanding",
+      "rising": "Naik",
+      "falling": "Turun",
+      "flat": "Datar",
+      "avgDay": "Rata-rata per hari (7h)",
+      "avgSub": "14h: {d14} · 30h: {d30}",
+      "trend": "Tren",
+      "trendSub": "Kemiringan regresi linear",
+      "accuracy": "Akurasi model",
+      "noBacktest": "Riwayat belum cukup untuk backtest",
+      "acc": {
+        "GOOD": "Baik",
+        "FAIR": "Cukup",
+        "POOR": "Buruk",
+        "NA": "n/a"
+      },
+      "busiest": "Hari tersibuk",
+      "quietest": "Terlengang: {day}",
+      "recommendations": "Rekomendasi",
+      "rec": {
+        "STABLE": "Prakiraan stabil dan dalam batas normal.",
+        "SURGE": "Volume diperkirakan naik 30% atau lebih — pertimbangkan tambahan personel.",
+        "DROP": "Volume diperkirakan turun 30% atau lebih.",
+        "HIGH_RISK_DAY": "Setidaknya satu hari prakiraan jauh di atas rata-rata terbaru."
+      },
+      "chartTitle": "Prakiraan volume harian",
+      "chartSub": "Biru: riwayat. Oranye: prakiraan. Area: rentang 95%.",
+      "detail": "Prakiraan per hari",
+      "date": "Tanggal",
+      "day": "Hari",
+      "range": "Rentang 95%",
+      "seasonal": "Faktor musiman",
+      "risk": "Risiko",
+      "riskLevel": {
+        "LOW": "Rendah",
+        "MEDIUM": "Sedang",
+        "HIGH": "Tinggi"
+      },
+      "quality": "Kualitas model",
+      "baseLevel": "Level dasar (dihaluskan)",
+      "trendPerDay": "Tren per hari",
+      "stdDev": "Simpangan baku",
+      "history": "Riwayat",
+      "mapeNote": "MAPE adalah rata-rata persentase galat absolut dari backtest 7 hari terakhir. Di bawah 20% baik, 20–40% cukup, di atas 40% buruk.",
+      "seasonality": "Musiman mingguan",
+      "seasonalitySub": "Volume relatif terhadap rata-rata harian: di atas 1× lebih ramai, di bawahnya lebih sepi."
+    },
+    "alerts": {
+      "allClear": "Tidak ada peringatan aktif untuk kelompok tiket ini.",
+      "severity": {
+        "CRITICAL": "Kritis",
+        "HIGH": "Tinggi",
+        "WARNING": "Peringatan",
+        "INFO": "Info"
+      },
+      "code": {
+        "DATA_STALE": {
+          "title": "Data tertinggal",
+          "rule": "Mirror belum diperbarui dalam interval yang diharapkan; angka bisa tertinggal dari Redmine."
+        },
+        "BREACHED_OPEN": {
+          "title": "Tiket terbuka melewati SLA",
+          "rule": "Tiket terbuka yang usianya melebihi target SLA. Terburuk dahulu."
+        },
+        "AT_RISK": {
+          "title": "Tiket berisiko melanggar SLA",
+          "rule": "Tiket terbuka dengan sisa hari tidak lebih dari bantalan prioritasnya."
+        },
+        "CRITICAL_HIGH_OPEN": {
+          "title": "Tiket Critical dan High masih terbuka",
+          "rule": "Semua tiket terbuka berprioritas Critical atau High."
+        },
+        "UNASSIGNED_OPEN": {
+          "title": "Tiket terbuka tanpa penanggung jawab",
+          "rule": "Tiket terbuka yang belum dimiliki siapa pun."
+        },
+        "FORECAST_SURGE": {
+          "title": "Lonjakan volume diprakirakan",
+          "rule": "Prakiraan memperkirakan tiket 30% atau lebih banyak dari 7 hari terakhir. Lihat Forecast."
+        }
+      }
+    },
+    "rca": {
+      "total": "Tiket problem",
+      "openSub": "{n} terbuka",
+      "rootCause": "Root cause terdokumentasi",
+      "workaround": "Workaround",
+      "permanent": "Solusi permanen",
+      "ofTotal": "{n} dari {total}",
+      "debt": "Utang workaround",
+      "debtSub": "Ada workaround, belum ada perbaikan permanen",
+      "byCategory": "Berdasarkan kategori",
+      "worklist": "Problem terbuka tanpa root cause",
+      "worklistSub": "Terlama dahulu — antrean analisis."
+    },
+    "sla": {
+      "note": "Kebijakan yang dipakai untuk menghitung semua angka SLA di dasbor ini, dibaca langsung dari konfigurasi. Kebijakan diubah di tabel kebijakan SLA oleh administrator basis data, dan mart dihitung ulang pada refresh berikutnya.",
+      "ladder": "SLA per prioritas",
+      "ladderSub": "Hari yang diizinkan untuk menyelesaikan, dan bantalan berisiko (sisa hari saat tiket terbuka ditandai).",
+      "days": "SLA (hari)",
+      "cushion": "Bantalan berisiko (hari)",
+      "unknownPriority": "Prioritas tanpa kebijakan (cadangan)",
+      "closeRule": "Tempat jam SLA berhenti",
+      "closeRuleSub": "Aturan pertama yang memiliki nilai berlaku.",
+      "closedByOverride": "Dihitung selesai",
+      "closedByOverrideSub": "Status yang dibiarkan terbuka oleh Redmine tetapi dianggap selesai oleh bisnis.",
+      "refresh": "Mart diperbarui setiap {n} menit."
+    },
+    "ai": {
+      "privacy": "Semua yang ada di sini dihitung di server dasbor dari data yang sama dengan halaman lain; tidak ada teks tiket yang dikirim ke mana pun kecuali administrator mengonfigurasi penyedia AI, dan kartu akan menyebutkannya.",
+      "summary": {
+        "title": "Ringkasan harian",
+        "sub": "Apa yang terjadi pada suatu hari, dan apa yang perlu perhatian sekarang."
+      },
+      "date": "Tanggal",
+      "generate": "Buat",
+      "local": "Dihitung lokal — tidak ada penyedia AI eksternal yang dikonfigurasi.",
+      "provider": "Ringkasan ditulis oleh {name}; angka dihitung secara lokal.",
+      "created": "Dibuat",
+      "closedToday": "Selesai",
+      "openNow": "Terbuka saat ini",
+      "breached": "Terlampaui",
+      "attention": "Perlu perhatian",
+      "qa": {
+        "title": "Ajukan pertanyaan",
+        "sub": "Menjawab sekumpulan pertanyaan tertentu tentang tiket terfilter dan menyatakan bila tidak bisa menjawab.",
+        "placeholder": "mis. Berapa rata-rata aging insiden BNI?",
+        "notUnderstood": "Saya dapat menjawab pertanyaan tentang jumlah, terbuka/selesai, kepatuhan SLA, pelanggaran, MTTR, aging, dan rasio penutupan — opsional untuk satu institusi, prioritas, sumber, atau penanggung jawab. Coba:",
+        "q1": "Berapa rata-rata aging insiden BNI?",
+        "q2": "Berapa jumlah insiden High yang masih terbuka?",
+        "q3": "Berapa kepatuhan SLA untuk tiket eksternal?"
+      },
+      "ask": "Tanya",
+      "metric": {
+        "COMPLIANCE": "Kepatuhan SLA",
+        "CLOSURE": "Rasio penutupan",
+        "MTTR": "Rata-rata waktu penyelesaian",
+        "BREACHED_OPEN": "Tiket terbuka melewati SLA",
+        "AVG_AGING": "Rata-rata aging",
+        "OPEN": "Tiket terbuka",
+        "CLOSED": "Tiket selesai",
+        "COUNT": "Tiket"
+      },
+      "basedOn": "Berdasarkan {n} tiket",
+      "search": {
+        "title": "Pencarian tiket",
+        "sub": "Mengurutkan tiket berdasarkan relevansi kata (TF-IDF) pada subjek, kategori, dan institusi. Mencocokkan kata, bukan makna.",
+        "placeholder": "mis. QRIS timeout",
+        "none": "Tidak ada tiket yang memiliki kata yang sama dengan pencarian itu."
+      },
+      "searchGo": "Cari",
+      "relevance": "Relevansi (0–1)",
+      "patterns": {
+        "title": "Pola berulang",
+        "sub": "Institusi dan kategori yang sama minimal 3 kali dalam periode.",
+        "none": "Tidak ada pola berulang pada periode ini.",
+        "workaroundOf": "{w} ditutup dengan workaround · {perm} dengan perbaikan permanen",
+        "keywords": "Kata umum",
+        "rec": {
+          "PERMANENT_FIX": "Ditutup dengan workaround tetapi terus berulang — rencanakan perbaikan permanen.",
+          "DOCUMENT_ROOT_CAUSE": "Sebagian besar kejadian belum punya root cause — analisis dan dokumentasikan.",
+          "MONITOR": "Terus pantau."
+        }
+      },
+      "analyze": "Analisis pola"
+    }
   }
 }

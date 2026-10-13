@@ -8,6 +8,7 @@ import id.co.yokke.incidentdashboard.domain.model.StatusFacet;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Locale;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * The query string of {@code GET /api/incidents} and {@code /api/incidents/export}, before
@@ -27,8 +28,8 @@ import java.util.Locale;
  * a single value is a one-element list.
  */
 public record IncidentFilterRequest(
-        LocalDate dateFrom,
-        LocalDate dateTo,
+        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateFrom,
+        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateTo,
         List<String> tracker,
         List<String> stage,
         List<String> priority,
@@ -42,7 +43,21 @@ public record IncidentFilterRequest(
         String sort,
         String direction,
         String scope,
-        Boolean matrixMissing) {
+        Boolean matrixMissing,
+        String search,
+        List<String> source,
+        List<String> assignedTo,
+        List<String> statusName) {
+
+    /** Pre-search shape, kept so callers that never search do not have to say so. */
+    public IncidentFilterRequest(LocalDate dateFrom, LocalDate dateTo, List<String> tracker,
+            List<String> stage, List<String> priority, List<String> institusi,
+            List<String> category, Boolean hasWorkaround, String status, String sla,
+            Integer page, Integer size, String sort, String direction, String scope,
+            Boolean matrixMissing) {
+        this(dateFrom, dateTo, tracker, stage, priority, institusi, category, hasWorkaround,
+                status, sla, page, size, sort, direction, scope, matrixMissing, null, null, null, null);
+    }
 
     /** Pre-scope shape, kept so callers that never scope do not have to say so. */
     public IncidentFilterRequest(LocalDate dateFrom, LocalDate dateTo, List<String> tracker,
@@ -50,7 +65,7 @@ public record IncidentFilterRequest(
             List<String> category, Boolean hasWorkaround, String status, String sla,
             Integer page, Integer size, String sort, String direction) {
         this(dateFrom, dateTo, tracker, stage, priority, institusi, category, hasWorkaround,
-                status, sla, page, size, sort, direction, null, null);
+                status, sla, page, size, sort, direction, null, null, null, null, null, null);
     }
 
     /**
@@ -67,6 +82,7 @@ public record IncidentFilterRequest(
                 facet("sla", sla, SlaFacet.class),
                 scope(scope),
                 matrixMissing,
+                search, source, assignedTo, statusName,
                 page == null ? 0 : page,
                 size == null ? IncidentFilter.DEFAULT_PAGE_SIZE : size,
                 sort, direction);

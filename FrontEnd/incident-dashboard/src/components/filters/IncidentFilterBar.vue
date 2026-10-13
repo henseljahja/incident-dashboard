@@ -40,7 +40,25 @@ const {
   sla,
   matrixMissing,
   scope,
+  search,
+  source,
+  assignedTo,
+  statusName,
 } = storeToRefs(filters)
+
+/** Data values of the External/Internal custom field (cf 349), so never translated. */
+const SOURCE_OPTIONS = ['External', 'Internal']
+
+/** The search box commits on Enter or blur, so each keystroke is not a request. */
+const searchDraft = ref(search.value)
+watch(search, (value) => {
+  searchDraft.value = value
+})
+function commitSearch() {
+  if (searchDraft.value.trim() === search.value) return
+  search.value = searchDraft.value.trim()
+  resetPage()
+}
 
 /**
  * Only the page's own trackers: the Service Request page offers its three, Incident and Problem
@@ -90,6 +108,9 @@ const advancedActiveCount = computed(
     priority.value.length +
     institusi.value.length +
     category.value.length +
+    source.value.length +
+    assignedTo.value.length +
+    statusName.value.length +
     (hasWorkaround.value === null ? 0 : 1),
 )
 
@@ -148,6 +169,17 @@ const activeFilters = computed<ActiveFilter[]>(() => {
     })
   }
 
+  if (search.value) {
+    chips.push({
+      key: `search:${search.value}`,
+      label: t('filters.chip.field', { name: t('filters.search'), value: search.value }),
+      remove: () => {
+        search.value = ''
+        resetPage()
+      },
+    })
+  }
+
   // Set by the matrix's "N missing" link. A chip, so the narrowing is named and removable.
   if (matrixMissing.value) {
     chips.push({
@@ -187,6 +219,9 @@ const activeFilters = computed<ActiveFilter[]>(() => {
     { key: 'priority', name: t('filters.priority'), ref: priority },
     { key: 'institusi', name: t('filters.institusi'), ref: institusi },
     { key: 'category', name: t('filters.category'), ref: category },
+    { key: 'source', name: t('filters.source'), ref: source },
+    { key: 'assignedTo', name: t('filters.assignedTo'), ref: assignedTo },
+    { key: 'statusName', name: t('filters.statusName'), ref: statusName },
   ]
   for (const { key, name, ref: list } of lists) {
     for (const value of list.value) {
@@ -259,6 +294,22 @@ const activeFilters = computed<ActiveFilter[]>(() => {
               resetPage()
             }
           "
+        />
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label class="text-xs uppercase text-surface-600" for="filter-search">{{
+          t('filters.search')
+        }}</label>
+        <InputText
+          id="filter-search"
+          v-model="searchDraft"
+          type="search"
+          class="min-h-11 min-w-56"
+          :placeholder="t('filters.searchPlaceholder')"
+          data-testid="filter-search"
+          @keydown.enter="commitSearch"
+          @blur="commitSearch"
         />
       </div>
 
@@ -387,6 +438,53 @@ const activeFilters = computed<ActiveFilter[]>(() => {
         />
         <small id="filter-category-hint" class="text-xs text-surface-600">
           {{ t('filters.categoryHint') }}
+        </small>
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label class="text-xs uppercase text-surface-600" for="filter-source">{{
+          t('filters.source')
+        }}</label>
+        <MultiSelect
+          input-id="filter-source"
+          v-model="source"
+          :options="SOURCE_OPTIONS"
+          :placeholder="t('filters.anySource')"
+          display="chip"
+          class="min-w-48"
+          @update:model-value="resetPage"
+        />
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label class="text-xs uppercase text-surface-600" for="filter-status-name">{{
+          t('filters.statusName')
+        }}</label>
+        <InputChips
+          input-id="filter-status-name"
+          v-model="statusName"
+          aria-describedby="filter-status-name-hint"
+          class="min-w-48"
+          @update:model-value="resetPage"
+        />
+        <small id="filter-status-name-hint" class="text-xs text-surface-600">
+          {{ t('filters.statusNameHint') }}
+        </small>
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label class="text-xs uppercase text-surface-600" for="filter-assigned-to">{{
+          t('filters.assignedTo')
+        }}</label>
+        <InputChips
+          input-id="filter-assigned-to"
+          v-model="assignedTo"
+          aria-describedby="filter-assigned-to-hint"
+          class="min-w-48"
+          @update:model-value="resetPage"
+        />
+        <small id="filter-assigned-to-hint" class="text-xs text-surface-600">
+          {{ t('filters.assignedToHint') }}
         </small>
       </div>
 

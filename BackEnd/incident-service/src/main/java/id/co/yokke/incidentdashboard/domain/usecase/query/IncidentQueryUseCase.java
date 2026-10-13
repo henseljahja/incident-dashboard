@@ -220,6 +220,22 @@ public class IncidentQueryUseCase {
         inList(terms, params, "INSTITUSI", filter.institusi());
         inList(terms, params, "CATEGORY_INCIDENT", filter.categories());
 
+        inList(terms, params, "EXTERNAL_INTERNAL", filter.sources());
+        inList(terms, params, "ASSIGNED_TO", filter.assignees());
+        inList(terms, params, "STATUS", filter.statusNames());
+        if (filter.search() != null) {
+            // Bound LIKE over the ticket number, subject, assignee and institusi. The term is
+            // escaped so a client-supplied % or _ matches itself instead of widening the scan.
+            String term = "%" + filter.search().toLowerCase(Locale.ROOT)
+                    .replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_") + "%";
+            terms.add("(TO_CHAR(NO_INCIDENT) LIKE ? ESCAPE '\\' OR LOWER(SUBJECT) LIKE ? "
+                    + "ESCAPE '\\' OR LOWER(ASSIGNED_TO) LIKE ? ESCAPE '\\' "
+                    + "OR LOWER(INSTITUSI) LIKE ? ESCAPE '\\')");
+            params.add(term);
+            params.add(term);
+            params.add(term);
+            params.add(term);
+        }
         if (filter.scope() != null) {
             // Config-resolved by tracker ID (V_INCIDENT carries f.TRACKER_ID alongside the
             // TRACKER name, so a Redmine rename cannot move a ticket between groups).

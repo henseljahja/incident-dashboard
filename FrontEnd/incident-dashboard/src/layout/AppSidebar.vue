@@ -39,11 +39,17 @@ const menuLabel = useMenuLabel()
  * are the working surface (Incident, Problem, Service Request); Wallboard next because it is the shared screen; Exec after; administration last.
  */
 const MENU_ORDER = [
+  'incident.dashboard',
   'incident.ops',
   'incident.problem',
   'incident.sr',
+  'incident.rca',
+  'incident.forecast',
+  'incident.alerts',
+  'incident.ai',
   'incident.wallboard',
   'incident.exec',
+  'incident.sla',
   'incident.admin',
 ]
 
@@ -55,6 +61,12 @@ const rank = (list: string[], key: string) => {
 
 /** Per-menu icon. Falls back to a neutral glyph so a new backend menu still renders. */
 const MENU_ICONS: Record<string, string> = {
+  'incident.dashboard': 'pi pi-th-large',
+  'incident.rca': 'pi pi-sitemap',
+  'incident.forecast': 'pi pi-chart-line',
+  'incident.alerts': 'pi pi-bell',
+  'incident.ai': 'pi pi-sparkles',
+  'incident.sla': 'pi pi-sliders-h',
   'incident.ops': 'pi pi-inbox',
   'incident.problem': 'pi pi-search',
   'incident.sr': 'pi pi-ticket',
