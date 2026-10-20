@@ -577,7 +577,9 @@ describe('WallboardView', () => {
       setHidden(false)
       await vi.advanceTimersByTimeAsync(60_000)
       expect(wrapper.get('[data-testid="wallboard-screen-title"]').text()).toBe('Trend')
-    })
+      // Advancing 10 minutes of fake time runs ~20 data refreshes through the mocked API; on a
+      // loaded machine that can exceed vitest's 5s default. The assertions are unchanged.
+    }, 30_000)
 
     /**
      * The countdown ticks every second; a live region that followed it would read out a number a
