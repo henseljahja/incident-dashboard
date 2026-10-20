@@ -48,7 +48,9 @@ echo "==> 2/4  Mirror schema (before Flyway — see the note at the top of this 
 ./seed-demo.sh schema
 
 echo "==> 3/4  Service + dashboard (this is where Flyway runs)"
-docker compose up -d
+# --build: images are tagged `latest` and never rebuilt otherwise, so a re-run after `git pull`
+# kept serving the previous code (and the previous Flyway version) from the old image.
+docker compose up -d --build
 
 printf '     waiting for the service to report healthy'
 for _ in $(seq 1 60); do
