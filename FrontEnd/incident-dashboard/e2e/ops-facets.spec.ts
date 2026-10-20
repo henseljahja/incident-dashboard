@@ -83,7 +83,7 @@ test.describe('ops KPI facets', () => {
     const rows = page.getByTestId('incident-row')
     await expect(rows).toHaveCount(page0.content.length)
     for (const row of await rows.all()) {
-      await expect(row.locator('td').nth(5)).toHaveText('Breached')
+      await expect(row.locator('td').nth(8)).toHaveText('Breached')
     }
 
     // The active tile's number is the table total (the backend applies the tile's OTHER facet only).

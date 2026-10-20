@@ -115,18 +115,30 @@ test.describe('TM12 scoped menus', () => {
     await login(page, ACCOUNTS.ops.username)
     await page.waitForURL('**/ops**')
     const links = page.getByRole('navigation', { name: 'Main' }).getByRole('link')
-    await expect(links).toHaveText(['Incident', 'Problem', 'Service Request'])
-    await expect(links.nth(0)).toHaveAttribute('href', '/ops')
-    await expect(links.nth(1)).toHaveAttribute('href', '/problem')
-    await expect(links.nth(2)).toHaveAttribute('href', '/service-requests')
-    await expect(links.nth(0)).toHaveAttribute('aria-current', 'page')
+    // V12 adds Dashboard and the four insight menus (+ SLA Config) to OPS_MANAGER, ordered by SORT_ORDER.
+    await expect(links).toHaveText([
+      'Dashboard',
+      'Incident',
+      'Problem',
+      'Service Request',
+      'Problem & RCA',
+      'Forecast',
+      'Alerts',
+      'AI Insights',
+      'SLA Config',
+    ])
+    await expect(links.nth(0)).toHaveAttribute('href', '/dashboard')
+    await expect(links.nth(1)).toHaveAttribute('href', '/ops')
+    await expect(links.nth(2)).toHaveAttribute('href', '/problem')
+    await expect(links.nth(3)).toHaveAttribute('href', '/service-requests')
+    await expect(links.nth(1)).toHaveAttribute('aria-current', 'page')
 
-    await links.nth(1).click()
+    await links.nth(2).click()
     await page.waitForURL('**/problem**')
     await expect(page.getByRole('heading', { level: 1, name: 'Problem' })).toBeVisible()
-    await expect(links.nth(1)).toHaveAttribute('aria-current', 'page')
-    await expect(links.nth(0)).not.toHaveAttribute('aria-current', 'page')
-    await links.nth(2).click()
+    await expect(links.nth(2)).toHaveAttribute('aria-current', 'page')
+    await expect(links.nth(1)).not.toHaveAttribute('aria-current', 'page')
+    await links.nth(3).click()
     await page.waitForURL('**/service-requests**')
     await expect(page.getByRole('heading', { level: 1, name: 'Service Request' })).toBeVisible()
     expect(errors).toEqual([])
