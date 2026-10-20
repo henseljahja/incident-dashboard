@@ -24,6 +24,10 @@ spring:
 
 incident:
   ai:
+    # MASTER SWITCH, default false (fail-closed): /api/insights/ai/** answers 404 and no provider is
+    # ever called until the provider and its data-handling terms are decided. Pair with
+    # VITE_AI_INSIGHTS_LIVE=true on the frontend build.
+    enabled: ${INCIDENT_AI_ENABLED:false}
     # OPTIONAL prose layer for /api/insights/ai/summary and /patterns. Everything else on the AI
     # page (figures, Q&A, search, patterns) is computed locally and never leaves the process.
     #

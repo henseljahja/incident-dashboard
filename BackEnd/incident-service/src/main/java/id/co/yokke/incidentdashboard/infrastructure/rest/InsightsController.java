@@ -7,12 +7,15 @@ import id.co.yokke.incidentdashboard.infrastructure.rest.dto.req.IncidentFilterR
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.http.HttpStatus;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 /**
  * The RD 22524 dashboard surface. GET only; every endpoint takes the same filter query string
@@ -37,8 +40,23 @@ public class InsightsController {
 
     private final InsightsUseCase insights;
 
-    public InsightsController(@Lazy InsightsUseCase insights) {
+    private final boolean aiEnabled;
+
+    /**
+     * @param aiEnabled {@code incident.ai.enabled}, default false. While the AI provider and its
+     *     data-handling terms are undecided, {@code /api/insights/ai/**} answers 404 so the
+     *     placeholder in the SPA is backed by the server, not just by the router.
+     */
+    public InsightsController(@Lazy InsightsUseCase insights,
+            @Value("${incident.ai.enabled:false}") boolean aiEnabled) {
         this.insights = insights;
+        this.aiEnabled = aiEnabled;
+    }
+
+    private void requireAi() {
+        if (!aiEnabled) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/api/insights/home")
@@ -109,6 +127,7 @@ public class InsightsController {
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
             LocalDate date,
             @RequestParam(required = false, defaultValue = "en") String lang) {
+        requireAi();
         return insights.dailySummary(request.toFilter(),
                 date == null ? LocalDate.now(ZoneId.of("Asia/Jakarta")) : date, lang);
     }
@@ -117,6 +136,7 @@ public class InsightsController {
     @RequirePrivilege(menu = {"incident.ai", "incident.ops"}, privilege = "view")
     public InsightsResponse.Patterns patterns(@ModelAttribute IncidentFilterRequest request,
             @RequestParam(required = false, defaultValue = "en") String lang) {
+        requireAi();
         return insights.patterns(request.toFilter(), lang);
     }
 
@@ -124,6 +144,7 @@ public class InsightsController {
     @RequirePrivilege(menu = {"incident.ai", "incident.ops"}, privilege = "view")
     public List<InsightsResponse.SearchHit> search(@ModelAttribute IncidentFilterRequest request,
             @RequestParam("q") String query) {
+        requireAi();
         return insights.search(request.toFilter(), query);
     }
 
@@ -131,6 +152,7 @@ public class InsightsController {
     @RequirePrivilege(menu = {"incident.ai", "incident.ops"}, privilege = "view")
     public InsightsResponse.Answer ask(@ModelAttribute IncidentFilterRequest request,
             @RequestParam("q") String question) {
+        requireAi();
         return insights.ask(request.toFilter(), question);
     }
 }

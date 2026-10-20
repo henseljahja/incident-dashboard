@@ -25,7 +25,7 @@ class InsightsBindingTest {
     @DisplayName("repeated params, ISO dates, search/source/assignedTo/statusName reach the filter")
     void bindsTheFilterQueryString() throws Exception {
         InsightsUseCase useCase = mock(InsightsUseCase.class);
-        MockMvc mvc = MockMvcBuilders.standaloneSetup(new InsightsController(useCase)).build();
+        MockMvc mvc = MockMvcBuilders.standaloneSetup(new InsightsController(useCase, true)).build();
 
         mvc.perform(get("/api/insights/assignees")
                         .param("dateFrom", "2026-01-01").param("dateTo", "2026-03-31")
@@ -52,7 +52,7 @@ class InsightsBindingTest {
     @DisplayName("an unknown scope is rejected, never silently widened")
     void validationStillApplies() {
         InsightsUseCase useCase = mock(InsightsUseCase.class);
-        MockMvc mvc = MockMvcBuilders.standaloneSetup(new InsightsController(useCase)).build();
+        MockMvc mvc = MockMvcBuilders.standaloneSetup(new InsightsController(useCase, true)).build();
 
         org.junit.jupiter.api.Assertions.assertThrows(Exception.class,
                 () -> mvc.perform(get("/api/insights/home").param("scope", "bogus")));
@@ -63,9 +63,24 @@ class InsightsBindingTest {
     @DisplayName("search and ask require a q parameter")
     void requiresQuery() throws Exception {
         InsightsUseCase useCase = mock(InsightsUseCase.class);
-        MockMvc mvc = MockMvcBuilders.standaloneSetup(new InsightsController(useCase)).build();
+        MockMvc mvc = MockMvcBuilders.standaloneSetup(new InsightsController(useCase, true)).build();
 
         mvc.perform(get("/api/insights/ai/search")).andExpect(status().isBadRequest());
         mvc.perform(get("/api/insights/ai/ask")).andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("the AI endpoints answer 404 and touch nothing while incident.ai.enabled is off")
+    void aiEndpointsAreClosedByDefault() throws Exception {
+        InsightsUseCase useCase = mock(InsightsUseCase.class);
+        MockMvc mvc = MockMvcBuilders.standaloneSetup(new InsightsController(useCase, false))
+                .setControllerAdvice(new id.co.yokke.incidentdashboard.domain.config.error.GlobalExceptionHandler())
+                .build();
+
+        for (String path : new String[] {"summary", "patterns", "search?q=x", "ask?q=x"}) {
+            mvc.perform(get("/api/insights/ai/" + path)).andExpect(status().isNotFound());
+        }
+        verifyNoInteractions(useCase);
+        mvc.perform(get("/api/insights/home")).andExpect(status().isOk());
     }
 }
