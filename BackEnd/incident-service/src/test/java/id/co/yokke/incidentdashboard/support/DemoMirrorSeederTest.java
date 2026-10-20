@@ -100,6 +100,11 @@ class DemoMirrorSeederTest {
     void loadFixtureData() throws Exception {
         DataSource dataSource = dataSource();
 
+        // The schema phase recreates only the mirror tables. REF_CUSTOM_FIELD_ENUM / REF_USER are
+        // Flyway-owned and survive on a reused volume, so re-running the data phase against an
+        // already-seeded stack hit ORA-00001 on their primary key. Reset them (and the mart
+        // tables, whose watermark must rewind for the ETL to rebuild) before loading.
+        MirrorFixtureLoader.resetAll(dataSource);
         MirrorFixtureLoader.loadAll(dataSource);
 
         long issues = count(dataSource, MirrorFixtureLoader.mirrorTable("issues"));
