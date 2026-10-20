@@ -55,7 +55,11 @@ const router = createRouter({
     {
       path: '/ai-insights',
       name: 'ai-insights',
-      component: () => import('../views/AiInsightsView.vue'),
+      // Placeholder until the AI provider is decided; VITE_AI_INSIGHTS_LIVE=true restores the built page.
+      component: () =>
+        import.meta.env.VITE_AI_INSIGHTS_LIVE === 'true'
+          ? import('../views/AiInsightsLiveView.vue')
+          : import('../views/AiInsightsView.vue'),
     },
     {
       path: '/sla-config',

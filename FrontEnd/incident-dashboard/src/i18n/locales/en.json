@@ -786,7 +786,11 @@
           "MONITOR": "Keep monitoring."
         }
       },
-      "analyze": "Analyse patterns"
+      "analyze": "Analyse patterns",
+      "placeholder": {
+        "title": "AI Insights — coming soon",
+        "body": "The AI provider has not been chosen yet, so this page is a placeholder. Nothing is sent to any AI service."
+      }
     }
   }
 }
