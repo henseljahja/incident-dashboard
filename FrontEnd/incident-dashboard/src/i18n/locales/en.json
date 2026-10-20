@@ -791,6 +791,9 @@
         "title": "AI Insights — coming soon",
         "body": "The AI provider has not been chosen yet, so this page is a placeholder."
       }
+    },
+    "brands": {
+      "title": "Top brand-network incidents"
     }
   }
 }

@@ -23,6 +23,8 @@ const filters = useFiltersStore()
 const query = useInsight<Category>('category', fetchCategory)
 const sources = computed(() => query.data.value?.sources ?? [])
 const institusi = computed(() => query.data.value?.institusi ?? [])
+const brands = computed(() => query.data.value?.brands ?? [])
+const brandMax = computed(() => Math.max(1, ...brands.value.map((b) => b.count)))
 const max = computed(() => Math.max(1, ...institusi.value.map((i) => i.count)))
 const dec = (v: number) => formatDecimal(v, locale.value)
 
@@ -161,6 +163,35 @@ function filterInstitusi(label: string) {
               ></span>
             </span>
           </button>
+        </li>
+      </ol>
+    </InsightPanel>
+
+    <InsightPanel
+      class="xl:col-span-5"
+      :title="t('insights.brands.title')"
+      :loading="query.isLoading.value"
+      :error="query.isError.value"
+      :empty="brands.length === 0"
+      @retry="query.refetch()"
+    >
+      <ol class="grid grid-cols-1 gap-2 md:grid-cols-2" data-testid="brand-list">
+        <li v-for="row in brands" :key="row.label" data-testid="brand-row" :data-count="row.count">
+          <span class="flex items-baseline justify-between gap-2 text-sm">
+            <span class="text-surface-800">{{ row.label }}</span>
+            <span class="tabular-nums">
+              <span class="font-semibold">{{ formatCount(row.count, locale) }}</span>
+              <span class="ml-2 text-xs text-surface-600">{{
+                orDash(row.sharePct, (v) => `${dec(v)}%`)
+              }}</span>
+            </span>
+          </span>
+          <span class="mt-1 block h-2 rounded bg-surface-100" aria-hidden="true">
+            <span
+              class="block h-2 rounded bg-primary"
+              :style="{ width: `${(row.count * 100) / brandMax}%` }"
+            ></span>
+          </span>
         </li>
       </ol>
     </InsightPanel>

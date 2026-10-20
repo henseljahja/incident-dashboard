@@ -70,7 +70,7 @@ describe('DashboardView', () => {
     vi.mocked(api.fetchMonthly).mockResolvedValue([])
     vi.mocked(api.fetchAssignees).mockResolvedValue([])
     vi.mocked(api.fetchAging).mockResolvedValue([])
-    vi.mocked(api.fetchCategory).mockResolvedValue({ sources: [], institusi: [] })
+    vi.mocked(api.fetchCategory).mockResolvedValue({ sources: [], institusi: [], brands: [] })
   })
 
   it('defaults to the Incident scope and a 30-day window, and exposes the four tabs', async () => {

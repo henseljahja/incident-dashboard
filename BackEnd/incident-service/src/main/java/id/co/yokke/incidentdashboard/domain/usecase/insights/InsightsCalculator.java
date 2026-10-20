@@ -196,7 +196,34 @@ public final class InsightsCalculator {
                 .map(e -> new InstitusiRow(e.getKey(), e.getValue(),
                         pct(e.getValue(), facts.size())))
                 .toList();
-        return new Category(List.copyOf(sources), institusi);
+        return new Category(List.copyOf(sources), institusi, brands(facts));
+    }
+
+    /** Redmine category codes 05xx are the Brand Network family (0501 VISA, 0503 MASTERCARD ...). */
+    private static final java.util.regex.Pattern BRAND_CATEGORY =
+            java.util.regex.Pattern.compile("^\\s*05\\d\\d\\b\\s*-?\\s*(.*)$");
+
+    /** Brand-network tickets by network, most tickets first; the code prefix is dropped. */
+    static List<InstitusiRow> brands(List<IncidentFact> facts) {
+        Map<String, Long> counts = new java.util.HashMap<>();
+        long total = 0;
+        for (IncidentFact f : facts) {
+            if (f.category() == null) {
+                continue;
+            }
+            java.util.regex.Matcher m = BRAND_CATEGORY.matcher(f.category());
+            if (m.matches()) {
+                String name = m.group(1).isBlank() ? f.category().trim() : m.group(1).trim();
+                counts.merge(name, 1L, Long::sum);
+                total++;
+            }
+        }
+        final long all = total;
+        return counts.entrySet().stream()
+                .sorted(Map.Entry.<String, Long>comparingByValue().reversed()
+                        .thenComparing(Map.Entry::getKey))
+                .map(e -> new InstitusiRow(e.getKey(), e.getValue(), pct(e.getValue(), all)))
+                .toList();
     }
 
     // --------------------------------------------------------------------- aging

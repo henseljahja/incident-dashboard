@@ -83,6 +83,7 @@ export interface InstitusiRow {
 export interface Category {
   sources: SourceRow[]
   institusi: InstitusiRow[]
+  brands: InstitusiRow[]
 }
 
 export interface AgingRow {

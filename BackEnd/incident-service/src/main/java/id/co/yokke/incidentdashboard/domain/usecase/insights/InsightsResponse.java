@@ -48,7 +48,8 @@ public final class InsightsResponse {
     public record InstitusiRow(String label, long count, Double sharePct) {
     }
 
-    public record Category(List<SourceRow> sources, List<InstitusiRow> institusi) {
+    public record Category(List<SourceRow> sources, List<InstitusiRow> institusi,
+            List<InstitusiRow> brands) {
     }
 
     public record AgingRow(long noIncident, String subject, String priority, String status,

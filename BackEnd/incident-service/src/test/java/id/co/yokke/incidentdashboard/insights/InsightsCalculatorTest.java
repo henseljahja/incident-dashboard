@@ -234,4 +234,30 @@ class InsightsCalculatorTest {
         assertThat(rca.byCategory()).extracting(InsightsResponse.LabelCount::label)
                 .containsExactly("Network", "Payment");
     }
+
+    @Test
+    @DisplayName("brand network: 05xx categories counted per network, code dropped, others ignored")
+    void brandNetwork() {
+        List<IncidentFact> facts = new java.util.ArrayList<>();
+        String[] categories = {"0503 - MASTERCARD", "0501 - VISA", "0503 - MASTERCARD",
+            "0501 - VISA", "0503 - MASTERCARD", "0502 - CUP", "1202 - BNI", null, "2301 - Pengecekan"};
+        for (int i = 0; i < categories.length; i++) {
+            IncidentFact base = fact(i + 1, "Low", true, 1, 60, false, "External", "BNI", "budi",
+                    "2026-03-01");
+            facts.add(new IncidentFact(base.noIncident(), base.subject(), base.priority(),
+                    base.status(), base.institusi(), base.source(), base.assignee(),
+                    categories[i], base.created(), base.closedAt(), base.closed(),
+                    base.breached(), base.atRisk(), base.aging(), base.slaDays(), null, false,
+                    false));
+        }
+
+        List<InsightsResponse.InstitusiRow> brands = InsightsCalculator.category(facts, 10).brands();
+
+        assertThat(brands).extracting(InsightsResponse.InstitusiRow::label)
+                .containsExactly("MASTERCARD", "VISA", "CUP");
+        assertThat(brands).extracting(InsightsResponse.InstitusiRow::count)
+                .containsExactly(3L, 2L, 1L);
+        assertThat(brands.get(0).sharePct()).isEqualTo(50.0);
+        assertThat(InsightsCalculator.category(FACTS, 2).brands()).isEmpty();
+    }
 }
