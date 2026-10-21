@@ -36,7 +36,8 @@
       "alerts": "Peringatan",
       "rca": "Problem & RCA",
       "ai": "Wawasan AI",
-      "sla": "Konfigurasi SLA"
+      "sla": "Konfigurasi SLA",
+      "params": "Parameter"
     },
     "toggle": "Buka/tutup navigasi",
     "skipToContent": "Langsung ke konten utama",
@@ -718,7 +719,7 @@
       "worklistSub": "Terlama dahulu — antrean analisis."
     },
     "sla": {
-      "note": "Kebijakan yang dipakai untuk menghitung semua angka SLA di dasbor ini, dibaca langsung dari konfigurasi. Kebijakan diubah di tabel kebijakan SLA oleh administrator basis data, dan mart dihitung ulang pada refresh berikutnya.",
+      "note": "Kebijakan yang dipakai untuk menghitung semua angka SLA di dasbor ini, dibaca langsung dari konfigurasi. Administrator mengubahnya di halaman Parameter, dan angka dihitung ulang pada refresh mart berikutnya.",
       "ladder": "SLA per prioritas",
       "ladderSub": "Hari yang diizinkan untuk menyelesaikan, dan bantalan berisiko (sisa hari saat tiket terbuka ditandai).",
       "days": "SLA (hari)",
@@ -794,6 +795,74 @@
     },
     "brands": {
       "title": "Insiden brand network teratas"
+    }
+  },
+  "params": {
+    "title": "Parameter",
+    "note": "Semua yang diperlakukan dashboard sebagai aturan, bukan fakta: batas SLA, kapan alert muncul, serta pengaturan forecast dan brand network. Perubahan berlaku pada pemuatan halaman berikutnya; perubahan SLA menghitung ulang angka pada refresh mart berikutnya. Setiap perubahan dicatat.",
+    "readOnly": "Anda dapat melihat pengaturan ini tetapi tidak dapat mengubahnya.",
+    "save": "Simpan",
+    "saving": "Menyimpan…",
+    "saved": "Tersimpan",
+    "resetDefault": "Kembalikan ke default",
+    "default": "Default: {value}",
+    "error": "Parameter tidak dapat dimuat.",
+    "saveError": "Tidak tersimpan: {message}",
+    "sla": {
+      "title": "SLA per prioritas",
+      "sub": "Jumlah hari untuk menyelesaikan tiket, dan batas peringatan (sisa hari saat tiket terbuka ditandai berisiko). Prioritas lebih tinggi tidak boleh punya batas lebih panjang daripada yang lebih rendah.",
+      "days": "SLA (hari)",
+      "cushion": "Batas berisiko (hari)"
+    },
+    "alerts": {
+      "title": "Aturan alert",
+      "sub": "Kapan setiap alert muncul di halaman Alert. Aturan hanya aktif jika jumlah tiket yang cocok mencapai minimum.",
+      "rule": "Alert",
+      "enabled": "Aktif",
+      "severity": "Tingkat",
+      "minCount": "Min tiket",
+      "threshold": "Ambang",
+      "thresholdHint": {
+        "BREACHED_OPEN": "Naikkan ke Kritis jika sebanyak ini tiket High/Critical melanggar (0 = tidak pernah)",
+        "UNASSIGNED_OPEN": "Hanya hitung tiket terbuka minimal sekian hari (0 = semua)",
+        "AGING_OPEN": "Tiket terbuka lebih lama dari sekian hari"
+      }
+    },
+    "severity": {
+      "INFO": "Info",
+      "WARNING": "Peringatan",
+      "HIGH": "Tinggi",
+      "CRITICAL": "Kritis"
+    },
+    "alertName": {
+      "BREACHED_OPEN": "Tiket terbuka yang melanggar",
+      "AT_RISK": "Tiket berisiko",
+      "CRITICAL_HIGH_OPEN": "Critical / High terbuka",
+      "UNASSIGNED_OPEN": "Tiket terbuka tanpa penanggung jawab",
+      "AGING_OPEN": "Tiket terbuka lama",
+      "FORECAST_SURGE": "Lonjakan forecast"
+    },
+    "general": {
+      "title": "Forecast dan brand network",
+      "sub": "Pengaturan yang dipakai halaman Forecast, Alert, dan Kategori."
+    },
+    "param": {
+      "forecast_default_horizon_days": "Horizon forecast default (hari)",
+      "forecast_trend_window_days": "Jendela tren (hari)",
+      "forecast_smoothing_alpha": "Faktor penghalusan (0,05 sampai 0,95)",
+      "forecast_surge_change_pct": "Alert lonjakan jika periode berikutnya naik (%)",
+      "alerts_ticket_sample_size": "Tiket ditampilkan per alert",
+      "brand_category_prefix": "Awalan kategori brand network (angka)"
+    },
+    "range": "Rentang {min} sampai {max}",
+    "changes": {
+      "title": "Perubahan terbaru",
+      "empty": "Belum ada perubahan.",
+      "when": "Waktu",
+      "who": "Oleh",
+      "what": "Apa",
+      "from": "Dari",
+      "to": "Menjadi"
     }
   }
 }

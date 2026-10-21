@@ -93,6 +93,13 @@ public class GlobalExceptionHandler {
         return respond(status, e.getMessage(), e);
     }
 
+    /** A rejected parameter edit. The message names the field and the allowed range. */
+    @ExceptionHandler(id.co.yokke.incidentdashboard.domain.usecase.config.ConfigModel.ConfigException.class)
+    public ResponseEntity<ErrorBody> configRejected(
+            id.co.yokke.incidentdashboard.domain.usecase.config.ConfigModel.ConfigException e) {
+        return respond(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+    }
+
     /** A named account that is not there. 404 rather than the 400 bucket, so the screen can tell
      * "you typed a username that does not exist" from "you left the name field blank". */
     @ExceptionHandler(UserAdminUseCase.UserNotFoundException.class)

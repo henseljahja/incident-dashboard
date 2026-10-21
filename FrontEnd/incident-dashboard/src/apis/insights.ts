@@ -254,8 +254,13 @@ export const fetchCategory = (p: URLSearchParams, limit = 10) =>
   get<Category>('category', p, { limit: String(limit) })
 export const fetchAging = (p: URLSearchParams, limit = 10) =>
   get<AgingRow[]>('aging', p, { limit: String(limit) })
-export const fetchForecast = (p: URLSearchParams, horizonDays = 7) =>
-  get<Forecast>('forecast', p, { horizonDays: String(horizonDays) })
+/** No horizon -> the server's configured default (Parameters menu); the response says which. */
+export const fetchForecast = (p: URLSearchParams, horizonDays?: number) =>
+  get<Forecast>(
+    'forecast',
+    p,
+    horizonDays === undefined ? {} : { horizonDays: String(horizonDays) },
+  )
 export const fetchRca = (p: URLSearchParams, limit = 25) =>
   get<Rca>('rca', p, { limit: String(limit) })
 export const fetchAlerts = (p: URLSearchParams) => get<Alert[]>('alerts', p)

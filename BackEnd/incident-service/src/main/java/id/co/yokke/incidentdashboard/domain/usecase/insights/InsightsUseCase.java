@@ -3,6 +3,7 @@ package id.co.yokke.incidentdashboard.domain.usecase.insights;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import id.co.yokke.incidentdashboard.domain.model.IncidentFilter;
 import id.co.yokke.incidentdashboard.domain.usecase.etl.FreshnessUseCase;
+import id.co.yokke.incidentdashboard.domain.usecase.config.ParametersUseCase;
 import id.co.yokke.incidentdashboard.domain.usecase.insights.InsightsResponse.Alert;
 import id.co.yokke.incidentdashboard.domain.usecase.insights.InsightsResponse.AlertTicket;
 import id.co.yokke.incidentdashboard.domain.usecase.insights.InsightsResponse.LabelCount;
@@ -53,16 +54,19 @@ public class InsightsUseCase {
     private final FreshnessUseCase freshness;
     private final AiNarrator narrator;
     private final boolean sendSubjects;
+    private final ParametersUseCase parameters;
     private final ObjectMapper mapper = new ObjectMapper();
 
     public InsightsUseCase(JdbcTemplate jdbc, @Lazy IncidentQueryUseCase incidents,
             @Lazy FreshnessUseCase freshness, AiNarrator narrator,
-            @Value("${incident.ai.send-subjects:false}") boolean sendSubjects) {
+            @Value("${incident.ai.send-subjects:false}") boolean sendSubjects,
+            @Lazy ParametersUseCase parameters) {
         this.jdbc = jdbc;
         this.incidents = incidents;
         this.freshness = freshness;
         this.narrator = narrator;
         this.sendSubjects = sendSubjects;
+        this.parameters = parameters;
     }
 
     // --------------------------------------------------------------------- facts
@@ -120,7 +124,8 @@ public class InsightsUseCase {
     }
 
     public InsightsResponse.Category category(IncidentFilter filter, int limit) {
-        return InsightsCalculator.category(facts(filter), bound(limit));
+        return InsightsCalculator.category(facts(filter), bound(limit),
+                parameters.brandCategoryPrefix());
     }
 
     public List<InsightsResponse.AgingRow> aging(IncidentFilter filter, int limit) {
@@ -138,10 +143,12 @@ public class InsightsUseCase {
      * request's dimension filters. The request's date window is deliberately ignored: a forecast
      * needs recent history, whatever period the page is showing.
      */
-    public InsightsResponse.Forecast forecast(IncidentFilter filter, int horizonDays) {
-        int horizon = Math.min(Math.max(horizonDays, 1), MAX_HORIZON);
+    public InsightsResponse.Forecast forecast(IncidentFilter filter, Integer horizonDays) {
+        int requested = horizonDays == null ? parameters.defaultHorizonDays() : horizonDays;
+        int horizon = Math.min(Math.max(requested, 1), MAX_HORIZON);
         LocalDate today = LocalDate.now(JAKARTA);
-        return ForecastModel.forecast(dailyCounts(filter, today), today, horizon);
+        return ForecastModel.forecast(dailyCounts(filter, today), today, horizon,
+                parameters.forecastParams());
     }
 
     double[] dailyCounts(IncidentFilter filter, LocalDate today) {
@@ -173,7 +180,8 @@ public class InsightsUseCase {
         // Alerts are about NOW: every open ticket in scope, whatever the page's date window.
         IncidentFilter now = withWindow(filter, null, null);
         boolean surge = forecast(filter, 7).recommendations().contains("SURGE");
-        List<Alert> alerts = new ArrayList<>(InsightsCalculator.alerts(facts(now), surge));
+        List<Alert> alerts = new ArrayList<>(InsightsCalculator.alerts(facts(now), surge,
+                parameters.alertRulesByCode(), parameters.alertSampleSize()));
         if (freshness.freshness().stale()) {
             alerts.add(0, new Alert("DATA_STALE", "HIGH", 0, List.of()));
         }

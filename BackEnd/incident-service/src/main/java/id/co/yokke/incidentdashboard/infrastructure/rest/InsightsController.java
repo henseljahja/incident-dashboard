@@ -94,7 +94,7 @@ public class InsightsController {
     @RequirePrivilege(menu = {"incident.forecast", "incident.dashboard", "incident.ops",
         "incident.problem", "incident.sr", "incident.exec"}, privilege = "view")
     public InsightsResponse.Forecast forecast(@ModelAttribute IncidentFilterRequest request,
-            @RequestParam(required = false, defaultValue = "7") int horizonDays) {
+            @RequestParam(required = false) Integer horizonDays) {
         return insights.forecast(request.toFilter(), horizonDays);
     }
 

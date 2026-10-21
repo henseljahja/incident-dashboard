@@ -67,6 +67,11 @@ const router = createRouter({
       component: () => import('../views/SlaConfigView.vue'),
     },
     {
+      path: '/parameters',
+      name: 'parameters',
+      component: () => import('../views/ParametersView.vue'),
+    },
+    {
       path: '/login',
       name: 'login',
       component: () => import('../views/LoginView.vue'),

@@ -23,10 +23,19 @@ import { orDash } from '@/utils/priority'
 useInsightPage(null, null)
 const { t, locale } = useI18n()
 
-const HORIZONS = [7, 14, 30] as const
-const horizon = ref<(typeof HORIZONS)[number]>(7)
-const query = useInsight<Forecast>('forecast', (p) => fetchForecast(p, horizon.value), horizon)
+const PRESET_HORIZONS = [7, 14, 30]
+/** null until the user picks one: the server then applies the configured default horizon. */
+const horizon = ref<number | null>(null)
+const query = useInsight<Forecast>(
+  'forecast',
+  (p) => fetchForecast(p, horizon.value ?? undefined),
+  horizon,
+)
 const f = computed(() => query.data.value ?? null)
+const selectedHorizon = computed(() => horizon.value ?? f.value?.horizonDays ?? 7)
+const horizons = computed(() =>
+  [...new Set([...PRESET_HORIZONS, selectedHorizon.value])].sort((a, b) => a - b),
+)
 const dec = (v: number) => formatDecimal(v, locale.value)
 const dec2 = (v: number) => formatDecimal(v, locale.value, { maximumFractionDigits: 2 })
 
@@ -161,11 +170,12 @@ const RISK_STYLE = {
           }}</label>
           <select
             id="forecast-horizon"
-            v-model.number="horizon"
+            :value="selectedHorizon"
+            @change="horizon = Number(($event.target as HTMLSelectElement).value)"
             class="min-h-10 rounded-md border border-surface-300 bg-surface-0 px-2"
             data-testid="forecast-horizon"
           >
-            <option v-for="h in HORIZONS" :key="h" :value="h">
+            <option v-for="h in horizons" :key="h" :value="h">
               {{ t('insights.forecast.days', { n: h }) }}
             </option>
           </select>

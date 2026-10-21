@@ -1,5 +1,6 @@
 package id.co.yokke.incidentdashboard.domain.usecase.insights;
 
+import id.co.yokke.incidentdashboard.domain.usecase.config.ConfigModel;
 import id.co.yokke.incidentdashboard.domain.usecase.insights.InsightsResponse.Alert;
 import id.co.yokke.incidentdashboard.domain.usecase.insights.InsightsResponse.AlertTicket;
 import id.co.yokke.incidentdashboard.domain.usecase.insights.InsightsResponse.AgingRow;
@@ -176,6 +177,11 @@ public final class InsightsCalculator {
     // ------------------------------------------------------------------ category
 
     public static Category category(List<IncidentFact> facts, int institusiLimit) {
+        return category(facts, institusiLimit, DEFAULT_BRAND_PREFIX);
+    }
+
+    public static Category category(List<IncidentFact> facts, int institusiLimit,
+            String brandPrefix) {
         Map<String, List<IncidentFact>> bySource = new TreeMap<>(facts.stream().collect(
                 Collectors.groupingBy(f -> label(f.source(), "Unclassified"))));
         List<SourceRow> sources = new ArrayList<>();
@@ -196,22 +202,24 @@ public final class InsightsCalculator {
                 .map(e -> new InstitusiRow(e.getKey(), e.getValue(),
                         pct(e.getValue(), facts.size())))
                 .toList();
-        return new Category(List.copyOf(sources), institusi, brands(facts));
+        return new Category(List.copyOf(sources), institusi, brands(facts, brandPrefix));
     }
 
-    /** Redmine category codes 05xx are the Brand Network family (0501 VISA, 0503 MASTERCARD ...). */
-    private static final java.util.regex.Pattern BRAND_CATEGORY =
-            java.util.regex.Pattern.compile("^\\s*05\\d\\d\\b\\s*-?\\s*(.*)$");
+    static final String DEFAULT_BRAND_PREFIX = "05";
 
     /** Brand-network tickets by network, most tickets first; the code prefix is dropped. */
-    static List<InstitusiRow> brands(List<IncidentFact> facts) {
+    static List<InstitusiRow> brands(List<IncidentFact> facts, String prefix) {
+        // Redmine category codes 05xx are the Brand Network family (0501 VISA, 0503 MASTERCARD ...);
+        // the prefix is adjustable (brand.category_prefix) because the codes are Redmine's to change.
+        java.util.regex.Pattern pattern = java.util.regex.Pattern.compile(
+                "^\\s*" + java.util.regex.Pattern.quote(prefix) + "\\d*\\b\\s*-?\\s*(.*)$");
         Map<String, Long> counts = new java.util.HashMap<>();
         long total = 0;
         for (IncidentFact f : facts) {
             if (f.category() == null) {
                 continue;
             }
-            java.util.regex.Matcher m = BRAND_CATEGORY.matcher(f.category());
+            java.util.regex.Matcher m = pattern.matcher(f.category());
             if (m.matches()) {
                 String name = m.group(1).isBlank() ? f.category().trim() : m.group(1).trim();
                 counts.merge(name, 1L, Long::sum);
@@ -293,45 +301,86 @@ public final class InsightsCalculator {
      * {@code forecastSurge} is supplied by the caller (it needs the forecast model).
      */
     public static List<Alert> alerts(List<IncidentFact> facts, boolean forecastSurge) {
+        return alerts(facts, forecastSurge, defaultAlertRules(), ALERT_SAMPLE);
+    }
+
+    /** The shipped rules (V13 seeds), for callers and tests that have no database. */
+    public static Map<String, ConfigModel.AlertRule> defaultAlertRules() {
+        Map<String, ConfigModel.AlertRule> rules = new LinkedHashMap<>();
+        rule(rules, "BREACHED_OPEN", true, "HIGH", 1.0);
+        rule(rules, "AT_RISK", true, "WARNING", null);
+        rule(rules, "CRITICAL_HIGH_OPEN", true, "WARNING", null);
+        rule(rules, "UNASSIGNED_OPEN", true, "INFO", 0.0);
+        rule(rules, "AGING_OPEN", false, "WARNING", 30.0);
+        rule(rules, "FORECAST_SURGE", true, "WARNING", null);
+        return rules;
+    }
+
+    private static void rule(Map<String, ConfigModel.AlertRule> rules, String code,
+            boolean enabled, String severity, Double threshold) {
+        rules.put(code, new ConfigModel.AlertRule(code, enabled, severity, 1, threshold, enabled,
+                severity, 1, threshold, null, null));
+    }
+
+    /**
+     * Alerts under adjustable rules (see V13): a disabled rule never fires, a rule fires only at its
+     * minimum count, severity is the rule's, and the thresholded rules read {@code threshold}.
+     */
+    public static List<Alert> alerts(List<IncidentFact> facts, boolean forecastSurge,
+            Map<String, ConfigModel.AlertRule> rules, int sampleSize) {
         List<IncidentFact> open = facts.stream().filter(f -> !f.closed()).toList();
         List<Alert> alerts = new ArrayList<>();
+        Map<String, ConfigModel.AlertRule> r = new LinkedHashMap<>(defaultAlertRules());
+        r.putAll(rules);
 
+        ConfigModel.AlertRule breachedRule = r.get("BREACHED_OPEN");
         List<IncidentFact> breached = open.stream().filter(IncidentFact::breached).toList();
-        if (!breached.isEmpty()) {
-            boolean severe = breached.stream().anyMatch(
-                    f -> f.isPriority("Critical") || f.isPriority("High"));
-            alerts.add(new Alert("BREACHED_OPEN", severe ? "CRITICAL" : "HIGH", breached.size(),
-                    sample(breached)));
+        if (breachedRule.enabled() && breached.size() >= breachedRule.minCount()) {
+            long severe = breached.stream()
+                    .filter(f -> f.isPriority("Critical") || f.isPriority("High")).count();
+            double escalateAt = breachedRule.threshold() == null ? 0 : breachedRule.threshold();
+            String severity = escalateAt > 0 && severe >= escalateAt ? "CRITICAL"
+                    : breachedRule.severity();
+            alerts.add(new Alert("BREACHED_OPEN", severity, breached.size(),
+                    sample(breached, sampleSize)));
         }
-        List<IncidentFact> atRisk = open.stream().filter(IncidentFact::atRisk).toList();
-        if (!atRisk.isEmpty()) {
-            alerts.add(new Alert("AT_RISK", "WARNING", atRisk.size(), sample(atRisk)));
-        }
-        List<IncidentFact> critical = open.stream()
-                .filter(f -> f.isPriority("Critical") || f.isPriority("High")).toList();
-        if (!critical.isEmpty()) {
-            alerts.add(new Alert("CRITICAL_HIGH_OPEN", "WARNING", critical.size(),
-                    sample(critical)));
-        }
-        List<IncidentFact> unassigned = open.stream()
-                .filter(f -> f.assignee() == null || f.assignee().isBlank()).toList();
-        if (!unassigned.isEmpty()) {
-            alerts.add(new Alert("UNASSIGNED_OPEN", "INFO", unassigned.size(),
-                    sample(unassigned)));
-        }
-        if (forecastSurge) {
-            alerts.add(new Alert("FORECAST_SURGE", "WARNING", 0, List.of()));
+        fire(alerts, r.get("AT_RISK"), open.stream().filter(IncidentFact::atRisk).toList(),
+                sampleSize);
+        fire(alerts, r.get("CRITICAL_HIGH_OPEN"), open.stream()
+                .filter(f -> f.isPriority("Critical") || f.isPriority("High")).toList(),
+                sampleSize);
+        ConfigModel.AlertRule unassignedRule = r.get("UNASSIGNED_OPEN");
+        double minAge = unassignedRule.threshold() == null ? 0 : unassignedRule.threshold();
+        fire(alerts, unassignedRule, open.stream()
+                .filter(f -> f.assignee() == null || f.assignee().isBlank())
+                .filter(f -> minAge <= 0 || f.aging() != null && f.aging() >= minAge).toList(),
+                sampleSize);
+        ConfigModel.AlertRule agingRule = r.get("AGING_OPEN");
+        double agingDays = agingRule.threshold() == null ? 0 : agingRule.threshold();
+        fire(alerts, agingRule, open.stream()
+                .filter(f -> f.aging() != null && f.aging() >= agingDays).toList(), sampleSize);
+        ConfigModel.AlertRule surgeRule = r.get("FORECAST_SURGE");
+        if (forecastSurge && surgeRule.enabled()) {
+            alerts.add(new Alert("FORECAST_SURGE", surgeRule.severity(), 0, List.of()));
         }
         return List.copyOf(alerts);
     }
 
+    private static void fire(List<Alert> alerts, ConfigModel.AlertRule rule,
+            List<IncidentFact> matching, int sampleSize) {
+        if (rule.enabled() && !matching.isEmpty() && matching.size() >= rule.minCount()) {
+            alerts.add(new Alert(rule.code(), rule.severity(), matching.size(),
+                    sample(matching, sampleSize)));
+        }
+    }
+
     /** Most overdue first: highest SLA used %, then ticket number. */
-    private static List<AlertTicket> sample(List<IncidentFact> facts) {
+    private static List<AlertTicket> sample(List<IncidentFact> facts, int limit) {
         Function<IncidentFact, Double> used = f -> f.slaUsedPct() == null ? -1.0 : f.slaUsedPct();
         return facts.stream()
                 .sorted(Comparator.comparing(used).reversed()
                         .thenComparingLong(IncidentFact::noIncident))
-                .limit(ALERT_SAMPLE)
+                .limit(Math.max(limit, 0))
                 .map(f -> new AlertTicket(f.noIncident(), f.subject(), f.priority(),
                         f.slaUsedPct() == null ? null : round1(f.slaUsedPct())))
                 .toList();
