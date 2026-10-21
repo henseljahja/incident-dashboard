@@ -106,6 +106,19 @@ public final class InsightsResponse {
     public record Alert(String code, String severity, long count, List<AlertTicket> tickets) {
     }
 
+    // ------------------------------------------------------------------ AI explain
+
+    /** Whether the explain buttons make sense: the server has a real narrator behind it. */
+    public record AiStatus(boolean enabled, boolean narrating, String provider) {
+    }
+
+    /**
+     * A short model-written reading of one page's figures. {@code narrative} is null when the
+     * provider is off or failed -- the caller shows "unavailable", never a made-up text.
+     */
+    public record Explanation(String topic, String narrative, String provider) {
+    }
+
     // ------------------------------------------------------------------------ AI
 
     public record DailySummary(String date, long created, long closed, long openNow,

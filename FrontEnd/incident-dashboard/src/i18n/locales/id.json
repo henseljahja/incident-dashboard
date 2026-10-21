@@ -795,6 +795,19 @@
     },
     "brands": {
       "title": "Insiden brand network teratas"
+    },
+    "explain": {
+      "title": "Jelaskan halaman ini",
+      "hint": "Penjelasan singkat dalam bahasa sederhana tentang angka di halaman ini.",
+      "action": "Jelaskan",
+      "again": "Jelaskan lagi",
+      "working": "Membaca angka…",
+      "unavailable": "Layanan AI tidak mengembalikan penjelasan. Angka di atas tidak terpengaruh.",
+      "error": "Layanan AI tidak dapat dihubungi.",
+      "retry": "Coba lagi",
+      "privacy": "Hanya angka yang tampil di sini yang dikirim, bukan teks tiket. Ditulis oleh {provider}; periksa dengan data sebelum bertindak.",
+      "stale": "Filter berubah — jelaskan lagi untuk memperbarui penjelasan ini.",
+      "ready": "Penjelasan siap: {n} poin."
     }
   },
   "params": {

@@ -155,4 +155,47 @@ public class InsightsController {
         requireAi();
         return insights.ask(request.toFilter(), question);
     }
+
+    /**
+     * Whether the SPA should offer the "Explain this" buttons. Deliberately NOT behind
+     * {@link #requireAi()}: it must answer {@code enabled=false} (not 404) while AI is off.
+     */
+    @GetMapping("/api/insights/ai/status")
+    @RequirePrivilege(menu = {"incident.forecast", "incident.alerts", "incident.rca",
+        "incident.ops", "incident.problem", "incident.sr", "incident.dashboard", "incident.ai",
+        "incident.exec"},
+            privilege = "view")
+    public InsightsResponse.AiStatus aiStatus() {
+        return insights.aiStatus(aiEnabled);
+    }
+
+    @GetMapping("/api/insights/ai/explain/forecast")
+    @RequirePrivilege(menu = {"incident.forecast", "incident.dashboard", "incident.ops",
+        "incident.problem", "incident.sr", "incident.exec"}, privilege = "view")
+    public InsightsResponse.Explanation explainForecast(
+            @ModelAttribute IncidentFilterRequest request,
+            @RequestParam(required = false) Integer horizonDays,
+            @RequestParam(required = false, defaultValue = "en") String lang) {
+        requireAi();
+        return insights.explainForecast(request.toFilter(), horizonDays, lang);
+    }
+
+    @GetMapping("/api/insights/ai/explain/alerts")
+    @RequirePrivilege(menu = {"incident.alerts", "incident.ops", "incident.problem",
+        "incident.sr"}, privilege = "view")
+    public InsightsResponse.Explanation explainAlerts(
+            @ModelAttribute IncidentFilterRequest request,
+            @RequestParam(required = false, defaultValue = "en") String lang) {
+        requireAi();
+        return insights.explainAlerts(request.toFilter(), lang);
+    }
+
+    @GetMapping("/api/insights/ai/explain/rca")
+    @RequirePrivilege(menu = {"incident.rca", "incident.problem", "incident.ops"},
+            privilege = "view")
+    public InsightsResponse.Explanation explainRca(@ModelAttribute IncidentFilterRequest request,
+            @RequestParam(required = false, defaultValue = "en") String lang) {
+        requireAi();
+        return insights.explainRca(request.toFilter(), lang);
+    }
 }

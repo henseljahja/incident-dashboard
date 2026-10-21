@@ -212,6 +212,73 @@ public class InsightsUseCase {
                 narrator.provider());
     }
 
+    public InsightsResponse.AiStatus aiStatus(boolean enabled) {
+        String provider = narrator.provider();
+        return new InsightsResponse.AiStatus(enabled, enabled && !"local".equals(provider),
+                provider);
+    }
+
+    /**
+     * "Explain this" for Forecast, Alerts and RCA. The model receives the page's headline figures
+     * only -- not the 180-day history, not ticket lists beyond number/priority/SLA-used, and (via
+     * {@link #narrate}) no subjects unless the operator opted in.
+     */
+    public InsightsResponse.Explanation explainForecast(IncidentFilter filter, Integer horizonDays,
+            String language) {
+        InsightsResponse.Forecast f = forecast(filter, horizonDays);
+        Map<String, Object> facts = new java.util.LinkedHashMap<>();
+        facts.put("horizonDays", f.horizonDays());
+        facts.put("expectedNextPeriod", f.nextTotal());
+        facts.put("previousPeriod", f.currentTotal());
+        facts.put("changePct", f.changePct());
+        facts.put("dailyAverage7d", f.avg7());
+        facts.put("dailyAverage14d", f.avg14());
+        facts.put("dailyAverage30d", f.avg30());
+        facts.put("trendPerDay", f.trendPerDay());
+        facts.put("backtestErrorPct", f.mapePct());
+        facts.put("accuracy", f.accuracy());
+        facts.put("busiestWeekday", f.busiestDay());
+        facts.put("quietestWeekday", f.quietestDay());
+        facts.put("signals", f.recommendations());
+        return explanation("forecast", "explain-forecast", facts, language);
+    }
+
+    public InsightsResponse.Explanation explainAlerts(IncidentFilter filter, String language) {
+        List<Map<String, Object>> alerts = new ArrayList<>();
+        for (Alert a : alerts(filter)) {
+            Map<String, Object> row = new java.util.LinkedHashMap<>();
+            row.put("rule", a.code());
+            row.put("severity", a.severity());
+            row.put("tickets", a.count());
+            row.put("worst", a.tickets().stream().limit(3).map(t -> Map.of(
+                    "ticket", t.noIncident(), "priority", String.valueOf(t.priority()),
+                    "slaUsedPct", t.slaUsedPct() == null ? "n/a" : t.slaUsedPct())).toList());
+            alerts.add(row);
+        }
+        return explanation("alerts", "explain-alerts", Map.of("alerts", alerts), language);
+    }
+
+    public InsightsResponse.Explanation explainRca(IncidentFilter filter, String language) {
+        InsightsResponse.Rca r = rca(filter, 1);
+        Map<String, Object> facts = new java.util.LinkedHashMap<>();
+        facts.put("problems", r.total());
+        facts.put("stillOpen", r.open());
+        facts.put("withRootCause", r.withRootCause());
+        facts.put("rootCausePct", r.rootCausePct());
+        facts.put("withWorkaround", r.withWorkaround());
+        facts.put("workaroundOnly", r.workaroundOnly());
+        facts.put("permanentSolution", r.permanentSolution());
+        facts.put("permanentPct", r.permanentPct());
+        facts.put("topCategories", r.byCategory().stream().limit(5).toList());
+        return explanation("rca", "explain-rca", facts, language);
+    }
+
+    private InsightsResponse.Explanation explanation(String topic, String task, Object facts,
+            String language) {
+        return new InsightsResponse.Explanation(topic, narrate(task, facts, language),
+                narrator.provider());
+    }
+
     public InsightsResponse.Patterns patterns(IncidentFilter filter, String language) {
         List<InsightsResponse.Pattern> patterns = PatternAnalyzer.analyze(facts(filter), 10);
         String narrative = patterns.isEmpty() ? null

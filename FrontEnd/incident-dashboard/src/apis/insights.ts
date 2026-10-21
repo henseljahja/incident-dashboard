@@ -246,6 +246,32 @@ function get<T>(path: string, params: URLSearchParams, extra: Record<string, str
   return apiRequest<T>(`/insights/${path}${query ? `?${query}` : ''}`)
 }
 
+export interface AiStatus {
+  enabled: boolean
+  /** A real model is behind the AI endpoints (not the local no-op), so "Explain" can answer. */
+  narrating: boolean
+  provider: string
+}
+export type ExplainTopic = 'forecast' | 'alerts' | 'rca'
+export interface Explanation {
+  topic: ExplainTopic
+  /** Null when the provider is off or failed: show "unavailable", never invent text. */
+  narrative: string | null
+  provider: string
+}
+
+export const fetchAiStatus = () => apiRequest<AiStatus>('/insights/ai/status')
+export const fetchExplanation = (
+  topic: ExplainTopic,
+  p: URLSearchParams,
+  lang: string,
+  horizonDays?: number,
+) =>
+  get<Explanation>(`ai/explain/${topic}`, p, {
+    lang,
+    ...(horizonDays === undefined ? {} : { horizonDays: String(horizonDays) }),
+  })
+
 export const fetchHome = (p: URLSearchParams) => get<Home>('home', p)
 export const fetchMonthly = (p: URLSearchParams) => get<MonthRow[]>('monthly', p)
 export const fetchAssignees = (p: URLSearchParams, limit = 10) =>

@@ -6,6 +6,7 @@ import { useI18n } from 'vue-i18n'
 import { fetchForecast, type Forecast } from '@/apis/insights'
 import BaseChart from '@/components/charts/BaseChart.vue'
 import FreshnessIndicator from '@/components/common/FreshnessIndicator.vue'
+import ExplainCard from '@/components/insights/ExplainCard.vue'
 import InsightPanel from '@/components/insights/InsightPanel.vue'
 import ScopeSwitch from '@/components/insights/ScopeSwitch.vue'
 import { useInsight } from '@/composables/useInsight'
@@ -188,6 +189,7 @@ const RISK_STYLE = {
       >
         {{ t('insights.forecast.note') }}
       </p>
+      <ExplainCard topic="forecast" :horizon-days="selectedHorizon" />
 
       <p v-if="query.isError.value" class="text-sm text-[var(--chart-error-text)]" role="alert">
         {{ t('insights.state.error') }}

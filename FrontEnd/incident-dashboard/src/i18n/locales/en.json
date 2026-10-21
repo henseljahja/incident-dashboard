@@ -795,6 +795,19 @@
     },
     "brands": {
       "title": "Top brand-network incidents"
+    },
+    "explain": {
+      "title": "Explain this page",
+      "hint": "A short plain-language reading of the figures on this page.",
+      "action": "Explain",
+      "again": "Explain again",
+      "working": "Reading the figures…",
+      "unavailable": "The AI service did not return an explanation. The figures above are unaffected.",
+      "error": "Could not reach the AI service.",
+      "retry": "Try again",
+      "privacy": "Only the figures shown here are sent, never ticket text. Written by {provider}; check it against the data before acting.",
+      "stale": "Filters changed — explain again to refresh this reading.",
+      "ready": "Explanation ready: {n} points."
     }
   },
   "params": {

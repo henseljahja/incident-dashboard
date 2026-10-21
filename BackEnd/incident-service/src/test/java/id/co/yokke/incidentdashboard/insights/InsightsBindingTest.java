@@ -77,7 +77,8 @@ class InsightsBindingTest {
                 .setControllerAdvice(new id.co.yokke.incidentdashboard.domain.config.error.GlobalExceptionHandler())
                 .build();
 
-        for (String path : new String[] {"summary", "patterns", "search?q=x", "ask?q=x"}) {
+        for (String path : new String[] {"summary", "patterns", "search?q=x", "ask?q=x",
+            "explain/forecast", "explain/alerts", "explain/rca"}) {
             mvc.perform(get("/api/insights/ai/" + path)).andExpect(status().isNotFound());
         }
         verifyNoInteractions(useCase);
