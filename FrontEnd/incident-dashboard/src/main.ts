@@ -152,8 +152,13 @@ const YokkePreset = definePreset(Aura, {
     button: {
       colorScheme: {
         light: {
-          outlined: { secondary: { color: '{surface.600}' } },
-          text: { secondary: { color: '{surface.600}' } },
+          // Outlined/text PRIMARY would fall back to the brand cyan (#59d8f8) as the label
+          // colour: 1.67:1 on white. primary.800 is the same hue at 6.5:1.
+          outlined: {
+            primary: { color: '{primary.800}' },
+            secondary: { color: '{surface.600}' },
+          },
+          text: { primary: { color: '{primary.800}' }, secondary: { color: '{surface.600}' } },
         },
       },
     },

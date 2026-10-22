@@ -1,4 +1,4 @@
-# Incident service — Spring Boot 3.1.5 on Java 17.
+# Incident service — Spring Boot 3.5 on Java 17.
 #
 # Multi-stage: the build stage keeps Maven and the full dependency tree out of the runtime image.
 #
@@ -21,11 +21,12 @@ FROM eclipse-temurin:17-jre AS runtime
 WORKDIR /app
 
 # Non-root. The service opens no privileged port and writes no files.
-RUN groupadd --system incident && useradd --system --gid incident --no-create-home incident
+# A NUMERIC uid: Kubernetes `runAsNonRoot` cannot verify a named user, and refuses to start it.
+RUN groupadd --system --gid 10001 incident && useradd --system --uid 10001 --gid incident --no-create-home incident
 
 COPY --from=build /build/target/incident-service-0.0.1.jar app.jar
 RUN chown incident:incident /app/app.jar
-USER incident
+USER 10001:10001
 
 EXPOSE 8080
 

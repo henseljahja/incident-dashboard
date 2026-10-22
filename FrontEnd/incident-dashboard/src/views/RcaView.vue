@@ -4,6 +4,7 @@ import { useI18n } from 'vue-i18n'
 
 import { fetchRca, type Rca } from '@/apis/insights'
 import FreshnessIndicator from '@/components/common/FreshnessIndicator.vue'
+import ExplainCard from '@/components/insights/ExplainCard.vue'
 import InsightPanel from '@/components/insights/InsightPanel.vue'
 import PeriodBar from '@/components/insights/PeriodBar.vue'
 import TicketLink from '@/components/insights/TicketLink.vue'
@@ -48,6 +49,7 @@ const maxCategory = computed(() => Math.max(1, ...(r.value?.byCategory ?? []).ma
     <template #header-actions><FreshnessIndicator /></template>
     <div class="flex flex-col gap-5" data-testid="rca-view">
       <PeriodBar />
+      <ExplainCard topic="rca" />
       <p v-if="query.isError.value" class="text-sm text-[var(--chart-error-text)]" role="alert">
         {{ t('insights.state.error') }}
       </p>

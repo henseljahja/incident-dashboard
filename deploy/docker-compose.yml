@@ -123,21 +123,20 @@ services:
     build:
       context: ../FrontEnd/incident-dashboard
       dockerfile: Dockerfile
-      args:
-        # Baked into the bundle at build time (Vite inlines import.meta.env.*), so this is a
-        # build arg and not an `environment:` entry — setting it below would do nothing.
-        # Empty by default: the demo stack has no Redmine to point at, and the drawer renders
-        # a disabled control saying so rather than linking to a placeholder domain. Set
-        # REDMINE_BASE_URL in deploy/.env to enable the deep links.
-        VITE_REDMINE_BASE_URL: "${REDMINE_BASE_URL:-}"
     container_name: incident-demo-dashboard
     depends_on:
       incident-service:
         condition: service_started
     environment:
       TZ: Asia/Jakarta
+      # RUNTIME settings, rendered into /config.js at container start (no rebuild to change).
+      # Empty Redmine origin = ticket deep links render as a disabled control.
+      REDMINE_BASE_URL: "${REDMINE_BASE_URL:-}"
+      AI_INSIGHTS_LIVE: "${AI_INSIGHTS_LIVE:-}"
+      # This container proxies /api and /auth to the service (the Ingress does that on Kubernetes).
+      BACKEND_UPSTREAM: http://incident-service:8080
     ports:
-      - "8090:80"
+      - "8090:8080"
 
 # PIN THE BRIDGE SUBNET. Do not delete this block and let Docker choose.
 #

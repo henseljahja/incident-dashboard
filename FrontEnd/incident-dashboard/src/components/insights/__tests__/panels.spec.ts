@@ -247,12 +247,19 @@ describe('CategoryPanel', () => {
         { label: 'BNI', count: 11, sharePct: 28.2 },
         { label: 'OTHER', count: 5, sharePct: 12.8 },
       ],
+      brands: [
+        { label: 'MASTERCARD', count: 17, sharePct: 51.5 },
+        { label: 'VISA', count: 10, sharePct: 30.3 },
+      ],
     })
     const w = await mountInsight(CategoryPanel)
 
     const sources = w.findAll('[data-testid="source-row"]')
     expect(sources.map((s) => s.attributes('data-source'))).toEqual(['External', 'Internal'])
     expect(sources[1]!.text()).toContain('16.4')
+    const brandRows = w.findAll('[data-testid="brand-row"]')
+    expect(brandRows.map((r) => r.attributes('data-count'))).toEqual(['17', '10'])
+    expect(brandRows[0]!.text()).toContain('MASTERCARD')
     const rows = w.findAll('[data-testid="institusi-row"]')
     expect(rows[0]!.text()).toContain('BNI')
     expect(rows[0]!.text()).toContain('28.2%')

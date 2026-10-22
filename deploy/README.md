@@ -128,3 +128,9 @@ Treat the machine accordingly, and do not point this stack at anything shared.
 docker compose down          # keep the data
 docker compose down -v       # also drop the Oracle volume, forcing a fresh seed
 ```
+
+## Kubernetes
+
+Production-style manifests (kustomize: `base` + `staging` / `production` overlays, Ingress,
+NetworkPolicy, PDB) live in [`k8s/`](k8s/README.md), including the full environment-variable
+reference for both images.

@@ -1,0 +1,27 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# Namespace is set by the overlays so staging and production never share one.
+resources:
+  - serviceaccount.yaml
+  - backend-configmap.yaml
+  - frontend-configmap.yaml
+  - backend-deployment.yaml
+  - backend-service.yaml
+  - frontend-deployment.yaml
+  - frontend-service.yaml
+  - frontend-pdb.yaml
+  - ingress.yaml
+  - networkpolicy.yaml
+
+# The Secret `incident-service-secrets` is NOT part of the base: real credentials never live in git.
+# Create it out-of-band (see deploy/k8s/README.md) or let the overlay generate it from a git-ignored
+# secrets.env.
+
+labels:
+  - pairs:
+      app.kubernetes.io/part-of: incident-dashboard
+    includeSelectors: false
+
+# Image names/tags are set by the overlays (`images:`), because a rename in the base would stop
+# the overlay's match on the bare names `incident-service` / `incident-dashboard`.

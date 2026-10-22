@@ -3,6 +3,7 @@ package id.co.yokke.incidentdashboard.domain.usecase.insights;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import id.co.yokke.incidentdashboard.domain.model.IncidentFilter;
 import id.co.yokke.incidentdashboard.domain.usecase.etl.FreshnessUseCase;
+import id.co.yokke.incidentdashboard.domain.usecase.config.ParametersUseCase;
 import id.co.yokke.incidentdashboard.domain.usecase.insights.InsightsResponse.Alert;
 import id.co.yokke.incidentdashboard.domain.usecase.insights.InsightsResponse.AlertTicket;
 import id.co.yokke.incidentdashboard.domain.usecase.insights.InsightsResponse.LabelCount;
@@ -53,16 +54,19 @@ public class InsightsUseCase {
     private final FreshnessUseCase freshness;
     private final AiNarrator narrator;
     private final boolean sendSubjects;
+    private final ParametersUseCase parameters;
     private final ObjectMapper mapper = new ObjectMapper();
 
     public InsightsUseCase(JdbcTemplate jdbc, @Lazy IncidentQueryUseCase incidents,
             @Lazy FreshnessUseCase freshness, AiNarrator narrator,
-            @Value("${incident.ai.send-subjects:false}") boolean sendSubjects) {
+            @Value("${incident.ai.send-subjects:false}") boolean sendSubjects,
+            @Lazy ParametersUseCase parameters) {
         this.jdbc = jdbc;
         this.incidents = incidents;
         this.freshness = freshness;
         this.narrator = narrator;
         this.sendSubjects = sendSubjects;
+        this.parameters = parameters;
     }
 
     // --------------------------------------------------------------------- facts
@@ -120,7 +124,8 @@ public class InsightsUseCase {
     }
 
     public InsightsResponse.Category category(IncidentFilter filter, int limit) {
-        return InsightsCalculator.category(facts(filter), bound(limit));
+        return InsightsCalculator.category(facts(filter), bound(limit),
+                parameters.brandCategoryPrefix());
     }
 
     public List<InsightsResponse.AgingRow> aging(IncidentFilter filter, int limit) {
@@ -138,10 +143,12 @@ public class InsightsUseCase {
      * request's dimension filters. The request's date window is deliberately ignored: a forecast
      * needs recent history, whatever period the page is showing.
      */
-    public InsightsResponse.Forecast forecast(IncidentFilter filter, int horizonDays) {
-        int horizon = Math.min(Math.max(horizonDays, 1), MAX_HORIZON);
+    public InsightsResponse.Forecast forecast(IncidentFilter filter, Integer horizonDays) {
+        int requested = horizonDays == null ? parameters.defaultHorizonDays() : horizonDays;
+        int horizon = Math.min(Math.max(requested, 1), MAX_HORIZON);
         LocalDate today = LocalDate.now(JAKARTA);
-        return ForecastModel.forecast(dailyCounts(filter, today), today, horizon);
+        return ForecastModel.forecast(dailyCounts(filter, today), today, horizon,
+                parameters.forecastParams());
     }
 
     double[] dailyCounts(IncidentFilter filter, LocalDate today) {
@@ -173,7 +180,8 @@ public class InsightsUseCase {
         // Alerts are about NOW: every open ticket in scope, whatever the page's date window.
         IncidentFilter now = withWindow(filter, null, null);
         boolean surge = forecast(filter, 7).recommendations().contains("SURGE");
-        List<Alert> alerts = new ArrayList<>(InsightsCalculator.alerts(facts(now), surge));
+        List<Alert> alerts = new ArrayList<>(InsightsCalculator.alerts(facts(now), surge,
+                parameters.alertRulesByCode(), parameters.alertSampleSize()));
         if (freshness.freshness().stale()) {
             alerts.add(0, new Alert("DATA_STALE", "HIGH", 0, List.of()));
         }
@@ -201,6 +209,73 @@ public class InsightsUseCase {
         return new InsightsResponse.DailySummary(summary.date(), summary.created(),
                 summary.closed(), summary.openNow(), summary.breachedOpen(), summary.byPriority(),
                 summary.topInstitusi(), summary.topCategories(), summary.attention(), narrative,
+                narrator.provider());
+    }
+
+    public InsightsResponse.AiStatus aiStatus(boolean enabled) {
+        String provider = narrator.provider();
+        return new InsightsResponse.AiStatus(enabled, enabled && !"local".equals(provider),
+                provider);
+    }
+
+    /**
+     * "Explain this" for Forecast, Alerts and RCA. The model receives the page's headline figures
+     * only -- not the 180-day history, not ticket lists beyond number/priority/SLA-used, and (via
+     * {@link #narrate}) no subjects unless the operator opted in.
+     */
+    public InsightsResponse.Explanation explainForecast(IncidentFilter filter, Integer horizonDays,
+            String language) {
+        InsightsResponse.Forecast f = forecast(filter, horizonDays);
+        Map<String, Object> facts = new java.util.LinkedHashMap<>();
+        facts.put("horizonDays", f.horizonDays());
+        facts.put("expectedNextPeriod", f.nextTotal());
+        facts.put("previousPeriod", f.currentTotal());
+        facts.put("changePct", f.changePct());
+        facts.put("dailyAverage7d", f.avg7());
+        facts.put("dailyAverage14d", f.avg14());
+        facts.put("dailyAverage30d", f.avg30());
+        facts.put("trendPerDay", f.trendPerDay());
+        facts.put("backtestErrorPct", f.mapePct());
+        facts.put("accuracy", f.accuracy());
+        facts.put("busiestWeekday", f.busiestDay());
+        facts.put("quietestWeekday", f.quietestDay());
+        facts.put("signals", f.recommendations());
+        return explanation("forecast", "explain-forecast", facts, language);
+    }
+
+    public InsightsResponse.Explanation explainAlerts(IncidentFilter filter, String language) {
+        List<Map<String, Object>> alerts = new ArrayList<>();
+        for (Alert a : alerts(filter)) {
+            Map<String, Object> row = new java.util.LinkedHashMap<>();
+            row.put("rule", a.code());
+            row.put("severity", a.severity());
+            row.put("tickets", a.count());
+            row.put("worst", a.tickets().stream().limit(3).map(t -> Map.of(
+                    "ticket", t.noIncident(), "priority", String.valueOf(t.priority()),
+                    "slaUsedPct", t.slaUsedPct() == null ? "n/a" : t.slaUsedPct())).toList());
+            alerts.add(row);
+        }
+        return explanation("alerts", "explain-alerts", Map.of("alerts", alerts), language);
+    }
+
+    public InsightsResponse.Explanation explainRca(IncidentFilter filter, String language) {
+        InsightsResponse.Rca r = rca(filter, 1);
+        Map<String, Object> facts = new java.util.LinkedHashMap<>();
+        facts.put("problems", r.total());
+        facts.put("stillOpen", r.open());
+        facts.put("withRootCause", r.withRootCause());
+        facts.put("rootCausePct", r.rootCausePct());
+        facts.put("withWorkaround", r.withWorkaround());
+        facts.put("workaroundOnly", r.workaroundOnly());
+        facts.put("permanentSolution", r.permanentSolution());
+        facts.put("permanentPct", r.permanentPct());
+        facts.put("topCategories", r.byCategory().stream().limit(5).toList());
+        return explanation("rca", "explain-rca", facts, language);
+    }
+
+    private InsightsResponse.Explanation explanation(String topic, String task, Object facts,
+            String language) {
+        return new InsightsResponse.Explanation(topic, narrate(task, facts, language),
                 narrator.provider());
     }
 

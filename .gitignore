@@ -56,3 +56,6 @@ FrontEnd/incident-dashboard/playwright-report/
 
 # Demo stack env — real local credentials.
 deploy/.env
+
+# Kubernetes secrets (real credentials; only *.example is tracked)
+deploy/k8s/overlays/*/secrets.env

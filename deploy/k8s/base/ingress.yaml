@@ -1,0 +1,35 @@
+# One host, path-routed: /api and /auth go straight to the backend, everything else to the SPA.
+# Host, class and TLS secret are placeholders patched per overlay. Annotations are for
+# ingress-nginx; other controllers need their own equivalents.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: incident-dashboard
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "120"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "120"
+    nginx.ingress.kubernetes.io/proxy-body-size: 10m
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    # cert-manager:
+    # cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts: [incident.example.com]
+      secretName: incident-dashboard-tls
+  rules:
+    - host: incident.example.com
+      http:
+        paths:
+          - path: /api
+            pathType: Prefix
+            backend:
+              service: { name: incident-service, port: { name: http } }
+          - path: /auth
+            pathType: Prefix
+            backend:
+              service: { name: incident-service, port: { name: http } }
+          - path: /
+            pathType: Prefix
+            backend:
+              service: { name: incident-dashboard, port: { name: http } }

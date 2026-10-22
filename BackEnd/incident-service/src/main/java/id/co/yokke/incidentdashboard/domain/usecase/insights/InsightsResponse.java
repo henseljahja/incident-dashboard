@@ -48,7 +48,8 @@ public final class InsightsResponse {
     public record InstitusiRow(String label, long count, Double sharePct) {
     }
 
-    public record Category(List<SourceRow> sources, List<InstitusiRow> institusi) {
+    public record Category(List<SourceRow> sources, List<InstitusiRow> institusi,
+            List<InstitusiRow> brands) {
     }
 
     public record AgingRow(long noIncident, String subject, String priority, String status,
@@ -103,6 +104,19 @@ public final class InsightsResponse {
 
     /** {@code code}: BREACHED_OPEN, AT_RISK, CRITICAL_HIGH_OPEN, UNASSIGNED_OPEN, FORECAST_SURGE. */
     public record Alert(String code, String severity, long count, List<AlertTicket> tickets) {
+    }
+
+    // ------------------------------------------------------------------ AI explain
+
+    /** Whether the explain buttons make sense: the server has a real narrator behind it. */
+    public record AiStatus(boolean enabled, boolean narrating, String provider) {
+    }
+
+    /**
+     * A short model-written reading of one page's figures. {@code narrative} is null when the
+     * provider is off or failed -- the caller shows "unavailable", never a made-up text.
+     */
+    public record Explanation(String topic, String narrative, String provider) {
     }
 
     // ------------------------------------------------------------------------ AI

@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 import { useAuthStore } from '@/stores/auth'
+import { appConfig } from '@/utils/runtimeConfig'
 import type { Scope } from '@/stores/filters'
 
 declare module 'vue-router' {
@@ -55,12 +56,21 @@ const router = createRouter({
     {
       path: '/ai-insights',
       name: 'ai-insights',
-      component: () => import('../views/AiInsightsView.vue'),
+      // Placeholder until the AI provider is decided; VITE_AI_INSIGHTS_LIVE=true restores the built page.
+      component: () =>
+        appConfig('aiInsightsLive') === 'true'
+          ? import('../views/AiInsightsLiveView.vue')
+          : import('../views/AiInsightsView.vue'),
     },
     {
       path: '/sla-config',
       name: 'sla-config',
       component: () => import('../views/SlaConfigView.vue'),
+    },
+    {
+      path: '/parameters',
+      name: 'parameters',
+      component: () => import('../views/ParametersView.vue'),
     },
     {
       path: '/login',

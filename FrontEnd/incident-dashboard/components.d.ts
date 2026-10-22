@@ -24,6 +24,7 @@ declare module 'vue' {
     DataTable: typeof import('primevue/datatable')['default']
     DatePicker: typeof import('primevue/datepicker')['default']
     Drawer: typeof import('primevue/drawer')['default']
+    ExplainCard: typeof import('./src/components/insights/ExplainCard.vue')['default']
     ForecastChart: typeof import('./src/components/insights/ForecastChart.vue')['default']
     FreshnessIndicator: typeof import('./src/components/common/FreshnessIndicator.vue')['default']
     ImpactUrgencyHeatmap: typeof import('./src/components/charts/ImpactUrgencyHeatmap.vue')['default']

@@ -51,6 +51,19 @@ public class OpenAiCompatibleNarrator implements AiNarrator {
         return "openai";
     }
 
+    /** What a reader of that page wants from the figures; unknown tasks add nothing. */
+    private static String instruction(String task) {
+        return switch (task) {
+            case "explain-forecast" -> "Explain what the expected ticket volume and its trend mean "
+                    + "for staffing, and how far to trust it given the backtest error.\n";
+            case "explain-alerts" -> "Say which alerts need attention first and why, in priority "
+                    + "order.\n";
+            case "explain-rca" -> "Say how well problems are being root-caused and permanently "
+                    + "fixed, and where the gap is.\n";
+            default -> "";
+        };
+    }
+
     @Override
     public Optional<String> narrate(String task, String facts, String language) {
         try {
@@ -63,7 +76,8 @@ public class OpenAiCompatibleNarrator implements AiNarrator {
                     "temperature", 0.2,
                     "messages", List.of(
                             Map.of("role", "system", "content", system),
-                            Map.of("role", "user", "content", "Task: " + task + "\n" + facts))));
+                            Map.of("role", "user", "content", "Task: " + task + "\n"
+                                    + instruction(task) + facts))));
             HttpRequest request = HttpRequest.newBuilder(URI.create(baseUrl + "/chat/completions"))
                     .timeout(timeout)
                     .header("Authorization", "Bearer " + apiKey)

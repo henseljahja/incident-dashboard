@@ -1,0 +1,30 @@
+# Default-deny ingress for the namespace, then allow only what the design needs. Egress is left
+# open (Oracle, Redmine and the AI provider are all external and their CIDRs are site-specific).
+# NOTE: the allow rules admit the Ingress controller by namespace label; adjust
+# `ingress-nginx` if your controller lives elsewhere.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-ingress
+spec:
+  podSelector: {}
+  policyTypes: [Ingress]
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-ingress-controller
+spec:
+  podSelector:
+    matchExpressions:
+      - key: app.kubernetes.io/name
+        operator: In
+        values: [incident-service, incident-dashboard]
+  policyTypes: [Ingress]
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: ingress-nginx
+      ports:
+        - { protocol: TCP, port: 8080 }

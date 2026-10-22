@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: incident-dashboard
+  labels:
+    app.kubernetes.io/name: incident-dashboard
+    app.kubernetes.io/component: frontend
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: incident-dashboard
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: incident-dashboard
+        app.kubernetes.io/component: frontend
+    spec:
+      serviceAccountName: incident-dashboard
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 101
+        runAsGroup: 101
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: incident-dashboard
+          image: incident-dashboard
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: incident-dashboard-config
+          env:
+            # The image's nginx resolves the upstream at request time; /etc/resolv.conf's
+            # nameserver is picked up by NGINX_ENTRYPOINT_LOCAL_RESOLVERS (set in the image).
+            - name: NGINX_ENTRYPOINT_QUIET_LOGS
+              value: "1"
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+          resources:
+            requests:
+              cpu: 50m
+              memory: 32Mi
+            limits:
+              memory: 128Mi
+          readinessProbe:
+            httpGet: { path: /index.html, port: http }
+            periodSeconds: 10
+            timeoutSeconds: 2
+          livenessProbe:
+            httpGet: { path: /index.html, port: http }
+            periodSeconds: 20
+            timeoutSeconds: 2
+          # Writable paths nginx and the entrypoint need on a read-only root filesystem.
+          volumeMounts:
+            - { name: tmp, mountPath: /tmp }
+            - { name: nginx-cache, mountPath: /var/cache/nginx }
+            - { name: nginx-conf, mountPath: /etc/nginx/conf.d }
+      volumes:
+        - name: tmp
+          emptyDir: { sizeLimit: 16Mi }
+        - name: nginx-cache
+          emptyDir: { sizeLimit: 64Mi }
+        - name: nginx-conf
+          emptyDir: { sizeLimit: 1Mi }

@@ -1,6 +1,7 @@
 import { useAuthStore } from '@/stores/auth'
+import { appConfig } from '@/utils/runtimeConfig'
 
-export const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL as string | undefined) ?? '/api'
+export const API_BASE_URL = appConfig('apiBaseUrl') ?? '/api'
 
 /**
  * The auth endpoints are NOT under the `/api` tree.

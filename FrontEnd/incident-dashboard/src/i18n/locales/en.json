@@ -36,7 +36,8 @@
       "alerts": "Alerts",
       "rca": "Problem & RCA",
       "ai": "AI Insights",
-      "sla": "SLA Config"
+      "sla": "SLA Config",
+      "params": "Parameters"
     },
     "toggle": "Toggle navigation",
     "skipToContent": "Skip to main content",
@@ -718,7 +719,7 @@
       "worklistSub": "Oldest first — the analysis backlog."
     },
     "sla": {
-      "note": "The policy every SLA figure in this dashboard is computed with, read live from configuration. It is changed in the SLA policy table by the database administrator, and the mart re-derives on its next refresh.",
+      "note": "The policy every SLA figure in this dashboard is computed with, read live from configuration. Administrators change it on the Parameters page, and the numbers re-derive on the next mart refresh.",
       "ladder": "SLA by priority",
       "ladderSub": "Days allowed to resolve, and the at-risk cushion (days left at which an open ticket is flagged).",
       "days": "SLA (days)",
@@ -786,7 +787,95 @@
           "MONITOR": "Keep monitoring."
         }
       },
-      "analyze": "Analyse patterns"
+      "analyze": "Analyse patterns",
+      "placeholder": {
+        "title": "AI Insights — coming soon",
+        "body": "The AI provider has not been chosen yet, so this page is a placeholder."
+      }
+    },
+    "brands": {
+      "title": "Top brand-network incidents"
+    },
+    "explain": {
+      "title": "Explain this page",
+      "hint": "A short plain-language reading of the figures on this page.",
+      "action": "Explain",
+      "again": "Explain again",
+      "working": "Reading the figures…",
+      "unavailable": "The AI service did not return an explanation. The figures above are unaffected.",
+      "error": "Could not reach the AI service.",
+      "retry": "Try again",
+      "privacy": "Only the figures shown here are sent, never ticket text. Written by {provider}; check it against the data before acting.",
+      "stale": "Filters changed — explain again to refresh this reading.",
+      "ready": "Explanation ready: {n} points."
+    }
+  },
+  "params": {
+    "title": "Parameters",
+    "note": "Everything the dashboard treats as a rule rather than a fact: SLA budgets, when an alert fires, and the forecast and brand-network settings. Changes apply on the next page load; SLA changes re-derive the numbers on the next mart refresh. Every change is logged.",
+    "readOnly": "You can view these settings but not change them.",
+    "save": "Save",
+    "saving": "Saving…",
+    "saved": "Saved",
+    "resetDefault": "Reset to default",
+    "default": "Default: {value}",
+    "error": "Could not load the parameters.",
+    "saveError": "Not saved: {message}",
+    "sla": {
+      "title": "SLA by priority",
+      "sub": "Days allowed to resolve a ticket, and the at-risk cushion (days left at which an open ticket is flagged). A higher priority cannot get a longer budget than a lower one.",
+      "days": "SLA (days)",
+      "cushion": "At-risk cushion (days)"
+    },
+    "alerts": {
+      "title": "Alert rules",
+      "sub": "When each alert fires on the Alerts page. A rule fires only when at least the minimum number of tickets match.",
+      "rule": "Alert",
+      "enabled": "On",
+      "severity": "Severity",
+      "minCount": "Min tickets",
+      "threshold": "Threshold",
+      "thresholdHint": {
+        "BREACHED_OPEN": "Escalate to Critical when this many High/Critical tickets are breached (0 = never)",
+        "UNASSIGNED_OPEN": "Only count tickets open at least this many days (0 = all)",
+        "AGING_OPEN": "Open tickets older than this many days"
+      }
+    },
+    "severity": {
+      "INFO": "Info",
+      "WARNING": "Warning",
+      "HIGH": "High",
+      "CRITICAL": "Critical"
+    },
+    "alertName": {
+      "BREACHED_OPEN": "Breached open tickets",
+      "AT_RISK": "At-risk tickets",
+      "CRITICAL_HIGH_OPEN": "Open Critical / High",
+      "UNASSIGNED_OPEN": "Unassigned open tickets",
+      "AGING_OPEN": "Long-open tickets",
+      "FORECAST_SURGE": "Forecast surge"
+    },
+    "general": {
+      "title": "Forecast and brand network",
+      "sub": "Scalar settings used by the Forecast, Alerts and Category pages."
+    },
+    "param": {
+      "forecast_default_horizon_days": "Default forecast horizon (days)",
+      "forecast_trend_window_days": "Trend window (days)",
+      "forecast_smoothing_alpha": "Smoothing factor (0.05 to 0.95)",
+      "forecast_surge_change_pct": "Surge alert when next period grows by (%)",
+      "alerts_ticket_sample_size": "Tickets listed per alert",
+      "brand_category_prefix": "Brand-network category prefix (digits)"
+    },
+    "range": "Range {min} to {max}",
+    "changes": {
+      "title": "Recent changes",
+      "empty": "No changes yet.",
+      "when": "When",
+      "who": "By",
+      "what": "What",
+      "from": "From",
+      "to": "To"
     }
   }
 }

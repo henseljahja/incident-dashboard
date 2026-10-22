@@ -50,6 +50,7 @@ const MENU_ORDER = [
   'incident.wallboard',
   'incident.exec',
   'incident.sla',
+  'incident.params',
   'incident.admin',
 ]
 
@@ -67,6 +68,7 @@ const MENU_ICONS: Record<string, string> = {
   'incident.alerts': 'pi pi-bell',
   'incident.ai': 'pi pi-sparkles',
   'incident.sla': 'pi pi-sliders-h',
+  'incident.params': 'pi pi-cog',
   'incident.ops': 'pi pi-inbox',
   'incident.problem': 'pi pi-search',
   'incident.sr': 'pi pi-ticket',

@@ -49,9 +49,29 @@ import org.springframework.test.context.TestPropertySource;
         "server.port=8081",
         // Explicit rather than inherited: the CORS allowlist is the one setting whose silent
         // drift makes every Playwright spec fail on an unrelated-looking cookie error.
-        "incident.cors.allowed-origins=http://localhost:5175"})
+        "incident.cors.allowed-origins=http://localhost:5175",
+        // AI on, against a local stand-in model (see FakeOpenAiServer): the Explain buttons are
+        // driven through the real narrator, with no key and nothing leaving the machine.
+        "incident.ai.enabled=true",
+        "incident.ai.provider=openai",
+        "incident.ai.api-key=e2e-not-a-real-key"})
 @EnabledIfEnvironmentVariable(named = "E2E_STACK", matches = "true")
 class E2eStackLauncherTest extends AbstractOracleIT {
+
+    private static final FakeOpenAiServer FAKE_LLM = startFakeLlm();
+
+    private static FakeOpenAiServer startFakeLlm() {
+        try {
+            return new FakeOpenAiServer();
+        } catch (java.io.IOException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    @org.springframework.test.context.DynamicPropertySource
+    static void fakeLlm(org.springframework.test.context.DynamicPropertyRegistry registry) {
+        registry.add("incident.ai.base-url", FAKE_LLM::baseUrl);
+    }
 
     @Test
     @DisplayName("serve the seeded isolated stack on :8081 until interrupted")

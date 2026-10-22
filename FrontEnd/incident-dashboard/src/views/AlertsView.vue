@@ -4,6 +4,7 @@ import { useI18n } from 'vue-i18n'
 
 import { fetchAlerts, type Alert } from '@/apis/insights'
 import FreshnessIndicator from '@/components/common/FreshnessIndicator.vue'
+import ExplainCard from '@/components/insights/ExplainCard.vue'
 import InsightPanel from '@/components/insights/InsightPanel.vue'
 import PriorityPill from '@/components/insights/PriorityPill.vue'
 import ScopeSwitch from '@/components/insights/ScopeSwitch.vue'
@@ -42,6 +43,7 @@ const ICON = { CRITICAL: '⛔', HIGH: '▲', WARNING: '⚠', INFO: 'ℹ' } as co
     <template #header-actions><FreshnessIndicator /></template>
     <div class="flex flex-col gap-4" data-testid="alerts-view">
       <ScopeSwitch />
+      <ExplainCard topic="alerts" />
       <p v-if="query.isError.value" class="text-sm text-[var(--chart-error-text)]" role="alert">
         {{ t('insights.state.error') }}
       </p>
@@ -74,32 +76,30 @@ const ICON = { CRITICAL: '⛔', HIGH: '▲', WARNING: '⚠', INFO: 'ℹ' } as co
             <span v-if="a.count > 0">· {{ a.count }}</span>
           </span>
         </template>
-        <table
-          v-if="a.tickets.length"
-          class="insight-table w-full text-sm"
-          :data-testid="`alert-${a.code}`"
-        >
-          <thead class="text-left text-xs uppercase text-surface-600">
-            <tr>
-              <th scope="col" class="py-1">{{ t('insights.col.ticket') }}</th>
-              <th scope="col">{{ t('insights.col.subject') }}</th>
-              <th scope="col">{{ t('insights.col.priority') }}</th>
-              <th scope="col" class="text-right">{{ t('insights.col.slaUsed') }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="tk in a.tickets" :key="tk.noIncident" class="border-t border-surface-100">
-              <th scope="row" class="py-1.5 text-left font-normal">
-                <TicketLink :id="tk.noIncident" />
-              </th>
-              <td class="max-w-96 truncate" :title="tk.subject ?? ''">{{ tk.subject }}</td>
-              <td><PriorityPill :priority="tk.priority" /></td>
-              <td class="text-right tabular-nums">
-                {{ tk.slaUsedPct === null ? '—' : `${formatDecimal(tk.slaUsedPct, locale)}%` }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div v-if="a.tickets.length" class="overflow-x-auto">
+          <table class="insight-table w-full text-sm" :data-testid="`alert-${a.code}`">
+            <thead class="text-left text-xs uppercase text-surface-600">
+              <tr>
+                <th scope="col" class="py-1">{{ t('insights.col.ticket') }}</th>
+                <th scope="col">{{ t('insights.col.subject') }}</th>
+                <th scope="col">{{ t('insights.col.priority') }}</th>
+                <th scope="col" class="text-right">{{ t('insights.col.slaUsed') }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="tk in a.tickets" :key="tk.noIncident" class="border-t border-surface-100">
+                <th scope="row" class="py-1.5 text-left font-normal">
+                  <TicketLink :id="tk.noIncident" />
+                </th>
+                <td class="max-w-96 truncate" :title="tk.subject ?? ''">{{ tk.subject }}</td>
+                <td><PriorityPill :priority="tk.priority" /></td>
+                <td class="text-right tabular-nums">
+                  {{ tk.slaUsedPct === null ? '—' : `${formatDecimal(tk.slaUsedPct, locale)}%` }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </InsightPanel>
     </div>
   </AppLayout>

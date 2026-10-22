@@ -115,18 +115,31 @@ test.describe('TM12 scoped menus', () => {
     await login(page, ACCOUNTS.ops.username)
     await page.waitForURL('**/ops**')
     const links = page.getByRole('navigation', { name: 'Main' }).getByRole('link')
-    await expect(links).toHaveText(['Incident', 'Problem', 'Service Request'])
-    await expect(links.nth(0)).toHaveAttribute('href', '/ops')
-    await expect(links.nth(1)).toHaveAttribute('href', '/problem')
-    await expect(links.nth(2)).toHaveAttribute('href', '/service-requests')
-    await expect(links.nth(0)).toHaveAttribute('aria-current', 'page')
+    // V12 adds Dashboard and the four insight menus (+ SLA Config, read-only Parameters) to OPS_MANAGER, ordered by SORT_ORDER.
+    await expect(links).toHaveText([
+      'Dashboard',
+      'Incident',
+      'Problem',
+      'Service Request',
+      'Problem & RCA',
+      'Forecast',
+      'Alerts',
+      'AI Insights',
+      'SLA Config',
+      'Parameters',
+    ])
+    await expect(links.nth(0)).toHaveAttribute('href', '/dashboard')
+    await expect(links.nth(1)).toHaveAttribute('href', '/ops')
+    await expect(links.nth(2)).toHaveAttribute('href', '/problem')
+    await expect(links.nth(3)).toHaveAttribute('href', '/service-requests')
+    await expect(links.nth(1)).toHaveAttribute('aria-current', 'page')
 
-    await links.nth(1).click()
+    await links.nth(2).click()
     await page.waitForURL('**/problem**')
     await expect(page.getByRole('heading', { level: 1, name: 'Problem' })).toBeVisible()
-    await expect(links.nth(1)).toHaveAttribute('aria-current', 'page')
-    await expect(links.nth(0)).not.toHaveAttribute('aria-current', 'page')
-    await links.nth(2).click()
+    await expect(links.nth(2)).toHaveAttribute('aria-current', 'page')
+    await expect(links.nth(1)).not.toHaveAttribute('aria-current', 'page')
+    await links.nth(3).click()
     await page.waitForURL('**/service-requests**')
     await expect(page.getByRole('heading', { level: 1, name: 'Service Request' })).toBeVisible()
     expect(errors).toEqual([])
@@ -300,7 +313,10 @@ test.describe('TM12 scoped menus', () => {
     const requests: string[] = []
     page.on('request', (request) => {
       const url = request.url()
-      if (url.startsWith(`${API_BASE_URL}/incidents?`) || url.startsWith(`${API_BASE_URL}/metrics/kpi`)) {
+      if (
+        url.startsWith(`${API_BASE_URL}/incidents?`) ||
+        url.startsWith(`${API_BASE_URL}/metrics/kpi`)
+      ) {
         // The login landing (/ops) fires its own, Incident-scoped requests before we navigate.
         if (page.url().includes('/problem')) requests.push(url)
       }
@@ -334,7 +350,7 @@ test.describe('TM12 scoped menus', () => {
 // =========================================================================================== TM14
 
 test.describe('TM14 scope count tiles', () => {
-  test('each tile navigates to its menu and its open count equals that page\'s Open tile', async ({
+  test("each tile navigates to its menu and its open count equals that page's Open tile", async ({
     page,
   }) => {
     const errors = trackPageErrors(page)
@@ -496,7 +512,10 @@ test.describe('TM13 wallboard rotation', () => {
     const board = (await (await wallboardResponse).json()) as {
       criticalHighOpen: { noIncident: number; subject: string | null }[]
     }
-    expect(board.criticalHighOpen.length, 'the stack has open Critical/High incidents').toBeGreaterThan(0)
+    expect(
+      board.criticalHighOpen.length,
+      'the stack has open Critical/High incidents',
+    ).toBeGreaterThan(0)
     for (const row of board.criticalHighOpen) expect(row.subject, `#${row.noIncident}`).toBeNull()
 
     // The subject text exists in the data (ops can read it) and must not be anywhere on screen.
@@ -518,7 +537,9 @@ test.describe('TM13 wallboard rotation', () => {
     const subjects = new Map(opsRows.content.map((r) => [r.NO_INCIDENT, r.SUBJECT]))
 
     const list = page.getByTestId('wallboard-critical-high')
-    await expect(list.getByTestId('wallboard-critical-row')).toHaveCount(board.criticalHighOpen.length)
+    await expect(list.getByTestId('wallboard-critical-row')).toHaveCount(
+      board.criticalHighOpen.length,
+    )
     const listText = await list.innerText()
     for (const row of board.criticalHighOpen) {
       const subject = subjects.get(row.noIncident)
@@ -772,7 +793,9 @@ test.describe('TM15 responsive, targets, focus, dark', () => {
         // A figure must also sit inside its tile, even where the tile hides overflow.
         const escaped = await page.evaluate(() =>
           [...document.querySelectorAll('[data-testid^="wallboard-"]')]
-            .filter((tile) => tile.querySelector(':scope > span.tabular-nums, :scope > span.font-bold'))
+            .filter((tile) =>
+              tile.querySelector(':scope > span.tabular-nums, :scope > span.font-bold'),
+            )
             .flatMap((tile) => {
               const t = tile.getBoundingClientRect()
               return [...tile.querySelectorAll('span.tabular-nums')]
@@ -841,7 +864,10 @@ test.describe('TM15 responsive, targets, focus, dark', () => {
     await expect(scroller).toHaveAttribute('tabindex', '0')
     await expect(scroller).toHaveAttribute('role', 'region')
     const overflows = await scroller.evaluate((el) => el.scrollWidth > el.clientWidth + 1)
-    expect(overflows, 'the table needs to scroll sideways at 768px for this check to mean anything').toBe(true)
+    expect(
+      overflows,
+      'the table needs to scroll sideways at 768px for this check to mean anything',
+    ).toBe(true)
     await expect(page.getByTestId('incident-table-scroll-hint')).toBeVisible()
     await expect(page.getByTestId('incident-table-scroll-fade')).toBeVisible()
 
@@ -873,14 +899,21 @@ test.describe('TM15 responsive, targets, focus, dark', () => {
     await heatmap.scrollIntoViewIfNeeded()
     const clipped = await heatmap.evaluate((root) =>
       [...root.querySelectorAll('th, [role="columnheader"], [role="rowheader"]')]
-        .filter((el) => el.scrollWidth > el.clientWidth + 1 || el.scrollHeight > el.clientHeight + 1)
-        .map((el) => `${(el.textContent ?? '').trim()} ${el.scrollWidth}x${el.scrollHeight} > ${el.clientWidth}x${el.clientHeight}`),
+        .filter(
+          (el) => el.scrollWidth > el.clientWidth + 1 || el.scrollHeight > el.clientHeight + 1,
+        )
+        .map(
+          (el) =>
+            `${(el.textContent ?? '').trim()} ${el.scrollWidth}x${el.scrollHeight} > ${el.clientWidth}x${el.clientHeight}`,
+        ),
     )
     expect(clipped, 'matrix header cells clip their text').toEqual([])
     // An abbreviated/wrapped header still carries the full value.
     const unknown = heatmap.getByText(/Unknown/).first()
     if ((await unknown.count()) > 0) {
-      const titled = await unknown.evaluate((el) => !!el.closest('[title]') || !!el.getAttribute('title'))
+      const titled = await unknown.evaluate(
+        (el) => !!el.closest('[title]') || !!el.getAttribute('title'),
+      )
       expect(titled, 'Unknown header exposes its full value as a title').toBe(true)
     }
   })

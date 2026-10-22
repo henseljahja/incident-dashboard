@@ -234,4 +234,93 @@ class InsightsCalculatorTest {
         assertThat(rca.byCategory()).extracting(InsightsResponse.LabelCount::label)
                 .containsExactly("Network", "Payment");
     }
+
+    @Test
+    @DisplayName("brand network: 05xx categories counted per network, code dropped, others ignored")
+    void brandNetwork() {
+        List<IncidentFact> facts = new java.util.ArrayList<>();
+        String[] categories = {"0503 - MASTERCARD", "0501 - VISA", "0503 - MASTERCARD",
+            "0501 - VISA", "0503 - MASTERCARD", "0502 - CUP", "1202 - BNI", null, "2301 - Pengecekan"};
+        for (int i = 0; i < categories.length; i++) {
+            IncidentFact base = fact(i + 1, "Low", true, 1, 60, false, "External", "BNI", "budi",
+                    "2026-03-01");
+            facts.add(new IncidentFact(base.noIncident(), base.subject(), base.priority(),
+                    base.status(), base.institusi(), base.source(), base.assignee(),
+                    categories[i], base.created(), base.closedAt(), base.closed(),
+                    base.breached(), base.atRisk(), base.aging(), base.slaDays(), null, false,
+                    false));
+        }
+
+        List<InsightsResponse.InstitusiRow> brands = InsightsCalculator.category(facts, 10).brands();
+
+        assertThat(brands).extracting(InsightsResponse.InstitusiRow::label)
+                .containsExactly("MASTERCARD", "VISA", "CUP");
+        assertThat(brands).extracting(InsightsResponse.InstitusiRow::count)
+                .containsExactly(3L, 2L, 1L);
+        assertThat(brands.get(0).sharePct()).isEqualTo(50.0);
+        assertThat(InsightsCalculator.category(FACTS, 2).brands()).isEmpty();
+    }
+
+    private static java.util.Map<String, id.co.yokke.incidentdashboard.domain.usecase.config.ConfigModel.AlertRule>
+            with(String code, boolean enabled, String severity, int minCount, Double threshold) {
+        java.util.Map<String, id.co.yokke.incidentdashboard.domain.usecase.config.ConfigModel.AlertRule> r =
+                new java.util.LinkedHashMap<>();
+        r.put(code, new id.co.yokke.incidentdashboard.domain.usecase.config.ConfigModel.AlertRule(
+                code, enabled, severity, minCount, threshold, true, severity, 1, threshold, null,
+                null));
+        return r;
+    }
+
+    @Test
+    @DisplayName("alert rules: disabled never fires, min count gates, severity and sample size apply")
+    void alertRulesAreAdjustable() {
+        assertThat(InsightsCalculator.alerts(FACTS, false, with("AT_RISK", false, "WARNING", 1,
+                null), 10)).extracting(InsightsResponse.Alert::code).doesNotContain("AT_RISK");
+        // two at-risk tickets (#7, #9), so a minimum of 3 suppresses the rule
+        assertThat(InsightsCalculator.alerts(FACTS, false, with("AT_RISK", true, "WARNING", 3,
+                null), 10)).extracting(InsightsResponse.Alert::code).doesNotContain("AT_RISK");
+        List<InsightsResponse.Alert> custom = InsightsCalculator.alerts(FACTS, false,
+                with("CRITICAL_HIGH_OPEN", true, "CRITICAL", 1, null), 1);
+        InsightsResponse.Alert chOpen = custom.stream()
+                .filter(a -> a.code().equals("CRITICAL_HIGH_OPEN")).findFirst().orElseThrow();
+        assertThat(chOpen.severity()).isEqualTo("CRITICAL");
+        assertThat(chOpen.count()).isEqualTo(2);
+        assertThat(chOpen.tickets()).hasSize(1); // sample size 1, count still 2
+    }
+
+    @Test
+    @DisplayName("alert rules: AGING_OPEN honours its day threshold; unassigned honours min age")
+    void alertThresholds() {
+        // open aging: #5=30 #6=12 #7=2 #9=13
+        List<InsightsResponse.Alert> aging = InsightsCalculator.alerts(FACTS, false,
+                with("AGING_OPEN", true, "WARNING", 1, 13.0), 10);
+        assertThat(aging).filteredOn(a -> a.code().equals("AGING_OPEN")).singleElement()
+                .satisfies(a -> assertThat(a.count()).isEqualTo(2)); // #5 and #9
+        // #6 is the only unassigned open ticket and is 12 days old
+        assertThat(InsightsCalculator.alerts(FACTS, false,
+                with("UNASSIGNED_OPEN", true, "INFO", 1, 20.0), 10))
+                .extracting(InsightsResponse.Alert::code).doesNotContain("UNASSIGNED_OPEN");
+        assertThat(InsightsCalculator.alerts(FACTS, false,
+                with("UNASSIGNED_OPEN", true, "INFO", 1, 12.0), 10))
+                .extracting(InsightsResponse.Alert::code).contains("UNASSIGNED_OPEN");
+    }
+
+    @Test
+    @DisplayName("brand network prefix is configurable and matched literally")
+    void brandPrefix() {
+        List<IncidentFact> facts = new java.util.ArrayList<>();
+        String[] categories = {"0503 - MASTERCARD", "1202 - BNI", "1202 - BNI", "1299 - X"};
+        for (int i = 0; i < categories.length; i++) {
+            IncidentFact b = fact(i + 1, "Low", true, 1, 60, false, "External", "BNI", "budi",
+                    "2026-03-01");
+            facts.add(new IncidentFact(b.noIncident(), b.subject(), b.priority(), b.status(),
+                    b.institusi(), b.source(), b.assignee(), categories[i], b.created(),
+                    b.closedAt(), b.closed(), b.breached(), b.atRisk(), b.aging(), b.slaDays(),
+                    null, false, false));
+        }
+        assertThat(InsightsCalculator.category(facts, 10, "12").brands())
+                .extracting(InsightsResponse.InstitusiRow::label).containsExactly("BNI", "X");
+        assertThat(InsightsCalculator.category(facts, 10, "05").brands())
+                .extracting(InsightsResponse.InstitusiRow::label).containsExactly("MASTERCARD");
+    }
 }

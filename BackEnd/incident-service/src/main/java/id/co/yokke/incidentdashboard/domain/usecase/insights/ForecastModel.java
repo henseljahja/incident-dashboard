@@ -37,8 +37,14 @@ import java.util.Locale;
  */
 public final class ForecastModel {
 
-    static final int TREND_WINDOW = 60;
-    static final double ALPHA = 0.3;
+    public static final int TREND_WINDOW = 60;
+    public static final double ALPHA = 0.3;
+    public static final int SURGE_CHANGE_PCT = 30;
+
+    /** The adjustable knobs (CFG_PARAM). {@link #DEFAULT} is the shipped behaviour. */
+    public record Params(int trendWindow, double alpha, int surgeChangePct) {
+        public static final Params DEFAULT = new Params(TREND_WINDOW, ALPHA, SURGE_CHANGE_PCT);
+    }
     static final int BACKTEST_DAYS = 7;
     static final int MIN_BACKTEST_HISTORY = 28;
 
@@ -53,9 +59,14 @@ public final class ForecastModel {
      *     with no ticket MUST be present as 0 (the caller fills gaps)
      */
     public static Forecast forecast(double[] counts, LocalDate lastDay, int horizon) {
+        return forecast(counts, lastDay, horizon, Params.DEFAULT);
+    }
+
+    public static Forecast forecast(double[] counts, LocalDate lastDay, int horizon,
+            Params params) {
         int n = counts.length;
         LocalDate firstDay = lastDay.minusDays(n - 1L);
-        Fit fit = fit(counts, firstDay);
+        Fit fit = fit(counts, firstDay, params);
 
         double mean30 = mean(counts, Math.min(30, n));
         List<ForecastDay> days = new ArrayList<>();
@@ -82,7 +93,7 @@ public final class ForecastModel {
         }
         Double change = current == 0 ? null : round1((next - current) * 100.0 / current);
 
-        Double mape = backtest(counts, firstDay);
+        Double mape = backtest(counts, firstDay, params);
         String accuracy = mape == null ? "NA" : mape < 20 ? "GOOD" : mape <= 40 ? "FAIR" : "POOR";
 
         List<WeekdayFactor> weekdayFactors = new ArrayList<>();
@@ -102,9 +113,9 @@ public final class ForecastModel {
         }
 
         List<String> recommendations = new ArrayList<>();
-        if (change != null && change >= 30) {
+        if (change != null && change >= params.surgeChangePct()) {
             recommendations.add("SURGE");
-        } else if (change != null && change <= -30) {
+        } else if (change != null && change <= -params.surgeChangePct()) {
             recommendations.add("DROP");
         } else {
             recommendations.add("STABLE");
@@ -125,7 +136,7 @@ public final class ForecastModel {
                 List.copyOf(weekdayFactors), List.copyOf(recommendations));
     }
 
-    private static Fit fit(double[] counts, LocalDate firstDay) {
+    private static Fit fit(double[] counts, LocalDate firstDay, Params params) {
         int n = counts.length;
         double[] sum = new double[7];
         int[] seen = new int[7];
@@ -159,11 +170,11 @@ public final class ForecastModel {
             double error = counts[i] - predicted;
             sse += error * error;
             errors++;
-            level = ALPHA * deseason[i] + (1 - ALPHA) * level;
+            level = params.alpha() * deseason[i] + (1 - params.alpha()) * level;
         }
         double sigma = errors > 1 ? Math.sqrt(sse / errors) : 0;
 
-        int from = Math.max(0, n - TREND_WINDOW);
+        int from = Math.max(0, n - params.trendWindow());
         int m = n - from;
         double slope = 0;
         if (m > 1) {
@@ -184,13 +195,13 @@ public final class ForecastModel {
         return new Fit(factors, level, slope, sigma);
     }
 
-    private static Double backtest(double[] counts, LocalDate firstDay) {
+    private static Double backtest(double[] counts, LocalDate firstDay, Params params) {
         int n = counts.length;
         if (n - BACKTEST_DAYS < MIN_BACKTEST_HISTORY) {
             return null;
         }
         double[] train = java.util.Arrays.copyOfRange(counts, 0, n - BACKTEST_DAYS);
-        Fit fit = fit(train, firstDay);
+        Fit fit = fit(train, firstDay, params);
         double sumApe = 0;
         int scored = 0;
         for (int h = 1; h <= BACKTEST_DAYS; h++) {

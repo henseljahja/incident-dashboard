@@ -35,7 +35,7 @@ import { fetchDefinitions } from '@/apis/definitions'
 import { counts, mountInsight, unmountAll } from '@/components/insights/__tests__/helpers'
 import { useFiltersStore } from '@/stores/filters'
 
-import AiInsightsView from '../AiInsightsView.vue'
+import AiInsightsView from '../AiInsightsLiveView.vue'
 import AlertsView from '../AlertsView.vue'
 import DashboardView from '../DashboardView.vue'
 import ForecastView from '../ForecastView.vue'
@@ -70,7 +70,7 @@ describe('DashboardView', () => {
     vi.mocked(api.fetchMonthly).mockResolvedValue([])
     vi.mocked(api.fetchAssignees).mockResolvedValue([])
     vi.mocked(api.fetchAging).mockResolvedValue([])
-    vi.mocked(api.fetchCategory).mockResolvedValue({ sources: [], institusi: [] })
+    vi.mocked(api.fetchCategory).mockResolvedValue({ sources: [], institusi: [], brands: [] })
   })
 
   it('defaults to the Incident scope and a 30-day window, and exposes the four tabs', async () => {
@@ -391,5 +391,15 @@ describe('AiInsightsView', () => {
 
     expect(w.get('[data-testid="ai-pattern"]').text()).toContain('BNI')
     expect(w.find('[data-rec="PERMANENT_FIX"]').exists()).toBe(true)
+  })
+})
+
+describe('AiInsightsView placeholder', () => {
+  it('shows the placeholder and calls no AI endpoint', async () => {
+    const Placeholder = (await import('../AiInsightsView.vue')).default
+    const w = await mountInsight(Placeholder, { global: { stubs } })
+
+    expect(w.find('[data-testid="ai-placeholder"]').exists()).toBe(true)
+    expect(api.fetchDailySummary).not.toHaveBeenCalled()
   })
 })
