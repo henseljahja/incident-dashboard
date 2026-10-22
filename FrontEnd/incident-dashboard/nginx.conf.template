@@ -1,0 +1,74 @@
+# Rendered by the nginx image's entrypoint (envsubst over /etc/nginx/templates/*.template).
+# Only variables that exist in the environment are substituted, so nginx's own $uri / $host are
+# untouched. Settings: BACKEND_UPSTREAM (default http://incident-service:8080).
+server {
+    listen 8080;
+    server_name _;
+    root /usr/share/nginx/html;
+
+    server_tokens off;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+
+    # Resolve the upstream at request time, not at start-up: with a literal proxy_pass nginx
+    # refuses to boot if the service name does not resolve yet (a compose or pod start-order
+    # race) and pins the IP forever. NGINX_LOCAL_RESOLVERS is filled in by the image's entrypoint
+    # from /etc/resolv.conf (NGINX_ENTRYPOINT_LOCAL_RESOLVERS=1, set in the Dockerfile).
+    resolver ${NGINX_LOCAL_RESOLVERS} valid=10s ipv6=off;
+    set $backend ${BACKEND_UPSTREAM};
+
+    gzip on;
+    gzip_types text/css application/javascript application/json image/svg+xml;
+
+    # Runtime settings, generated at container start from environment variables (see
+    # docker-entrypoint.d/40-runtime-config.sh). Never cached: a changed value must take effect
+    # on the next page load, not after a CDN or browser expires it.
+    location = /config.js {
+        alias /tmp/runtime-config/config.js;
+        default_type application/javascript;
+        add_header Cache-Control "no-store" always;
+        add_header X-Content-Type-Options "nosniff" always;
+    }
+
+    # Vite emits content-hashed files here, so they can be cached forever.
+    location /assets/ {
+        try_files $uri =404;
+        expires 1y;
+    }
+
+    # The shell references hashed assets by name, so it must be revalidated on every load.
+    location = /index.html {
+        add_header Cache-Control "no-cache" always;
+        add_header X-Content-Type-Options "nosniff" always;
+    }
+
+    # SPA history routing: /ops, /exec, /wallboard are client-side routes with no file behind
+    # them. Without this fallback a browser refresh on any of them returns 404 from nginx.
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    # Same-origin proxy to the service. Used by docker compose, where this container is the only
+    # published port. On Kubernetes the Ingress routes /api and /auth straight to the service and
+    # these blocks are simply not reached.
+    #
+    # TWO blocks, not one, and that is load-bearing: AuthController maps /auth/** at the servlet
+    # ROOT while every data controller maps under /api/**. Proxying only /api leaves login
+    # unroutable. See .agents/patterns/api.md.
+    location /api/ {
+        proxy_pass $backend;
+        include /etc/nginx/proxy_params_incident;
+        # Exports can run for a while on a large window.
+        proxy_read_timeout 120s;
+    }
+
+    location /auth/ {
+        proxy_pass $backend;
+        include /etc/nginx/proxy_params_incident;
+    }
+
+    location /health {
+        proxy_pass $backend;
+        include /etc/nginx/proxy_params_incident;
+    }
+}

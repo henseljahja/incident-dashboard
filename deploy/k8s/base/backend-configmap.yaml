@@ -1,0 +1,45 @@
+# Non-secret backend configuration. Every key is an environment variable read by incident-service
+# (Spring relaxed binding: INCIDENT_FOO_BAR == incident.foo-bar). Defaults for anything omitted are
+# in BackEnd/incident-service/src/main/resources/application.yml; the full table is in README.md.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: incident-service-config
+data:
+  TZ: Asia/Jakarta
+  SERVER_PORT: "8080"
+  SERVER_FORWARD_HEADERS_STRATEGY: framework
+  SPRING_LIFECYCLE_TIMEOUT_PER_SHUTDOWN_PHASE: 30s
+
+  # Oracle. Credentials come from the Secret; the URL is not secret but is environment-specific,
+  # so the overlays set it.
+  SPRING_DATASOURCE_DRIVER_CLASS_NAME: oracle.jdbc.OracleDriver
+  SPRING_FLYWAY_ENABLED: "true"
+
+  # Mirror schema carries its own trailing separator ("REDMINE_MIRROR." on a real schema,
+  # "REDMINE_MIRROR_" for a table-prefix mirror). The Flyway placeholder must match it.
+  INCIDENT_MIRROR_SCHEMA: "REDMINE_MIRROR."
+  SPRING_FLYWAY_PLACEHOLDERS_MIRROR: "REDMINE_MIRROR."
+
+  # Public origin(s) of the dashboard, comma separated. Never "*": the refresh cookie needs
+  # credentials mode. Overlays override this.
+  INCIDENT_CORS_ALLOWED_ORIGINS: "https://incident.example.com"
+  INCIDENT_JWT_COOKIE_SECURE: "true"
+
+  # ETL. Run exactly ONE replica of incident-service (there is no distributed lock); if you must
+  # scale out, set INCIDENT_ETL_SCHEDULING_ENABLED=false on the extras.
+  INCIDENT_ETL_SCHEDULING_ENABLED: "true"
+  INCIDENT_ETL_REFRESH_INTERVAL_MS: "120000"
+  INCIDENT_ETL_RECONCILE_CRON: "0 15 * * * *"
+  INCIDENT_ETL_CHUNK_SIZE: "500"
+  INCIDENT_ETL_WATERMARK_OVERLAP_SECONDS: "300"
+  INCIDENT_ETL_MIRROR_LAG_THRESHOLD_SECONDS: "3600"
+
+  INCIDENT_EXPORT_MAX_ROWS: "50000"
+
+  # AI narration is OFF by default. To enable: set INCIDENT_AI_ENABLED=true, INCIDENT_AI_PROVIDER,
+  # INCIDENT_AI_BASE_URL, INCIDENT_AI_MODEL here and INCIDENT_AI_API_KEY in the Secret.
+  INCIDENT_AI_ENABLED: "false"
+  INCIDENT_AI_PROVIDER: none
+  INCIDENT_AI_SEND_SUBJECTS: "false"
+  INCIDENT_AI_TIMEOUT_SECONDS: "20"

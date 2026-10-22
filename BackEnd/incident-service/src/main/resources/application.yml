@@ -11,7 +11,24 @@
 #
 # Caught by the db-migration-reviewer during /straventa-code-review, 2026-08-23.
 
+# ENVIRONMENT VARIABLES. Every setting below can be overridden from the environment -- that is how
+# the container and Kubernetes deployments are configured. Spring maps UPPER_SNAKE_CASE onto the
+# dotted key (incident.etl.refresh-interval-ms <- INCIDENT_ETL_REFRESH_INTERVAL_MS), so a key that
+# has no ${...} placeholder here is still overridable the same way. The full list, with defaults,
+# is deploy/k8s/README.md. Three settings are deliberately NOT given a value here and must come
+# from the environment: the database connection (SPRING_DATASOURCE_URL / _USERNAME / _PASSWORD),
+# INCIDENT_JWT_SECRET, and (first boot only) INCIDENT_ADMIN_PASSWORD -- a default would be a
+# credential in source control.
+server:
+  port: ${SERVER_PORT:8080}
+  # Behind an ingress the client's scheme and address arrive in X-Forwarded-* headers.
+  forward-headers-strategy: ${SERVER_FORWARD_HEADERS_STRATEGY:framework}
+  # Finish in-flight requests on SIGTERM (a rolling update or scale-down) instead of cutting them.
+  shutdown: graceful
+
 spring:
+  lifecycle:
+    timeout-per-shutdown-phase: ${SPRING_LIFECYCLE_TIMEOUT_PER_SHUTDOWN_PHASE:30s}
   application:
     name: incident-service
   flyway:
@@ -42,42 +59,42 @@ incident:
     api-key: ${INCIDENT_AI_API_KEY:}
     model: ${INCIDENT_AI_MODEL:gpt-4o-mini}
     send-subjects: ${INCIDENT_AI_SEND_SUBJECTS:false}
-    timeout-seconds: 20
+    timeout-seconds: ${INCIDENT_AI_TIMEOUT_SECONDS:20}
   cors:
     # EXPLICIT ALLOWLIST, echoed by name. Never `*`: the refresh cookie requires
     # Access-Control-Allow-Credentials: true, and a wildcard origin is incompatible with
     # credentials by specification - the browser would reject the response and
     # /auth/refresh-token could never succeed. Comma-separated; override per environment.
-    allowed-origins: http://localhost:5175
+    allowed-origins: ${INCIDENT_CORS_ALLOWED_ORIGINS:http://localhost:5175}
   mirror:
     # FOOTGUN: this value carries its OWN trailing separator, it is not appended
     # automatically. Prod uses "REDMINE_MIRROR." (dot), the test stack uses
     # "REDMINE_MIRROR_" (underscore). Keep the separator inside the value.
-    schema: REDMINE_MIRROR.
+    schema: ${INCIDENT_MIRROR_SCHEMA:REDMINE_MIRROR.}
   etl:
     # Rows per MERGE chunk. The watermark is advanced and the transaction committed PER
     # CHUNK, so the ~23k-row first load survives a kill instead of restarting from scratch.
-    chunk-size: 500
+    chunk-size: ${INCIDENT_ETL_CHUNK_SIZE:500}
     # Each RUN re-reads from watermark - this many seconds: a row committed at T-1s carrying
     # updated_on = T-3s would otherwise be skipped forever. Applied to the first chunk ONLY —
     # rewinding every chunk stops the loop from terminating.
-    watermark-overlap-seconds: 300
+    watermark-overlap-seconds: ${INCIDENT_ETL_WATERMARK_OVERLAP_SECONDS:300}
     # Master switch for SchedulingConfig. TRUE in production; AbstractOracleIT sets it FALSE
     # so a background tick cannot race MirrorFixtureLoader.resetAll() and produce tier-2
     # failures that look like real ETL bugs.
-    scheduling-enabled: true
+    scheduling-enabled: ${INCIDENT_ETL_SCHEDULING_ENABLED:true}
     # Incremental refresh cadence, and the first tick's delay. Also the basis of /api/freshness
     # staleness: LAST_RUN_AT older than 4x this is a stall.
-    refresh-interval-ms: 120000
+    refresh-interval-ms: ${INCIDENT_ETL_REFRESH_INTERVAL_MS:120000}
     # Reconcile + prune, hourly at :15 -- offset off the hour so it does not collide with
     # whatever else the host runs on the hour.
-    reconcile-cron: "0 15 * * * *"
+    reconcile-cron: ${INCIDENT_ETL_RECONCILE_CRON:0 15 * * * *}
     # The OTHER half of staleness: how far the mirror's newest issues.updated_on may fall
     # behind wall clock before /api/freshness calls the data stale. This is what catches the
     # Kafka sync dying while our ETL keeps running happily over frozen data.
-    mirror-lag-threshold-seconds: 3600
+    mirror-lag-threshold-seconds: ${INCIDENT_ETL_MIRROR_LAG_THRESHOLD_SECONDS:3600}
   export:
-    max-rows: 50000
+    max-rows: ${INCIDENT_EXPORT_MAX_ROWS:50000}
 
 ---
 # Scaffold profile — the ONLY place DataSource/Flyway autoconfiguration is disabled.

@@ -1,0 +1,15 @@
+# Runtime configuration for the dashboard image, rendered into /config.js at container start —
+# one image serves every environment.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: incident-dashboard-config
+data:
+  # Behind the Ingress the browser calls /api and /auth on the same origin.
+  API_BASE_URL: /api
+  # Base URL of the source Redmine ("Open in Redmine" links). Empty disables the link.
+  REDMINE_BASE_URL: ""
+  # "true" enables the AI Insights routes (needs the backend AI settings as well).
+  AI_INSIGHTS_LIVE: "false"
+  # Only used if the nginx in this image proxies /api (docker-compose). The Ingress bypasses it.
+  BACKEND_UPSTREAM: http://incident-service:8080

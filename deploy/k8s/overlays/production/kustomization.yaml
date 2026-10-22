@@ -1,0 +1,50 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: incident-production
+
+resources:
+  - namespace.yaml
+  - ../../base
+
+# Credentials: generated from a git-ignored secrets.env next to this file
+# (copy secrets.env.example). Fixed name, no hash suffix, so the Deployment's secretRef resolves.
+# For External Secrets / Sealed Secrets, delete this block and provide a Secret named
+# incident-service-secrets with the same keys.
+generatorOptions:
+  disableNameSuffixHash: true
+secretGenerator:
+  - name: incident-service-secrets
+    envs:
+      - secrets.env
+
+images:
+  - name: incident-service
+    newName: registry.example.com/incident-service
+    newTag: "1.0.0"
+  - name: incident-dashboard
+    newName: registry.example.com/incident-dashboard
+    newTag: "1.0.0"
+
+patches:
+  - target: { kind: Ingress, name: incident-dashboard }
+    patch: |-
+      - op: replace
+        path: /spec/rules/0/host
+        value: incident.example.com
+      - op: replace
+        path: /spec/tls/0/hosts/0
+        value: incident.example.com
+  - target: { kind: ConfigMap, name: incident-service-config }
+    patch: |-
+      apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: incident-service-config
+      data:
+        INCIDENT_CORS_ALLOWED_ORIGINS: "https://incident.example.com"
+  - target: { kind: Deployment, name: incident-dashboard }
+    patch: |-
+      - op: replace
+        path: /spec/replicas
+        value: 2

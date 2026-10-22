@@ -1,3 +1,5 @@
+import { appConfig } from '@/utils/runtimeConfig'
+
 /**
  * Redmine deep links — the ONE action this read-only product offers.
  *
@@ -23,9 +25,7 @@
  * action silently linked to a domain nobody owns. Callers render plain text instead.
  */
 export function redmineBaseUrl(): string | null {
-  const configured = (import.meta.env.VITE_REDMINE_BASE_URL as string | undefined)
-    ?.trim()
-    .replace(/\/+$/, '')
+  const configured = appConfig('redmineBaseUrl')?.replace(/\/+$/, '')
   return configured ? configured : null
 }
 
