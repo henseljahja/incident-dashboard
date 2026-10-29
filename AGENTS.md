@@ -8,6 +8,10 @@ This system never mutates incident data — every "act on this" path deep-links 
 
 ---
 
+> **Resuming work?** Read `.agents/HANDOFF.md` first (state, ranked open items, run gotchas), then `.agents/deferred-followups.md`.
+
+---
+
 ## Data contract (fixed, not negotiable)
 
 A separate team streams Redmine → Oracle via Kafka, near real time. We start at the Oracle

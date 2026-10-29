@@ -196,3 +196,8 @@ the jjwt 0.11.5 deprecation cleanup in the same pass.
   executed.
 - `IncidentFilterBar`'s tracker/stage/priority option lists are hand-transcribed from
   `V2__seed_config.sql` — the only backend-owned list in the system retyped by hand.
+
+## 2026-10-29 — Kubernetes: Ingress + NetworkPolicy not exercised end to end
+
+**Status:** open · **Reason:** local controller (traefik) was down during the OrbStack test; only pods, probes, restricted PSA and direct service calls were verified.
+**Trigger to close:** first deploy of `deploy/k8s/overlays/<env>`; confirm `/`, `/api`, `/auth` route correctly through the real Ingress and the allow rule admits the controller namespace. See `.agents/HANDOFF.md` for the other open items.
